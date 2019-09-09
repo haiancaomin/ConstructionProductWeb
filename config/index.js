@@ -27,17 +27,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/user/*': {
-        target: 'http://127.0.0.1:8082'  // 请求本地 需要咕泡商城后台项目 默认127.0.0.1:8082
-      },
-      '/shopping/**': {
-        target: 'http://127.0.0.1:8081'  // 请求本地 需要咕泡商城后台项目 默认127.0.0.1:8081
-      },
-      '/cashier/**': {
-        target: 'http://127.0.0.1:8083'  // 请求本地 需要咕泡商城后台项目 默认127.0.0.1:8083
-      }
-    },
+    proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
