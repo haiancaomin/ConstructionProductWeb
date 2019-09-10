@@ -5,12 +5,12 @@
         <div class="w-box">
           <div class="nav-logo">
             <h1 @click="changePage(-1)">
-              <router-link to="/" title="智聚部品">智聚部品</router-link>
+              <router-link to="/" title="智聚装配">智聚装配</router-link>
             </h1>
           </div>
           <div _ngcontent-c1="" class="container">
             <ul _ngcontent-c1="" class="nav-list"> <!---->
-              <li _ngcontent-c1=""><a _ngcontent-c1="" class="active" title="在线商城" href="/" target="">在线商城 </a></li>
+              <li _ngcontent-c1=""><a _ngcontent-c1="" class="active" title="智聚装配" href="/" target="">智聚装配 </a></li>
               <li _ngcontent-c1=""><a _ngcontent-c1="" title="智聚官网" href="http://zhjcx.cn" target="_blank"> 智聚官网 </a></li>
               <li _ngcontent-c1=""><a _ngcontent-c1="" title="智聚实训"  href="http://www.智聚实训.cn" target="_blank">智聚实训</a></li>
             </ul>
