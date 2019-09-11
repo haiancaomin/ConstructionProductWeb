@@ -627,12 +627,11 @@
       display: flex;
       align-items: center;
       > a {
-        background: url(/static/images/nav_logo.png) no-repeat 100%;
-        background-size: cover;
+        background: url(/static/images/nav_logo.png) no-repeat center;
+        background-size: contain;
         display: block;
-        @include wh(144px, 70px);
+        @include wh(144px, 50px);
         text-indent: -9999px;
-        background-position: 0 0;
       }
     }
     .nav-list {
