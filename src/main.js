@@ -41,8 +41,9 @@ Vue.use(VueLazyload, {
   loading: '/static/images/load.gif'
   // attempt: 1
 })
-
-// Mock.bootstrap()
+//开发过程中假数据
+import Mock from'./mock/mock.js'
+Mock.bootstrap()
 
 Vue.config.productionTip = false
 const whiteList = ['/home', '/goods', '/login', '/register', '/product', '/thanks', '/search', '/refreshsearch', '/refreshgoods'] // 不需要登陆的页面
