@@ -1,19 +1,14 @@
 <template>
   <div class="home">
     <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" v-if="!error">
-      <div class="banner">
+      <div class="banner" v-for="(item, i) in banner" :key="i" v-show="i===mark" :style="{background: item.bgColor}">
         <div
           class="bg"
-          ref="bg"
-          @mouseover="bgOver($refs.bg)"
-          @mousemove="bgMove($refs.bg,$event)"
-          @mouseout="bgOut($refs.bg)"
+         
         >
           <transition name="fade">
             <div
-              v-for="(item, i) in banner"
-              v-if="i===mark"
-              :key="i"
+              v-show="i===mark"
               style="position:absolute"
               @click="linkTo(item)"
               @mouseover="stopTimer"
@@ -140,13 +135,13 @@ export default {
     },
     play() {
       // 每2.5s自动切换
-      this.timer = setInterval(this.autoPlay, 2500);
+      this.timer = setInterval(this.autoPlay, 4500);
     },
     change(i) {
       this.mark = i;
     },
     startTimer() {
-      this.timer = setInterval(this.autoPlay, 2500);
+      this.timer = setInterval(this.autoPlay, 4500);
     },
     stopTimer() {
       clearInterval(this.timer);
@@ -173,7 +168,7 @@ export default {
       let X, Y;
       let mouseX = eve.pageX - bgOpt.px;
       let mouseY = eve.pageY - bgOpt.py;
-      
+
       X = mouseX - bgOpt.w / 2;
       Y = bgOpt.h / 2 - mouseY;
 
@@ -343,18 +338,18 @@ export default {
 
 .banner {
   cursor: pointer;
-  perspective: 3000px;
+  // perspective: 3000px;
   position: relative;
   z-index: 19;
-  margin: 0 auto;
-  width: 1220px;
+  // margin: 0 auto;
+  width: 100%;
 }
 
 .bg {
   position: relative;
   width: 1220px;
   height: 500px;
-  margin: 20px auto;
+  margin: 0px auto;
   background-size: 100% 100%;
   border-radius: 10px;
   transform-style: preserve-3d;
