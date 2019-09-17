@@ -6,6 +6,7 @@
       </div>
       <div slot="content">
         <div
+          id="teamworkTableList"
           v-loading="loading"
           element-loading-text="加载中..."
           v-if="tableData.length"
@@ -286,5 +287,11 @@ export default {
   div:last-child {
     padding-right: 24px;
   }
+}
+</style>
+<style>
+#teamworkTableList .el-table td,
+#teamworkTableList .el-table th {
+  height: 45px;
 }
 </style>
