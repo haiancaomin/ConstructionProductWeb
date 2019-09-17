@@ -1105,7 +1105,7 @@ header {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
-      background: #343d42;
+      background: rgb(46,51,62);
       .nav-list2 {
         display: flex;
         height: 100%;

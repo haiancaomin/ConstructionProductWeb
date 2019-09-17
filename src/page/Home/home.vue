@@ -1,11 +1,9 @@
 <template>
   <div class="home">
     <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" v-if="!error">
-      <div class="banner" v-for="(item, i) in banner" :key="i" v-show="i===mark" :style="{background: item.bgColor}">
-        <div
-          class="bg"
-         
-        >
+      <div class="banner" v-for="(item, i) in banner" :key="i" v-show="i===mark">
+        <!-- :style="{background: item.bgColor}" -->
+        <div class="bg">
           <transition name="fade">
             <div
               v-show="i===mark"
@@ -14,9 +12,12 @@
               @mouseover="stopTimer"
               @mouseout="startTimer"
             >
-              <img v-if="item.picUrl" class="img1" :src="item.picUrl" />
-              <img v-if="item.picUrl2" class="img2 a" :src="item.picUrl2" />
-              <img v-if="item.picUrl3" class="img3 b" :src="item.picUrl3" />
+              <!-- <img v-if="item.picUrl" class="img1" :src="item.picUrl" /> -->
+              <div
+                v-if="item.picUrl"
+                class="imgtest"
+                :style="{backgroundImage: 'url(' + item.picUrl + ')' }"
+              ></div>
             </div>
           </transition>
         </div>
@@ -218,6 +219,11 @@ export default {
 .home {
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
+  min-width: 1260px;
+  max-width: 1920px;
+  margin: 0 auto;
 }
 
 .no-info {
@@ -344,14 +350,13 @@ export default {
   // margin: 0 auto;
   width: 100%;
 }
-
 .bg {
   position: relative;
-  width: 1220px;
+  width: 100%;
   height: 500px;
+  overflow: hidden;
   margin: 0px auto;
   background-size: 100% 100%;
-  border-radius: 10px;
   transform-style: preserve-3d;
   transform-origin: 50% 50%;
   transform: rotateY(0deg) rotateX(0deg);
@@ -361,7 +366,6 @@ export default {
     width: 100%;
   }
 }
-
 .img1 {
   display: block;
   position: absolute;
@@ -370,7 +374,15 @@ export default {
   top: 0;
   border-radius: 10px;
 }
-
+.imgtest {
+  position: absolute;
+  width: 100%;
+  height: 500px;
+  top: 0;
+  left: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .img2 {
   display: block;
   position: absolute;
