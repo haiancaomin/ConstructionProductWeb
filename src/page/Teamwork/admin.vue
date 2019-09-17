@@ -96,6 +96,7 @@ export default {
 
 .account-sidebar {
   width: 210px;
+  flex-shrink: 0;
   border-radius: 6px;
   .avatar {
     padding-top: 20px;
@@ -148,5 +149,6 @@ export default {
 .account-content {
   margin-left: 20px;
   flex: 1;
+  overflow: hidden;
 }
 </style>
