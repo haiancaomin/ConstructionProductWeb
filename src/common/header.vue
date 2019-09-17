@@ -3,12 +3,12 @@
     <div>
       <header class="w">
         <div class="w-box">
+          <router-link to="/" title="智聚装配">
           <div class="nav-logo">
-            <h1 @click="changePage(-1)">
-              <router-link to="/" title="智聚装配">智聚装配</router-link>
-            </h1>
+              <img class="big_index_logo" src="/static/images/favicon.png">智聚装配
           </div>
-          <div class="nav_search_head index_search_input">
+          </router-link>
+          <div class="nav_search_head index_search_input_head">
                 <el-autocomplete
                   placeholder="请输入商品信息"
                   icon="search"
@@ -31,7 +31,7 @@
               >
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
-                  <i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i>
+                  报价器<i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i>
                 </span>
                 <!--购物车显示块-->
                 <div class="nav-user-wrapper pa active" v-show="showCart">
@@ -62,21 +62,21 @@
               <ul class="nav-list2">
                 <li>
                   <router-link to="/">
-                    <a @click="changGoods(-1)" :class="{active:choosePage===-1}">首页</a>
+                    <div @click="changGoods(-1)" :class="{active:choosePage===-1}">首页</div>
                   </router-link>
                 </li>
                 <li>
-                  <a @click="changGoods(-2)" :class="{active:choosePage===-2}">
+                  <div @click="changGoods(-2)" :class="{active:choosePage===-2}">
                     产品分类
                     <i class="iconfont_down_arrow">&#xe60a;</i>
-                  </a>
+                  </div>
                 </li>
                 <li
                   @mouseenter="handleNavItemMouseEnter(item, i)"
                   v-for="(item,i) in navList"
                   :key="i"
                 >
-                  <a @click="changGoods(i, item)" :class="{active:i===choosePage}">{{item.picUrl}}</a>
+                  <div @click="changGoods(i, item)" :class="{active:i===choosePage}">{{item.picUrl}}</div>
                 </li>
               </ul>
               <div class="nav-search index_search_input" v-if="st">
@@ -586,7 +586,7 @@ export default {
 .header-box {
   background: #fff;
   width: 100%;
-  padding-top:15px;
+  padding-top:25px;
 }
 
 header {
@@ -600,26 +600,17 @@ header {
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  // position: relative;
+  padding:0 0 20px 0;
   h1 {
     height: 100%;
     display: flex;
     align-items: center;
-    > a {
-      width: 130px;
-      height: 30px;
-      background: url(/static/images/nav_logo.png) no-repeat center;
-      background-size: contain;
-      display: block;
-      @include wh(144px, 50px);
-      text-indent: -9999px;
-    }
   }
   
 
   .right-box {
     display: flex;
-    margin-right:10px;
+    margin-right:40px;
   }
   .nav-aside {
     position: relative;
@@ -758,13 +749,16 @@ header {
     }
     .cart-num {
       position: relative;
-      display: block;
+      display: flex;
+      align-items:center;
       margin-left: 31px;
       margin-top: -1px;
       min-width: 30px;
       text-indent: 0;
       line-height: 20px;
+      width:100px;
       > i {
+        margin-left:4px;
         background: #eb746b;
         background-image: -webkit-linear-gradient(#eb746b, #e25147);
         background-image: linear-gradient(#eb746b, #e25147);
@@ -1043,7 +1037,7 @@ header {
       font-size: 14px;
       padding: 0 25px;
       &:hover {
-        color: #fff;
+        color: #39cf41;
       }
     }
     a:nth-child(2) {
@@ -1063,15 +1057,18 @@ header {
         position: relative;
         width: 120px;
         text-align: center;
-        a {
+        div {
           font-size: 16px;
           color: #333;
+          height:40px;
           font-family: "Microsoft YaHei";
           &.active {
             color: #39cf41;
+            font-weight: bold;
+            border-bottom: 2px solid #39cf41;
           }
         }
-        a:hover {
+        div:hover {
           color: #39cf41;
         }
       }
@@ -1117,14 +1114,16 @@ header {
           position: relative;
           width: 120px;
           text-align: center;
-          a {
+          div {
             font-size: 16px;
             color: #fff;
             &.active {
               color: #39cf41;
+              font-weight: 100;
+              border: 0px solid #333; 
             }
           }
-          a:hover {
+          div:hover {
             color: #ffd04b;
           }
         }
@@ -1318,11 +1317,28 @@ header {
 .w-box .nav_search_head .el-autocomplete{
   width:320px;
 }
+.nav-logo {
+  display: flex;
+  align-items:center;         
+  font-size:23px;
+  color:#555;
+  font-weight: bold;
+  font-weight: "Microsoft YaHei"                                                                                          
+}
+.big_index_logo {
+  width:28px;
+  height:28px;
+  margin-right: 4px;
+}
 </style>
 <style>
 .index_search_input .el-autocomplete input {
   height: 34px;
   border-radius: 17px;
+}
+.index_search_input_head .el-autocomplete input {
+  height: 36px;
+  border-radius: 18px;
 }
 </style>
 
