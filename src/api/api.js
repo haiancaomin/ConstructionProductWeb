@@ -40,5 +40,5 @@ export const apis = {
   delOrder: '/shopping/delOrder',
   getSearch: '/shopping/search',
   getQuickSearch: '/shopping/search',
-  indexCarousel: 'http://192.168.1.146:8080/jzbppt/jzbp_findIndexPicList.do'
+  indexCarousel: 'http://192.168.1.188:8080/jzbppt/jzbp_findIndexPicList.do'
 }

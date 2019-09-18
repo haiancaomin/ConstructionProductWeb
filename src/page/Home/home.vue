@@ -211,6 +211,7 @@ export default {
     });
     this.showNotify();
     this._indexCarousel();
+    console.log("ss");
 
     // this.$ajax({
     //   method: "get",

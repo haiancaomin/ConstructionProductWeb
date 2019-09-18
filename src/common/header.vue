@@ -19,6 +19,8 @@
         <i class="iconfont_suspension">&#xe63c;</i>
         <div class="hover_div3">关注我们</div>
       </div>
+      <div class="connection_info">
+      </div>
     </div>
     <div>
       <header class="w">
@@ -96,7 +98,7 @@
                   </div>
                 </li>
                 <li>
-                  <div @click="changGoods(-2)" :class="{active:choosePage===-2}">协同办公</div>
+                  <div @click="changGoods(-3)" :class="{active:choosePage===-3}">协同办公</div>
                 </li>
               </ul>
               <div class="nav-search index_search_input" v-if="st">
