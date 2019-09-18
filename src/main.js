@@ -5,10 +5,34 @@ import store from './store/'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueCookie from 'vue-cookie'
-import { userInfo } from './api'
+import {
+  userInfo
+} from './api'
 // Element css
 import 'element-ui/lib/theme-default/index.css'
-import { Button, Pagination, Checkbox, Icon, Autocomplete, Loading, Message, Notification, Steps, Step, Table, TableColumn, Input, Dialog, Select, Option, Tabs, TabPane } from 'element-ui'
+import {
+  Button,
+  Pagination,
+  Checkbox,
+  Icon,
+  Autocomplete,
+  Loading,
+  Message,
+  Notification,
+  Steps,
+  Step,
+  Table,
+  TableColumn,
+  Input,
+  Dialog,
+  Select,
+  Option,
+  Tabs,
+  TabPane,
+  Form,
+  FormItem,
+  DatePicker
+} from 'element-ui'
 // import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import axios from 'axios' //引入axios
@@ -31,6 +55,9 @@ Vue.use(Option)
 Vue.use(Loading.directive)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(DatePicker)
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
