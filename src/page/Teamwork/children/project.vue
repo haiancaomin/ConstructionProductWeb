@@ -1,5 +1,5 @@
 <template>
-  <div id="projectPage">
+  <div>
     <y-shelf title="项目管理">
       <div slot="right">
         <el-button @click="newProject">新建项目</el-button>
@@ -43,16 +43,16 @@
         :total="total"
       ></el-pagination>
     </div>
-    <el-dialog title="新建项目" :visible.sync="newProjectVisible">
+    <el-dialog title="新建项目" :visible.sync="newProjectVisible" id="projectForm">
       <el-form :model="form">
         <el-form-item label="项目名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
         </el-form-item>
         <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
         </el-form-item>
         <el-form-item label="项目开始日期" :label-width="formLabelWidth">
           <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
@@ -64,7 +64,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="活动形式" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="form.desc"></el-input>
+          <el-input type="textarea" v-model="form.desc" placeholder="请选择活动区域"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -339,14 +339,15 @@ export default {
 #teamworkTableList .el-table th {
   height: 45px;
 }
-#projectPage .el-input,#projectPage textarea {
+#projectForm .el-input,
+#projectForm textarea {
   width: 300px;
 }
-#projectPage .el-dialog--small{
-  width: 500px
+#projectForm .el-dialog--small {
+  width: 500px;
 }
-#projectPage .el-dialog__body{
+#projectForm .el-dialog__body {
   max-height: 500px;
-  overflow: auto
+  overflow: auto;
 }
 </style>
