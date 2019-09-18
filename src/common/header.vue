@@ -1,29 +1,46 @@
 <template>
   <div class="header-box">
     <div class="suspension_frame">
-sss
+      <div class="suspension_zone1">
+        <i class="iconfont_suspension">&#xe663;</i>
+        <div class="hover_div1">我要留言</div>
+      </div>
+      <div class="split_line">
+        <div class="line_div"></div>
+      </div>
+      <div class="suspension_zone2">
+        <i class="iconfont_suspension">&#xe60f;</i>
+        <div class="hover_div2">联系我们</div>
+      </div>
+      <div class="split_line">
+        <div class="line_div"></div>
+      </div>
+      <div class="suspension_zone3">
+        <i class="iconfont_suspension">&#xe63c;</i>
+        <div class="hover_div3">关注我们</div>
+      </div>
     </div>
     <div>
       <header class="w">
         <div class="w-box">
           <router-link to="/" title="智聚装配">
-          <div class="nav-logo">
-              <img class="big_index_logo" src="/static/images/favicon.png">智聚装配
-          </div>
+            <div class="nav-logo">
+              <img class="big_index_logo" src="/static/images/favicon.png" />智聚装配
+            </div>
           </router-link>
           <div class="nav_search_head index_search_input_head">
-                <el-autocomplete
-                  placeholder="请输入商品信息"
-                  icon="search"
-                  v-model="input"
-                  minlength="1"
-                  maxlength="100"
-                  :fetch-suggestions="querySearchAsync"
-                  @select="handleSelect"
-                  :on-icon-click="handleIconClick"
-                  @keydown.enter.native="handleIconClick"
-                ></el-autocomplete>
-              </div>
+            <el-autocomplete
+              placeholder="请输入商品信息"
+              icon="search"
+              v-model="input"
+              minlength="1"
+              maxlength="100"
+              :fetch-suggestions="querySearchAsync"
+              @select="handleSelect"
+              :on-icon-click="handleIconClick"
+              @keydown.enter.native="handleIconClick"
+            ></el-autocomplete>
+          </div>
           <div class="right-box">
             <div class="nav-aside" ref="aside">
               <div
@@ -34,7 +51,11 @@ sss
               >
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
-                  报价器<i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i>
+                  报价器
+                  <i
+                    class="num"
+                    :class="{no:totalNum <= 0,move_in_cart:receiveInCart}"
+                  >{{totalNum}}</i>
                 </span>
                 <!--购物车显示块-->
                 <div class="nav-user-wrapper pa active" v-show="showCart">
@@ -74,12 +95,8 @@ sss
                     <i class="iconfont_down_arrow">&#xe60a;</i>
                   </div>
                 </li>
-                <li
-                  @mouseenter="handleNavItemMouseEnter(item, i)"
-                  v-for="(item,i) in navList"
-                  :key="i"
-                >
-                  <div @click="changGoods(i, item)" :class="{active:i===choosePage}">{{item.picUrl}}</div>
+                <li>
+                  <div @click="changGoods(-2)" :class="{active:choosePage===-2}">协同办公</div>
                 </li>
               </ul>
               <div class="nav-search index_search_input" v-if="st">
@@ -99,7 +116,7 @@ sss
                 <i class="iconfont">&#xe625;</i>报价器
                 <div class="cart_num">12</div>
               </div>
-              <div _ngcontent-c1 class="container"  v-if="!st">
+              <div _ngcontent-c1 class="container" v-if="!st">
                 <ul _ngcontent-c1 class="nav-list">
                   <!---->
                   <li _ngcontent-c1>
@@ -589,7 +606,7 @@ export default {
 .header-box {
   background: #fff;
   width: 100%;
-  padding-top:25px;
+  padding-top: 25px;
 }
 
 header {
@@ -603,17 +620,16 @@ header {
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  padding:0 0 20px 0;
+  padding: 0 0 20px 0;
   h1 {
     height: 100%;
     display: flex;
     align-items: center;
   }
-  
 
   .right-box {
     display: flex;
-    margin-right:40px;
+    margin-right: 40px;
   }
   .nav-aside {
     position: relative;
@@ -753,15 +769,15 @@ header {
     .cart-num {
       position: relative;
       display: flex;
-      align-items:center;
+      align-items: center;
       margin-left: 31px;
       margin-top: -1px;
       min-width: 30px;
       text-indent: 0;
       line-height: 20px;
-      width:100px;
+      width: 100px;
       > i {
-        margin-left:4px;
+        margin-left: 4px;
         background: #eb746b;
         background-image: -webkit-linear-gradient(#eb746b, #e25147);
         background-image: linear-gradient(#eb746b, #e25147);
@@ -1025,37 +1041,37 @@ header {
     background: #fff;
     position: relative;
     .nav-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin:0px 0 20px 220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0px 0 20px 220px;
 
-    .el-autocomplete {
-      width: 305px;
-    }
-    a {
-      width: 110px;
-      color: #666;
-      display: block;
-      font-size: 14px;
-      padding: 0 25px;
-      &:hover {
-        color: #39cf41;
+      .el-autocomplete {
+        width: 305px;
       }
+      a {
+        width: 110px;
+        color: #666;
+        display: block;
+        font-size: 14px;
+        padding: 0 25px;
+        &:hover {
+          color: #39cf41;
+        }
+      }
+      a:nth-child(2) {
+        // width: 5vw;
+        margin-left: -10px;
+      }
+      // a:nth-child(3){
+      //   width: 5vw;
+      // }
     }
-    a:nth-child(2) {
-      // width: 5vw;
-      margin-left: -10px;
-    }
-    // a:nth-child(3){
-    //   width: 5vw;
-    // }
-  }
     .nav-list2 {
       position: relative;
       display: flex;
       width: 650px;
-      
+
       li {
         position: relative;
         width: 120px;
@@ -1063,7 +1079,7 @@ header {
         div {
           font-size: 16px;
           color: #333;
-          height:40px;
+          height: 40px;
           font-family: "Microsoft YaHei";
           &.active {
             color: #39cf41;
@@ -1108,7 +1124,7 @@ header {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
-      background: rgb(46,51,62);
+      background: rgb(46, 51, 62);
       .nav-list2 {
         display: flex;
         height: 100%;
@@ -1123,7 +1139,7 @@ header {
             &.active {
               color: #39cf41;
               font-weight: 100;
-              border: 0px solid #333; 
+              border: 0px solid #333;
             }
           }
           div:hover {
@@ -1286,15 +1302,16 @@ header {
     }
   }
 }
+
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */
-  src: url("//at.alicdn.com/t/font_1414486_c5gednjonhe.eot");
-  src: url("//at.alicdn.com/t/font_1414486_c5gednjonhe.eot?#iefix")
+  src: url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.eot");
+  src: url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.eot?#iefix")
       format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_1414486_c5gednjonhe.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_1414486_c5gednjonhe.woff") format("woff"),
-    url("//at.alicdn.com/t/font_1414486_c5gednjonhe.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_1414486_c5gednjonhe.svg#iconfont") format("svg");
+    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.woff") format("woff"),
+    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.svg#iconfont") format("svg");
 }
 .iconfont {
   font-family: "iconfont" !important;
@@ -1315,29 +1332,132 @@ header {
   margin-left: 4px;
 }
 .w-box .nav_search_head {
-  width:320px;
+  width: 320px;
 }
-.w-box .nav_search_head .el-autocomplete{
-  width:320px;
+.w-box .nav_search_head .el-autocomplete {
+  width: 320px;
 }
 .nav-logo {
   display: flex;
-  align-items:center;         
-  font-size:23px;
-  color:#555;
+  align-items: center;
+  font-size: 23px;
+  color: #555;
   font-weight: bold;
-  font-weight: "Microsoft YaHei"                                                                                          
+  font-weight: "Microsoft YaHei";
 }
 .big_index_logo {
-  width:28px;
-  height:28px;
+  width: 28px;
+  height: 28px;
   margin-right: 4px;
 }
 .suspension_frame {
   position: fixed;
-  right:0;
-  bottom:100px;
+  right: 20px;
+  bottom: 200px;
   z-index: 99999;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.suspension_zone1 {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+}
+.suspension_zone2 {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 1px;
+}
+.suspension_zone3 {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 1px;
+}
+.split_line {
+  display: flex;
+  align-items: center;
+  width: 60px;
+  background: #fff;
+  height: 10px;
+  cursor: pointer;
+}
+.line_div {
+  width: 50px;
+  border-top: 1px solid #ccc;
+  height: 2px;
+  margin: auto;
+}
+.iconfont_suspension {
+  font-family: "iconfont" !important;
+  font-size: 26px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.suspension_zone1:hover .iconfont_suspension {
+  display: none;
+}
+.suspension_zone2:hover .iconfont_suspension {
+  display: none;
+}
+.suspension_zone3:hover .iconfont_suspension {
+  display: none;
+}
+.suspension_zone1:hover .hover_div1 {
+  display:block;
+}
+.suspension_zone2:hover .hover_div2 {
+  display:block;
+}
+.suspension_zone3:hover .hover_div3 {
+  display:block;
+}
+.hover_div1 {
+  background: #49af4f;
+  color: #fff;
+  padding: 10px;
+  width: 58px;
+  text-align: center;
+  cursor: pointer;
+  display: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.hover_div2 {
+  background: #49af4f;
+  color: #fff;
+  padding: 10px;
+  width: 58px;
+  text-align: center;
+  cursor: pointer;
+  display: none;
+}
+.hover_div3 {
+  background: #49af4f;
+  color: #fff;
+  padding: 10px;
+  width: 58px;
+  text-align: center;
+  cursor: pointer;
+  display: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 </style>
 <style>
