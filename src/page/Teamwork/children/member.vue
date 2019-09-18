@@ -245,7 +245,7 @@ export default {
   },
   created() {
     this.userId = getStore("userId");
-    this._orderList();
+    // this._orderList();
   },
   components: {
     YShelf
