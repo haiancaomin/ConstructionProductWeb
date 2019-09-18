@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div id="projectPage">
     <y-shelf title="项目管理">
       <div slot="right">
-        <el-button>新建项目</el-button>
+        <el-button @click="newProject">新建项目</el-button>
       </div>
       <div slot="content">
         <div
@@ -43,6 +43,35 @@
         :total="total"
       ></el-pagination>
     </div>
+    <el-dialog title="新建项目" :visible.sync="newProjectVisible">
+      <el-form :model="form">
+        <el-form-item label="项目名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系人" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="项目开始日期" :label-width="formLabelWidth">
+          <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="活动区域" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="活动形式" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.desc"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="newProjectVisible = false">取 消</el-button>
+        <el-button type="primary" @click="newProjectVisible = false">提 交</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -52,6 +81,19 @@ import { getStore } from "/utils/storage";
 export default {
   data() {
     return {
+      newProjectVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      formLabelWidth: "120px",
+      value1: "",
       projectList: [0],
       userId: "",
       orderStatus: "",
@@ -128,6 +170,9 @@ export default {
     };
   },
   methods: {
+    newProject() {
+      this.newProjectVisible = true;
+    },
     handleClick(row) {
       console.log(row);
     },
@@ -293,5 +338,15 @@ export default {
 #teamworkTableList .el-table td,
 #teamworkTableList .el-table th {
   height: 45px;
+}
+#projectPage .el-input,#projectPage textarea {
+  width: 300px;
+}
+#projectPage .el-dialog--small{
+  width: 500px
+}
+#projectPage .el-dialog__body{
+  max-height: 500px;
+  overflow: auto
 }
 </style>
