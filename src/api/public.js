@@ -4,6 +4,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded
 export default {
   fetchGet (url, params = {}) {
     return new Promise((resolve, reject) => {
+      console.log(url);
       axios.get(url, params).then(res => {
         resolve(res.data)
       }).catch(error => {

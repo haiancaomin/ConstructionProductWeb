@@ -11,6 +11,7 @@ import 'element-ui/lib/theme-default/index.css'
 import { Button, Pagination, Checkbox, Icon, Autocomplete, Loading, Message, Notification, Steps, Step, Table, TableColumn, Input, Dialog, Select, Option, Tabs, TabPane } from 'element-ui'
 // import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
+import axios from 'axios' //引入axios
 // import Mock from './mock/mock.js'
 
 Vue.use(VueContentPlaceholders)
@@ -33,6 +34,7 @@ Vue.use(TabPane)
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
+Vue.prototype.$ajax = axios
 Vue.use(infiniteScroll)
 Vue.use(VueCookie)
 Vue.use(VueLazyload, {
@@ -42,8 +44,8 @@ Vue.use(VueLazyload, {
   // attempt: 1
 })
 //开发过程中假数据
-import Mock from'./mock/mock.js'
-Mock.bootstrap()
+// import Mock from'./mock/mock.js'
+// Mock.bootstrap()
 
 Vue.config.productionTip = false
 const whiteList = ['/home', '/goods', '/login', '/register', '/product', '/thanks', '/search', '/refreshsearch', '/refreshgoods'] // 不需要登陆的页面
