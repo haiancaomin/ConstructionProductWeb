@@ -1,6 +1,10 @@
 import http from './public'
 import {apis} from './api'
 
+//首页轮播图
+export const indexCarousel = (params) => {
+  return http.fetchGet(apis.indexCarousel, params)
+}
 // 登陆
 export const userLogin = (params) => {
   return http.fetchPost(apis.userLogin, params)

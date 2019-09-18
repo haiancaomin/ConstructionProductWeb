@@ -1,86 +1,81 @@
 <template>
   <div class="home">
-    <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" v-if="!error">
-      <div class="banner" v-for="(item, i) in banner" :key="i" v-show="i===mark">
-        <!-- :style="{background: item.bgColor}" -->
-        <div class="bg">
-          <transition name="fade">
-            <div
-              v-show="i===mark"
-              style="position:absolute"
-              @click="linkTo(item)"
-              @mouseover="stopTimer"
-              @mouseout="startTimer"
-            >
-              <!-- <img v-if="item.picUrl" class="img1" :src="item.picUrl" /> -->
-              <div
-                v-if="item.picUrl"
-                class="imgtest"
-                :style="{backgroundImage: 'url(' + item.picUrl + ')' }"
-              ></div>
-            </div>
-          </transition>
-        </div>
-        <div class="page">
-          <ul class="dots">
-            <li
-              class="dot-active"
-              v-for="(item, i) in banner"
-              :class="{ 'dot':i!=mark }"
-              :key="i"
-              @click="change(i)"
-            ></li>
-          </ul>
-        </div>
+    <!-- <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" v-if="!error"> -->
+    <div class="banner" v-for="(item, i) in carouselList" :key="i" v-show="i===mark">
+      <!-- :style="{background: item.bgColor}" -->
+      <div class="bg">
+        <transition name="fade">
+          <div
+            v-show="i===mark"
+            style="position:absolute"
+            @mouseover="stopTimer"
+            @mouseout="startTimer"
+          >
+            <!-- <img v-if="item.picUrl" class="img1" :src="item.picUrl" /> -->
+            <div class="imgtest" :style="{backgroundImage: 'url(' + item.picurl + ')' }"></div>
+          </div>
+        </transition>
       </div>
-
-      <div v-for="(item,i) in home" :key="i">
-        <div class="activity-panel" v-if="item.type === 1">
-          <ul class="box">
-            <li
-              class="content"
-              v-for="(iitem,j) in item.panelContentItems"
-              :key="j"
-              @click="linkTo(iitem)"
-            >
-              <img class="i" :src="iitem.picUrl" />
-              <a class="cover-link"></a>
-            </li>
-          </ul>
-        </div>
-
-        <section class="w mt30 clearfix" v-if="item.type === 2">
-          <y-shelf :title="item.name">
-            <div slot="content" class="hot">
-              <mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContentItems" :key="j"></mall-goods>
-            </div>
-          </y-shelf>
-        </section>
-
-        <section class="w mt30 clearfix" v-if="item.type === 3">
-          <y-shelf :title="item.name">
-            <div slot="content" class="floors">
-              <div
-                class="imgbanner"
-                v-for="(iitem,j) in item.panelContentItems"
-                :key="j"
-                v-if="iitem.type === 2 || iitem.type === 3"
-                @click="linkTo(iitem)"
-              >
-                <img v-lazy="iitem.picUrl" />
-                <a class="cover-link"></a>
-              </div>
-              <mall-goods
-                :msg="iitem"
-                v-for="(iitem,j) in item.panelContentItems"
-                :key="j+'key'"
-                v-if="iitem.type != 2 && iitem.type != 3"
-              ></mall-goods>
-            </div>
-          </y-shelf>
-        </section>
+      <div class="page">
+        <ul class="dots">
+          <li
+            class="dot-active"
+            v-for="(item, i) in carouselList"
+            :class="{ 'dot':i!=mark }"
+            :key="i"
+            @click="change(i)"
+          ></li>
+        </ul>
       </div>
     </div>
+
+    <div v-for="(item,i) in home" :key="i">
+      <div class="activity-panel" v-if="item.type === 1">
+        <ul class="box">
+          <li
+            class="content"
+            v-for="(iitem,j) in item.panelContentItems"
+            :key="j"
+            @click="linkTo(iitem)"
+          >
+            <img class="i" :src="iitem.picUrl" />
+            <a class="cover-link"></a>
+          </li>
+        </ul>
+      </div>
+
+      <section class="w mt30 clearfix" v-if="item.type === 2">
+        <y-shelf :title="item.name">
+          <div slot="content" class="hot">
+            <mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContentItems" :key="j"></mall-goods>
+          </div>
+        </y-shelf>
+      </section>
+
+      <section class="w mt30 clearfix" v-if="item.type === 3">
+        <y-shelf :title="item.name">
+          <div slot="content" class="floors">
+            <div
+              class="imgbanner"
+              v-for="(iitem,j) in item.panelContentItems"
+              :key="j"
+              v-if="iitem.type === 2 || iitem.type === 3"
+              @click="linkTo(iitem)"
+            >
+              <img v-lazy="iitem.picUrl" />
+              <a class="cover-link"></a>
+            </div>
+            <mall-goods
+              :msg="iitem"
+              v-for="(iitem,j) in item.panelContentItems"
+              :key="j+'key'"
+              v-if="iitem.type != 2 && iitem.type != 3"
+            ></mall-goods>
+          </div>
+        </y-shelf>
+      </section>
+    </div>
+    <!-- </div> -->
 
     <div class="no-info" v-if="error">
       <div class="no-data">
@@ -107,6 +102,7 @@ import YShelf from "/components/shelf";
 import product from "/components/product";
 import mallGoods from "/components/mallGoods";
 import { setStore, getStore } from "/utils/storage.js";
+import { indexCarousel } from "/api/index";
 export default {
   data() {
     return {
@@ -123,13 +119,23 @@ export default {
       loading: true,
       notify: "1",
       dialogVisible: false,
-      timer: ""
+      timer: "",
+      carouselList: []
     };
   },
   methods: {
+    _indexCarousel() {
+      indexCarousel("").then(res => {
+        console.log(res);
+        console.log(res.data);
+
+        this.carouselList = res.data;
+        console.log(this.carouselList);
+      });
+    },
     autoPlay() {
       this.mark++;
-      if (this.mark > this.banner.length - 1) {
+      if (this.mark > this.carouselList.length - 1) {
         // 当遍历到最后一张图片置零
         this.mark = 0;
       }
@@ -204,6 +210,20 @@ export default {
       }
     });
     this.showNotify();
+    this._indexCarousel();
+
+    // this.$ajax({
+    //   method: "get",
+    //   url: `http://192.168.1.146:8080/jzbppt/jzbp_findIndexPicList.do`
+    // })
+    //   .then(res => {
+    //     console.log("yyw");
+    //     console.log(res.data);
+    //   })
+    //   .catch(function(err) {
+    //     console.log("wyy");
+    //     console.log(err);
+    //   });
   },
   created() {
     this.play();
@@ -382,6 +402,7 @@ export default {
   left: 0;
   background-position: center;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 .img2 {
   display: block;

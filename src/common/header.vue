@@ -1,5 +1,8 @@
 <template>
   <div class="header-box">
+    <div class="suspension_frame">
+sss
+    </div>
     <div>
       <header class="w">
         <div class="w-box">
@@ -1329,6 +1332,12 @@ header {
   width:28px;
   height:28px;
   margin-right: 4px;
+}
+.suspension_frame {
+  position: fixed;
+  right:0;
+  bottom:100px;
+  z-index: 99999;
 }
 </style>
 <style>
