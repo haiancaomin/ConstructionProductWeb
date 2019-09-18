@@ -1,27 +1,63 @@
 <template>
   <div class="header-box">
     <div class="suspension_frame">
-      <div class="suspension_zone1">
-        <i class="iconfont_suspension">&#xe663;</i>
-        <div class="hover_div1">我要留言</div>
+      <div class="suspension_zone1" @mouseenter="showBoard" @mouseleave="hideBoard">
+        <i class="iconfont_suspension" v-show="!showBoradHover">&#xe663;</i>
+        <div class="hover_div1" v-show="showBoradHover">我要留言</div>
       </div>
       <div class="split_line">
         <div class="line_div"></div>
       </div>
-      <div class="suspension_zone2">
-        <i class="iconfont_suspension">&#xe60f;</i>
-        <div class="hover_div2">联系我们</div>
+      <div
+        class="suspension_zone2"
+        @mouseenter="showConnectionInfo"
+        @mouseleave="hideConnectionInfo"
+      >
+        <i class="iconfont_suspension" v-show="!showConnectionHover">&#xe60f;</i>
+        <div class="hover_div2" v-show="showConnectionHover">联系我们</div>
       </div>
       <div class="split_line">
         <div class="line_div"></div>
       </div>
-      <div class="suspension_zone3">
-        <i class="iconfont_suspension">&#xe63c;</i>
-        <div class="hover_div3">关注我们</div>
-      </div>
-      <div class="connection_info">
+      <div class="suspension_zone3" @mouseenter="showAttention" @mouseleave="hideAttention">
+        <i class="iconfont_suspension" v-show="!showAttentionHover">&#xe63c;</i>
+        <div class="hover_div3" v-show="showAttentionHover">关注我们</div>
       </div>
     </div>
+    <div
+      class="connection_info"
+      v-show="connectionShow"
+      @mouseenter="showConnectionInfo"
+      @mouseleave="hideConnectionInfo"
+    >
+      <div class="connection_info_detail">电话：</div>
+      <div class="connection_info_detail">0513-81055866</div>
+      <div class="connection_info_detail"></div>
+      <div class="connection_info_detail">邮箱：</div>
+      <div class="connection_info_detail">MKT_Dept@zhjcx.cn</div>
+    </div>
+    <div
+      class="connection_info_arrow"
+      v-show="connectionShow"
+      @mouseenter="showConnectionInfo"
+      @mouseleave="hideConnectionInfo"
+    ></div>
+
+    <div
+      class="erweima_body"
+      v-show="showAttentionHover"
+      @mouseenter="showAttention"
+      @mouseleave="hideAttention"
+    >
+      <img src="/static/images/erweima.jpg" class="erweima_img" />
+    </div>
+    <div
+      class="erweima_arrow"
+      v-show="showAttentionHover"
+      @mouseenter="showAttention"
+      @mouseleave="hideAttention"
+    ></div>
+
     <div>
       <header class="w">
         <div class="w-box">
@@ -217,7 +253,11 @@ export default {
       searchResults: [],
       timeout: null,
       token: "",
-      navList: []
+      navList: [],
+      connectionShow: false,
+      showConnectionHover: false,
+      showBoradHover: false,
+      showAttentionHover: false
     };
   },
   computed: {
@@ -251,6 +291,26 @@ export default {
       "RECORD_USERINFO",
       "EDIT_CART"
     ]),
+    showAttention() {
+      this.showAttentionHover = true;
+    },
+    hideAttention() {
+      this.showAttentionHover = false;
+    },
+    showBoard() {
+      this.showBoradHover = true;
+    },
+    hideBoard() {
+      this.showBoradHover = false;
+    },
+    showConnectionInfo() {
+      this.connectionShow = true;
+      this.showConnectionHover = true;
+    },
+    hideConnectionInfo() {
+      this.connectionShow = false;
+      this.showConnectionHover = false;
+    },
     handleNavItemMouseEnter(item, index) {
       let cateName = item.picUrl;
       this.showRecommend = false;
@@ -1356,7 +1416,7 @@ header {
   position: fixed;
   right: 20px;
   bottom: 200px;
-  z-index: 99999;
+  z-index: 99;
   border: 1px solid #ccc;
   border-radius: 6px;
   overflow: hidden;
@@ -1412,24 +1472,24 @@ header {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
-.suspension_zone1:hover .iconfont_suspension {
-  display: none;
-}
-.suspension_zone2:hover .iconfont_suspension {
-  display: none;
-}
-.suspension_zone3:hover .iconfont_suspension {
-  display: none;
-}
-.suspension_zone1:hover .hover_div1 {
-  display:block;
-}
-.suspension_zone2:hover .hover_div2 {
-  display:block;
-}
-.suspension_zone3:hover .hover_div3 {
-  display:block;
-}
+// .suspension_zone1:hover .iconfont_suspension {
+//   display: none;
+// }
+// .suspension_zone2:hover .iconfont_suspension {
+//   display: none;
+// }
+// .suspension_zone3:hover .iconfont_suspension {
+//   display: none;
+// }
+// .suspension_zone1:hover .hover_div1 {
+//   display: block;
+// }
+// .suspension_zone2:hover .hover_div2 {
+//   display: block;
+// }
+// .suspension_zone3:hover .hover_div3 {
+//   display: block;
+// }
 .hover_div1 {
   background: #49af4f;
   color: #fff;
@@ -1437,7 +1497,6 @@ header {
   width: 58px;
   text-align: center;
   cursor: pointer;
-  display: none;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -1448,7 +1507,6 @@ header {
   width: 58px;
   text-align: center;
   cursor: pointer;
-  display: none;
 }
 .hover_div3 {
   background: #49af4f;
@@ -1457,9 +1515,67 @@ header {
   width: 58px;
   text-align: center;
   cursor: pointer;
-  display: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+}
+.connection_info {
+  position: fixed;
+  bottom: 250px;
+  right: 75px;
+  width: 150px;
+  height: 100px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  z-index: 199;
+  padding: 10px 0;
+}
+.connection_info_detail {
+  width: 100%;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+}
+.connection_info_arrow {
+  border: 1px solid #ccc;
+  border-width: 7px 4px;
+  border-color: transparent transparent transparent #fff;
+  width: 0;
+  height: 0;
+  position: fixed;
+  bottom: 290px;
+  right: 68px;
+  z-index: 399;
+}
+.erweima_body {
+  position: fixed;
+  bottom: 180px;
+  right: 75px;
+  width: 100px;
+  height: 100px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  z-index: 199;
+  padding: 5px;
+}
+.erweima_img {
+  width:90px;
+  width:90px;
+}
+.erweima_arrow {
+  border: 1px solid #ccc;
+  border-width: 7px 4px;
+  border-color: transparent transparent transparent #fff;
+  width: 0;
+  height: 0;
+  position: fixed;
+  bottom: 220px;
+  right: 68px;
+  z-index: 399;
 }
 </style>
 <style>
