@@ -4,7 +4,6 @@
       <textarea name="content" id rows="10" v-model="content" @keydown.enter="add"></textarea>
       <div class="submit-comment-action clearfix">
         <el-button @click="add" type="success">提交</el-button>
-        <span>(可按Enter 回复)</span>
       </div>
     </div>
     <div class="comment-list">
@@ -105,12 +104,7 @@ textarea {
   height: 50px;
   width: 750px;
 }
-.submit-comment-action span {
-  width: 150px;
-  float: right;
-  text-align: center;
-  padding: 10px;
-}
+
 .submit-comment-action button {
   float: right;
 }
