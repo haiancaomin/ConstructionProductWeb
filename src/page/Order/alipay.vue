@@ -314,9 +314,9 @@
     cursor: pointer;
   }
 
-  .el-dialog--small {
-    width: 30%;
-  }
+  // .el-dialog--small {
+  //   width: 30%;
+  // }
 
   .qr-red {
     display: block;

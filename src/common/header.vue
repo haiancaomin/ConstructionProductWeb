@@ -1,7 +1,15 @@
 <template>
   <div class="header-box">
+    <el-dialog title="留言板" :visible.sync="messageBoardFlag" width="10%" id="messageBoard">
+      <div class="message_board_notice1">留言内容</div>
+      <el-input type="textarea" v-model="messageBoardDesc" id="messageBoardTextarea"></el-input>
+      <div class="message_board_notice2">联系方式（请留下您的联系方式，方便我们联系您）</div>
+      <el-input v-model="userPhone"></el-input>
+      <div class="message_board_submit_btn">提交</div>
+    </el-dialog>
+
     <div class="suspension_frame">
-      <div class="suspension_zone1" @mouseenter="showBoard" @mouseleave="hideBoard">
+      <div class="suspension_zone1" @mouseenter="showBoard" @mouseleave="hideBoard" @click="messageBoardFlag=true">
         <i class="iconfont_suspension" v-show="!showBoradHover">&#xe663;</i>
         <div class="hover_div1" v-show="showBoradHover">我要留言</div>
       </div>
@@ -257,7 +265,10 @@ export default {
       connectionShow: false,
       showConnectionHover: false,
       showBoradHover: false,
-      showAttentionHover: false
+      showAttentionHover: false,
+      messageBoardFlag: false,
+      messageBoardDesc:"",
+      userPhone:"",
     };
   },
   computed: {
@@ -379,7 +390,7 @@ export default {
         });
       }
     },
-   
+
     // loadAll() {
     //   let params = {
     //     params: {
@@ -430,25 +441,25 @@ export default {
     handleSelect(item) {
       this.input = item.value;
     },
-   
+
     // cartShowState(state) {
     //   this.SHOW_CART({ showCart: state });
     // },
-   
+
     // _getCartList() {
     //   getCartList({ userId: getStore("userId") })
     //     .then(res => {
     //       if (res.success === true) {
     //         setStore("buyCart", res.result);
     //       }
-         
+
     //     })
     //     .then(this.INIT_BUYCART);
     // },
 
     // delGoods(productId) {
     //   if (this.login) {
-     
+
     //     cartDel({ userId: getStore("userId"), productId }).then(res => {
     //       this.EDIT_CART({ productId });
     //     });
@@ -459,7 +470,7 @@ export default {
     // toCart() {
     //   this.$router.push({ path: "/cart" });
     // },
-  
+
     navFixed() {
       const fixedPages = ["goods/*", "/home", "product/*"];
       let path = this.$route.path;
@@ -485,7 +496,7 @@ export default {
           cartPositionT: this.positionT
         });
       }
-    },
+    }
 
     // _loginOut() {
     //   let params = {
@@ -498,7 +509,7 @@ export default {
     //     window.location.href = "/";
     //   });
     // },
-  
+
     // getPage() {
     //   let path = this.$route.path;
 
@@ -528,20 +539,20 @@ export default {
     //   let parentCateList = goodsCateList.filter(cate => cate.isParent) || [];
     //   let tree = {};
     //   if (parentCateList) {
-    
+
     //     for (let parentCate of parentCateList) {
-    //       let parentCateId = parentCate.id; 
-    //       let parentCateName = parentCate.name; 
+    //       let parentCateId = parentCate.id;
+    //       let parentCateName = parentCate.name;
 
     //       let childCateList = goodsCateList
-    //         .filter(cate => cate.parentId === parentCateId && !cate.isParent) 
+    //         .filter(cate => cate.parentId === parentCateId && !cate.isParent)
     //         .map(cate => {
     //           let childCateId = cate.id;
-              
+
     //           let children = goodsCateList.filter(
     //             cate => cate.parentId === childCateId && !cate.isParent
     //           );
-             
+
     //           return {
     //             ...cate,
     //             children: children
@@ -579,7 +590,7 @@ export default {
     // if (typeof this.$route.query.key !== undefined) {
     //   this.input = this.$route.query.key;
     // }
-  },
+  }
   // components: {
   //   YButton
   // }
@@ -1563,8 +1574,8 @@ header {
   padding: 5px;
 }
 .erweima_img {
-  width:90px;
-  width:90px;
+  width: 90px;
+  width: 90px;
 }
 .erweima_arrow {
   border: 1px solid #ccc;
@@ -1577,6 +1588,27 @@ header {
   right: 68px;
   z-index: 399;
 }
+.message_board_notice1 {
+  line-height:30px;
+}
+.message_board_notice2 {
+  margin-top:20px;
+  line-height:30px;
+}
+.message_board_submit_btn {
+  width:100px;
+  height:40px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  color:#fff;
+  background: #409EFF;
+  margin:20px auto 0;
+  cursor: pointer;
+}
+.message_board_submit_btn:hover {
+  background: rgb(97, 167, 236);
+}
 </style>
 <style>
 .index_search_input .el-autocomplete input {
@@ -1587,5 +1619,17 @@ header {
   height: 36px;
   border-radius: 18px;
 }
+#messageBoard .el-dialog__header{
+  text-align: center;
+}
+#messageBoard .el-dialog--small {
+  width: 500px;
+}
+#messageBoard .el-dialog__body {
+  max-height: 500px;
+  overflow: auto;
+}
+#messageBoardTextarea .el-textarea__inner{
+  height:100px;
+}
 </style>
-

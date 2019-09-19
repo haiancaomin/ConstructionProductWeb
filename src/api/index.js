@@ -1,6 +1,10 @@
 import http from './public'
 import {apis} from './api'
 
+//左侧留言板
+export const messageBoardFun = (params) => {
+  return http.fetchPost(apis.messageBoardFun, params)
+}
 //首页热卖商品
 export const homeHotList = (params) => {
   return http.fetchGet(apis.homeHotList, params)

@@ -41,5 +41,6 @@ export const apis = {
   getSearch: '/shopping/search',
   getQuickSearch: '/shopping/search',
   indexCarousel: 'http://192.168.1.188:8080/jzbppt/jzbp_findIndexPicList.do',
-  homeHotList: 'http://192.168.1.188:8080/jzbppt/jzbp_findHotspotPicList.do'
+  homeHotList: 'http://192.168.1.188:8080/jzbppt/jzbp_findHotspotPicList.do',
+  messageBoardFun: 'http://192.168.1.146:8080/jzbppt/jzbp_saveFeedback.do'
 }
