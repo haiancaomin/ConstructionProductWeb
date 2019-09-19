@@ -25,9 +25,10 @@ const orderDetail = () => import('/page/User/children/orderDetail.vue')
 const Alipay = () => import('/page/Order/alipay.vue')
 const Wechat = () => import('/page/Order/wechat.vue')
 const QQpay = () => import('/page/Order/qqpay.vue')
-const teamwork = () => import('/page/Teamwork/admin.vue')
+const admin = () => import('/page/Teamwork/admin.vue')
 const project = () => import('/page/Teamwork/children/project.vue')
 const member = () => import('/page/Teamwork/children/member.vue')
+const teamwork = () => import('/page/Teamwork/teamwork.vue')
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -79,14 +80,19 @@ export default new Router({
     },
     {path: '/checkout/:productId?/:num?', name: 'checkout', component: checkout},
     {
-      path: '/teamwork',
-      name: 'teamwork',
-      component: teamwork,
-      redirect: '/teamwork/project',
+      path: '/admin',
+      name: 'admin',
+      component: admin,
+      redirect: '/admin/project',
       children: [
         {path: 'project', name: '项目管理', component: project},
         {path: 'member', name: '人员管理', component: member}
       ]
+    },
+    {
+      path:'/teamwork',
+      name:'teamwork',
+      component:teamwork
     },
     {path: '*', redirect: '/home'}
   ]

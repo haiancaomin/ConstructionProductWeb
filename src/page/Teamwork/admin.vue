@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     tab(e) {
-      this.$router.push({ path: "/teamwork/" + e.path });
+      this.$router.push({ path: "/admin/" + e.path });
     }
   },
   created() {
