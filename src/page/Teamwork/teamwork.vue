@@ -94,6 +94,7 @@ export default {
   border: #a5bcff solid 1px;
 }
 textarea {
+  padding: 5px;
   width: 750px;
   height: 150px;
   border: 1px solid #636c72;
