@@ -1,57 +1,99 @@
 <template>
   <div class="home">
-    <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" >
-    <div class="banner" v-for="(item, i) in carouselList" :key="i" v-show="i===mark">
-      <!-- :style="{background: item.bgColor}" -->
-      <div class="bg">
-        <transition name="fade">
-          <div
-            v-show="i===mark"
-            style="position:absolute"
-            @mouseover="stopTimer"
-            @mouseout="startTimer"
-          >
-            <!-- <img v-if="item.picUrl" class="img1" :src="item.picUrl" /> -->
-            <div class="imgtest" :style="{backgroundImage: 'url(' + item.picurl + ')' }"></div>
-          </div>
-        </transition>
+    <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;">
+      <div class="banner" v-for="(item, i) in carouselList" :key="i" v-show="i===mark">
+        <!-- :style="{background: item.bgColor}" -->
+        <div class="bg">
+          <transition name="fade">
+            <div
+              v-show="i===mark"
+              style="position:absolute"
+              @mouseover="stopTimer"
+              @mouseout="startTimer"
+            >
+              <!-- <img v-if="item.picUrl" class="img1" :src="item.picUrl" /> -->
+              <div class="imgtest" :style="{backgroundImage: 'url(' + item.picurl + ')' }"></div>
+            </div>
+          </transition>
+        </div>
+        <div class="page">
+          <ul class="dots">
+            <li
+              class="dot-active"
+              v-for="(item, i) in carouselList"
+              :class="{ 'dot':i!=mark }"
+              :key="i"
+              @click="change(i)"
+            ></li>
+          </ul>
+        </div>
       </div>
-      <div class="page">
-        <ul class="dots">
-          <li
-            class="dot-active"
-            v-for="(item, i) in carouselList"
-            :class="{ 'dot':i!=mark }"
-            :key="i"
-            @click="change(i)"
-          ></li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="hot_list_body">
-      <!-- <div class="activity-panel" v-if="item.type === 1">
-        <ul class="box">
-          <li
-            class="content"
-            v-for="(iitem,j) in item.panelContentItems"
-            :key="j"
-            @click="linkTo(iitem)"
-          >
-            <img class="i" :src="iitem.picUrl" />
-            <a class="cover-link"></a>
-          </li>
-        </ul>
-      </div>-->
-      <div class="hot_title">热门商品</div>
-      <!-- <div class="hot_list_body">
-        <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
-          <div class="hot_product_img_div">
-            <img v-lazy="iitem.picurl" />
+      <div class="product_hot_new_body">
+        <div class="hot_list_outbody">
+          <div class="hot_title">热门商品</div>
+          <div class="hot_list_body">
+            <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j" v-show="j<6">
+              <div class="hot_product_img_div">
+                <img v-lazy="iitem.picurl" class="hot_product_img" />
+                <div class="hot_product_hover"></div>
+                <div class="hot_hover_product_name">
+                  加入报价器
+                  <i class="iconfont_cart">&#xe625;</i>
+                </div>
+              </div>
+              <div class="hot_product_info_div">
+                <!-- <div class="hot_product_name">{{iitem.name}}</div> -->
+                <div class="hot_product_name">这是部件名称</div>
+                <!-- <div class="hot_product_description">{{iitem.description}}</div> -->
+                <div class="hot_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div>
+                <div class="hot_split_line_div">
+                  <div class="hot_split_line"></div>
+                </div>
+                <div class="hot_product_price">
+                  ¥
+                  <span class="hot_price_span">{{iitem.price}}</span>
+                  <span class="hot_check_detail_btn">
+                    查看详情
+                    <i class="iconfont">&#xe64b;</i>
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div> -->
-      <section class="w mt30 clearfix">
+        <div class="new_list_outbody">
+          <div class="hot_title">新品上线</div>
+          <div class="new_list_body">
+            <div class="new_product_body" v-for="(iitem,j) in hotList" :key="j" v-show="j<6">
+              <i class="iconfont_new_right_arrow">&#xe606;</i>
+              <div class="new_product_img_div">
+                <img v-lazy="iitem.picurl" class="new_product_img" />
+              </div>
+              <div class="new_product_info_div">
+                <div class="new_product_name">{{iitem.name}}</div>
+                <!-- <div class="new_product_description">{{iitem.description}}</div> -->
+                <div class="new_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div>
+                <div class="new_product_price">
+                  <span>¥</span>
+                  {{iitem.price}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="friend_zone_div">
+        <div class="hot_title">友情链接</div>
+        <div class="friend_out_body">
+          <div class="friend_body1"></div>
+          <div class="friend_body2"></div>
+          <div class="friend_body3"></div>
+          <div class="friend_body4"></div>
+        </div>
+      </div>
+      <!-- <section class="w mt30 clearfix">
 
           <div slot="content" class="hot">
             <div
@@ -66,8 +108,8 @@
             </div>
             <mall-goods :msg="iitem" v-for="(iitem,j) in hotList" :key="j" v-if="j != 0"></mall-goods>
           </div>
-        <!-- </y-shelf> -->
-      </section>
+        
+      </section>-->
 
       <!-- <section class="w mt30 clearfix" v-if="item.type === 3">
         <y-shelf :title="item.name">
@@ -92,14 +134,13 @@
         </y-shelf>
       </section>-->
     </div>
-    </div>
 
     <!-- <div class="no-info" v-if="error">
       <div class="no-data">
         <img src="/static/images/error.png" />
         <br />抱歉！出错了...
       </div>
-    </div> -->
+    </div>-->
 
     <!--<el-dialog
       title="通知"
@@ -143,7 +184,7 @@ export default {
   methods: {
     _homeHotList() {
       homeHotList("").then(res => {
-        console.log("ssss");
+        console.log(res.data);
         this.hotList = res.data;
         this.loading = false;
       });
@@ -223,7 +264,7 @@ export default {
     //   }
     //   let data = res.result;
     //   this.home = data;
-      
+
     //   for (let i = 0; i < data.length; i++) {
     //     if (data[i].type === 0) {
     //       this.banner = data[i].panelContentItems;
@@ -565,18 +606,291 @@ ul.box {
     height: 100%;
   }
 }
+.product_hot_new_body {
+  width: 1280px;
+  margin: 30px auto 0px;
+  display: flex;
+}
 .hot_list_body {
-  width:1220px;
-  margin:30px auto 0;
+  width: 960px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.new_list_outbody {
+  width: 300px;
 }
 .hot_title {
-    position: relative;
-    line-height: 22px;
-    font-size: 22px;
-    color: #272a2c;
-    display: block;
-    text-indent: 15px;
-    border-left: 4px #cf1132 solid;
-    margin-bottom: 30px;
+  position: relative;
+  line-height: 22px;
+  font-size: 22px;
+  color: #272a2c;
+  display: block;
+  text-indent: 15px;
+  border-left: 4px #cf1132 solid;
+  margin-bottom: 30px;
+}
+.hot_product_body {
+  margin: 0 20px 20px 0;
+  background: #fff;
+}
+.hot_product_img_div {
+  width: 300px;
+  height: 170px;
+  position: relative;
+  overflow: hidden;
+}
+.hot_product_hover {
+  position: absolute;
+  width: 300px;
+  height: 170px;
+  top: -100%;
+  left: 0;
+  background: rgb(180, 15, 45);
+  opacity: 0;
+  transition: all 0.4s;
+}
+.hot_product_body:hover .hot_product_hover {
+  top: 0%;
+  opacity: 0.8;
+}
+.hot_hover_product_name {
+  position: absolute;
+  width: 140px;
+  height: 36px;
+  line-height: 36px;
+  top: -100%;
+  left: 80px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s;
+  color: #cf1132;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+.hot_product_body:hover .hot_hover_product_name {
+  top: 70px;
+  opacity: 1;
+}
+.hot_product_img {
+  width: 300px;
+  height: 170px;
+  object-fit: cover;
+}
+.hot_product_name {
+  width: 260px;
+  color: #383838;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 32px;
+  font-family: "Microsoft YaHei";
+  margin: 13px 20px 2px;
+  height: 32px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.hot_product_description {
+  width: 268px;
+  margin: 0 16px 7px;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  color: #b1b1b1;
+  line-height: 22px;
+  padding: 0 2px;
+  height: 45px;
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+.hot_split_line_div {
+  width: 100%;
+  height: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hot_split_line {
+  width: 260px;
+  height: 2px;
+  border-top: 1px solid #e5e5e5;
+}
+.hot_product_price {
+  width: 100%;
+  height: 39px;
+  font-size: 12px;
+  line-height: 39px;
+  font-family: "Micosoft YaHei";
+  padding-left: 20px;
+  color: #cf1132;
+}
+.hot_price_span {
+  font-size: 18px;
+  line-height: 39px;
+  font-family: "Micosoft YaHei";
+  font-weight: bold;
+}
+.hot_check_detail_btn {
+  font-size: 12px;
+  line-height: 39px;
+  font-family: "Micosoft YaHei";
+  color: #9f9f9f;
+  font-size: 12px;
+  margin-left: 151px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.hot_check_detail_btn:hover {
+  color: #cf1132;
+}
+.new_list_body {
+  border-left: solid 1px #ededed;
+  border-right: solid 1px #ededed;
+  border-bottom: solid 1px #ededed;
+}
+.new_product_body {
+  position: relative;
+  display: flex;
+  width: 298px;
+  height: 108px;
+  padding: 20px 42px 0 26px;
+  background: #fff;
+  border-top: solid 1px #ededed;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.new_product_img_div {
+  height: 68px;
+  width: 68px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.new_product_img {
+  height: 68px;
+  width: 68px;
+  object-fit: cover;
+}
+.new_product_info_div {
+  margin-left: 22px;
+}
+
+.new_product_name {
+  font-size: 16px;
+  color: #555;
+  line-height: 22px;
+  height: 22px;
+  width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+.new_product_description {
+  font-size: 14px;
+  color: #999;
+  line-height: 24px;
+  height: 24px;
+  width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Micosoft YaHei";
+}
+.new_product_price {
+  font-size: 14px;
+  color: #cf1132;
+  line-height: 24px;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.new_product_price span {
+  font-size: 12px;
+}
+.new_product_body:hover {
+  background: rgb(240, 242, 247);
+}
+.new_product_body:hover .iconfont_new_right_arrow {
+  color: rgb(221, 17, 54);
+}
+.friend_zone_div {
+  width: 1280px;
+  margin: 20px auto 30px;
+  
+}
+.friend_out_body {
+  display: flex;
+}
+.friend_body1 {
+  width:300px;
+  height:130px;
+  background: #cf1132;
+  margin-right:20px;
+  cursor: pointer;
+}
+.friend_body2 {
+  width:300px;
+  height:130px;
+  background: #cf1132;
+  margin-right:20px;
+  cursor: pointer;
+}
+.friend_body3 {
+  width:300px;
+  height:130px;
+  background: #cf1132;
+  margin-right:20px;
+  cursor: pointer;
+}
+.friend_body4 {
+  width:300px;
+  height:130px;
+  background: #cf1132;
+  margin-right:20px;
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: "iconfont"; /* project id 1414486 */
+  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot");
+  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot?#iefix")
+      format("embedded-opentype"),
+    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff") format("woff"),
+    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.svg#iconfont") format("svg");
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 12px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  margin-left: 4px;
+}
+.iconfont_cart {
+  font-family: "iconfont" !important;
+  font-size: 15px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  margin-left: 4px;
+}
+.iconfont_new_right_arrow {
+  position: absolute;
+  top: 37px;
+  left: 250px;
+  font-family: "iconfont" !important;
+  font-size: 34px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  color: #ddd;
+  transition: all 0.3s;
 }
 </style>

@@ -364,21 +364,21 @@ export default {
     //   });
     // },
 
-    // changePage(v) {
-    //   this.choosePage = v;
-    // },
-    // changGoods(v, item) {
-    //   this.changePage(v);
-    //   if (v === -1) {
-    //     this.$router.push({
-    //       path: "/"
-    //     });
-    //   } else if (v === -2) {
-    //     this.$router.push({
-    //       path: "/refreshgoods"
-    //     });
-    //   }
-    // },
+    changePage(v) {
+      this.choosePage = v;
+    },
+    changGoods(v, item) {
+      this.changePage(v);
+      if (v === -1) {
+        this.$router.push({
+          path: "/"
+        });
+      } else if (v === -2) {
+        this.$router.push({
+          path: "/refreshgoods"
+        });
+      }
+    },
    
     // loadAll() {
     //   let params = {
@@ -1144,13 +1144,13 @@ header {
           height: 40px;
           font-family: "Microsoft YaHei";
           &.active {
-            color: #39cf41;
+            color: #cf1132;
             font-weight: bold;
-            border-bottom: 2px solid #39cf41;
+            border-bottom: 2px solid #cf1132;
           }
         }
         div:hover {
-          color: #39cf41;
+          color: #cf1132;
         }
       }
     }
