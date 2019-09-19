@@ -19,7 +19,7 @@
           </p>
         </div>
       </div>
-      <div class="page">
+      <div class="page clearfix">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -133,6 +133,9 @@ textarea {
 .page {
   background-color: #f3f8fd;
   padding: 10px 5px;
+}
+.el-pagination{
+    float: right
 }
 
 .clearfix:after {
