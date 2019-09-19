@@ -12,7 +12,7 @@
       </div>
       <div>
         <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
-          <p class="person-name">华新集团-张三-15195910513</p>
+          <p class="person-name">{{item.creater}}</p>
           <p class="replyContent">{{item.content}}</p>
           <p class="operation">
             <span class="time">{{item.time}}</span>
@@ -41,12 +41,14 @@ export default {
       msgData: [
         {
           content: "真特么帅气",
-          time: "2019-9-19 15:22:00"
+          time: "2019-9-19 15:22:00",
+          creater:'华新集团 - 张三 - 15195910513'
         },
         {
           content:
-            "真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气",
-          time: "2019-9-19 15:22:00"
+            "行数据的 Key，用来优化 Table 的渲染；在使用 reserve-selection 功能的情况下，该属性是必填的。类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。",
+          time: "2019-9-19 15:22:00",
+          creater:'智聚公司 - 黄徐林 - 15195910513'
         }
       ],
       nowIndex: -100,
