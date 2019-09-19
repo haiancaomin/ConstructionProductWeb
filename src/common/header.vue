@@ -388,6 +388,10 @@ export default {
         this.$router.push({
           path: "/refreshgoods"
         });
+      }else{
+        this.$router.push({
+          path: "/admin"
+        });
       }
     },
 

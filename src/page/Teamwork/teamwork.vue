@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="submit-comment">
       <textarea name="content" id rows="10" v-model="content" @keydown.enter="add"></textarea>
       <div class="submit-comment-action clearfix">
@@ -42,13 +42,13 @@ export default {
         {
           content: "真特么帅气",
           time: "2019-9-19 15:22:00",
-          creater:'华新集团 - 张三 - 15195910513'
+          creater: "华新集团 - 张三 - 15195910513"
         },
         {
           content:
             "行数据的 Key，用来优化 Table 的渲染；在使用 reserve-selection 功能的情况下，该属性是必填的。类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。",
           time: "2019-9-19 15:22:00",
-          creater:'智聚公司 - 黄徐林 - 15195910513'
+          creater: "智聚公司 - 黄徐林 - 15195910513"
         }
       ],
       nowIndex: -100,
@@ -77,9 +77,6 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-.container {
-  background: #fff;
-}
 .submit-comment {
   height: 250px;
   width: 800px;
@@ -90,10 +87,9 @@ export default {
 }
 .comment-list {
   width: 800px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 25px;
+  margin: 25px auto 40px;
   border: #a5bcff solid 1px;
+  background: #fff;
 }
 textarea {
   padding: 5px;
@@ -134,8 +130,8 @@ textarea {
   background-color: #f3f8fd;
   padding: 10px 5px;
 }
-.el-pagination{
-    float: right
+.el-pagination {
+  float: right;
 }
 
 .clearfix:after {
