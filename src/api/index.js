@@ -1,6 +1,10 @@
 import http from './public'
 import {apis} from './api'
 
+//首页热卖商品
+export const homeHotList = (params) => {
+  return http.fetchGet(apis.homeHotList, params)
+}
 //首页轮播图
 export const indexCarousel = (params) => {
   return http.fetchGet(apis.indexCarousel, params)

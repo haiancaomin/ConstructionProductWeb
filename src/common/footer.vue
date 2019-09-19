@@ -71,7 +71,7 @@ export default {
 #footer {
   width: 100%;
   background: rgb(46, 51, 62);
-  margin-top: 40px;
+  
   height: 180px;
 }
 #footer > .footer-contert {

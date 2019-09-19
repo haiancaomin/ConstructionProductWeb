@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <!-- <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" v-if="!error"> -->
+    <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;" >
     <div class="banner" v-for="(item, i) in carouselList" :key="i" v-show="i===mark">
       <!-- :style="{background: item.bgColor}" -->
       <div class="bg">
@@ -29,8 +29,8 @@
       </div>
     </div>
 
-    <div v-for="(item,i) in home" :key="i">
-      <div class="activity-panel" v-if="item.type === 1">
+    <div class="hot_list_body">
+      <!-- <div class="activity-panel" v-if="item.type === 1">
         <ul class="box">
           <li
             class="content"
@@ -42,17 +42,34 @@
             <a class="cover-link"></a>
           </li>
         </ul>
-      </div>
-
-      <section class="w mt30 clearfix" v-if="item.type === 2">
-        <y-shelf :title="item.name">
-          <div slot="content" class="hot">
-            <mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContentItems" :key="j"></mall-goods>
+      </div>-->
+      <div class="hot_title">热门商品</div>
+      <!-- <div class="hot_list_body">
+        <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
+          <div class="hot_product_img_div">
+            <img v-lazy="iitem.picurl" />
           </div>
-        </y-shelf>
+        </div>
+      </div> -->
+      <section class="w mt30 clearfix">
+
+          <div slot="content" class="hot">
+            <div
+              class="imgbanner"
+              v-for="(iitem,j) in hotList"
+              :key="j"
+              v-if="j == 0"
+              @click="linkTo(iitem)"
+            >
+              <img v-lazy="iitem.picurl" />
+              <a class="cover-link"></a>
+            </div>
+            <mall-goods :msg="iitem" v-for="(iitem,j) in hotList" :key="j" v-if="j != 0"></mall-goods>
+          </div>
+        <!-- </y-shelf> -->
       </section>
 
-      <section class="w mt30 clearfix" v-if="item.type === 3">
+      <!-- <section class="w mt30 clearfix" v-if="item.type === 3">
         <y-shelf :title="item.name">
           <div slot="content" class="floors">
             <div
@@ -73,16 +90,16 @@
             ></mall-goods>
           </div>
         </y-shelf>
-      </section>
+      </section>-->
     </div>
-    <!-- </div> -->
+    </div>
 
-    <div class="no-info" v-if="error">
+    <!-- <div class="no-info" v-if="error">
       <div class="no-data">
         <img src="/static/images/error.png" />
         <br />抱歉！出错了...
       </div>
-    </div>
+    </div> -->
 
     <!--<el-dialog
       title="通知"
@@ -102,11 +119,10 @@ import YShelf from "/components/shelf";
 import product from "/components/product";
 import mallGoods from "/components/mallGoods";
 import { setStore, getStore } from "/utils/storage.js";
-import { indexCarousel } from "/api/index";
+import { indexCarousel, homeHotList } from "/api/index";
 export default {
   data() {
     return {
-      error: false,
       banner: [],
       mark: 0,
       bgOpt: {
@@ -120,17 +136,22 @@ export default {
       notify: "1",
       dialogVisible: false,
       timer: "",
-      carouselList: []
+      carouselList: [],
+      hotList: []
     };
   },
   methods: {
+    _homeHotList() {
+      homeHotList("").then(res => {
+        console.log("ssss");
+        this.hotList = res.data;
+        this.loading = false;
+      });
+    },
     _indexCarousel() {
       indexCarousel("").then(res => {
-        console.log(res);
-        console.log(res.data);
-
         this.carouselList = res.data;
-        console.log(this.carouselList);
+        this._homeHotList();
       });
     },
     autoPlay() {
@@ -164,28 +185,28 @@ export default {
         window.location.href = item.fullUrl;
       }
     },
-    bgOver(e) {
-      this.bgOpt.px = e.offsetLeft;
-      this.bgOpt.py = e.offsetTop;
-      this.bgOpt.w = e.offsetWidth;
-      this.bgOpt.h = e.offsetHeight;
-    },
-    bgMove(dom, eve) {
-      let bgOpt = this.bgOpt;
-      let X, Y;
-      let mouseX = eve.pageX - bgOpt.px;
-      let mouseY = eve.pageY - bgOpt.py;
+    // bgOver(e) {
+    //   this.bgOpt.px = e.offsetLeft;
+    //   this.bgOpt.py = e.offsetTop;
+    //   this.bgOpt.w = e.offsetWidth;
+    //   this.bgOpt.h = e.offsetHeight;
+    // },
+    // bgMove(dom, eve) {
+    //   let bgOpt = this.bgOpt;
+    //   let X, Y;
+    //   let mouseX = eve.pageX - bgOpt.px;
+    //   let mouseY = eve.pageY - bgOpt.py;
 
-      X = mouseX - bgOpt.w / 2;
-      Y = bgOpt.h / 2 - mouseY;
+    //   X = mouseX - bgOpt.w / 2;
+    //   Y = bgOpt.h / 2 - mouseY;
 
-      dom.style["transform"] = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`;
-      dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`;
-    },
-    bgOut(dom) {
-      dom.style["transform"] = "rotateY(0deg) rotateX(0deg)";
-      dom.style.transform = "rotateY(0deg) rotateX(0deg)";
-    },
+    //   dom.style["transform"] = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`;
+    //   dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`;
+    // },
+    // bgOut(dom) {
+    //   dom.style["transform"] = "rotateY(0deg) rotateX(0deg)";
+    //   dom.style.transform = "rotateY(0deg) rotateX(0deg)";
+    // },
     showNotify() {
       var value = getStore("notify");
       if (this.notify !== value) {
@@ -195,36 +216,22 @@ export default {
     }
   },
   mounted() {
-    productHome().then(res => {
-      if (res.success === false) {
-        this.error = true;
-        return;
-      }
-      let data = res.result;
-      this.home = data;
-      this.loading = false;
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].type === 0) {
-          this.banner = data[i].panelContentItems;
-        }
-      }
-    });
+    // productHome().then(res => {
+    //   if (res.success === false) {
+    //     this.error = true;
+    //     return;
+    //   }
+    //   let data = res.result;
+    //   this.home = data;
+      
+    //   for (let i = 0; i < data.length; i++) {
+    //     if (data[i].type === 0) {
+    //       this.banner = data[i].panelContentItems;
+    //     }
+    //   }
+    // });
     this.showNotify();
     this._indexCarousel();
-    console.log("ss");
-
-    // this.$ajax({
-    //   method: "get",
-    //   url: `http://192.168.1.146:8080/jzbppt/jzbp_findIndexPicList.do`
-    // })
-    //   .then(res => {
-    //     console.log("yyw");
-    //     console.log(res.data);
-    //   })
-    //   .catch(function(err) {
-    //     console.log("wyy");
-    //     console.log(err);
-    //   });
   },
   created() {
     this.play();
@@ -245,6 +252,7 @@ export default {
   min-width: 1260px;
   max-width: 1920px;
   margin: 0 auto;
+  background-color: #f6f7fb;
 }
 
 .no-info {
@@ -520,13 +528,13 @@ ul.box {
 
 .hot {
   display: flex;
+  flex-wrap: wrap;
   > div {
-    flex: 1;
     width: 25%;
   }
 }
 
-.floors {
+.hot {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -556,5 +564,19 @@ ul.box {
     width: 100%;
     height: 100%;
   }
+}
+.hot_list_body {
+  width:1220px;
+  margin:30px auto 0;
+}
+.hot_title {
+    position: relative;
+    line-height: 22px;
+    font-size: 22px;
+    color: #272a2c;
+    display: block;
+    text-indent: 15px;
+    border-left: 4px #cf1132 solid;
+    margin-bottom: 30px;
 }
 </style>

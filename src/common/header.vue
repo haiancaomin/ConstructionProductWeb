@@ -211,7 +211,7 @@
   </div>
 </template>
 <script>
-import YButton from "/components/YButton";
+// import YButton from "/components/YButton";
 import { mapMutations, mapState } from "vuex";
 import {
   getQuickSearch,
@@ -311,22 +311,22 @@ export default {
       this.connectionShow = false;
       this.showConnectionHover = false;
     },
-    handleNavItemMouseEnter(item, index) {
-      let cateName = item.picUrl;
-      this.showRecommend = false;
-      if (cateName === "手机") {
-        this.showCateDiv = false;
-        this.showRecommend = true;
-        return;
-      }
-      let cate = this.goodsCateTree[cateName];
-      if (cate) {
-        this.curCateList = cate.children;
-        this.showCateDiv = true;
-      } else {
-        this.showCateDiv = false;
-      }
-    },
+    // handleNavItemMouseEnter(item, index) {
+    //   let cateName = item.picUrl;
+    //   this.showRecommend = false;
+    //   if (cateName === "手机") {
+    //     this.showCateDiv = false;
+    //     this.showRecommend = true;
+    //     return;
+    //   }
+    //   let cate = this.goodsCateTree[cateName];
+    //   if (cate) {
+    //     this.curCateList = cate.children;
+    //     this.showCateDiv = true;
+    //   } else {
+    //     this.showCateDiv = false;
+    //   }
+    // },
     handleNavSubMouseLeave() {
       this.showCateDiv = false;
       this.showRecommend = false;
@@ -348,69 +348,69 @@ export default {
         });
       }
     },
-    goGoodsCatePage(childCateItem) {
-      let { id } = childCateItem;
-      this.$router.push("/goods/cate/" + id);
-      this.showCateDiv = false;
-    },
-    goRecommendGoodsDetail(item) {
-      let { productId } = item;
-      this.$router.push("/product/" + productId);
-      this.showRecommend = false;
-    },
-    showError(m) {
-      this.$message.error({
-        message: m
-      });
-    },
-    // 导航栏文字样式改变
-    changePage(v) {
-      this.choosePage = v;
-    },
-    changGoods(v, item) {
-      this.changePage(v);
-      if (v === -1) {
-        this.$router.push({
-          path: "/"
-        });
-      } else if (v === -2) {
-        this.$router.push({
-          path: "/refreshgoods"
-        });
-      }
-    },
-    // 搜索框提示
-    loadAll() {
-      let params = {
-        params: {
-          key: this.input
-        }
-      };
-      getQuickSearch(params).then(response => {
-        if (response === null || response === "") {
-          return;
-        }
-        if (response.error) {
-          this.showError(response.error.reason);
-          return;
-        }
-        var array = [];
-        var maxSize = 5;
-        if (response.result.length <= 5) {
-          maxSize = response.result.length;
-        }
-        for (var i = 0; i < maxSize; i++) {
-          var obj = {};
-          obj.value = response.result[i].productName;
-          array.push(obj);
-        }
-        if (array.length !== 0) {
-          this.searchResults = array;
-        } else {
-          this.searchResults = [];
-        }
-      });
-    },
+    // goGoodsCatePage(childCateItem) {
+    //   let { id } = childCateItem;
+    //   this.$router.push("/goods/cate/" + id);
+    //   this.showCateDiv = false;
+    // },
+    // goRecommendGoodsDetail(item) {
+    //   let { productId } = item;
+    //   this.$router.push("/product/" + productId);
+    //   this.showRecommend = false;
+    // },
+    // showError(m) {
+    //   this.$message.error({
+    //     message: m
+    //   });
+    // },
+
+    // changePage(v) {
+    //   this.choosePage = v;
+    // },
+    // changGoods(v, item) {
+    //   this.changePage(v);
+    //   if (v === -1) {
+    //     this.$router.push({
+    //       path: "/"
+    //     });
+    //   } else if (v === -2) {
+    //     this.$router.push({
+    //       path: "/refreshgoods"
+    //     });
+    //   }
+    // },
+   
+    // loadAll() {
+    //   let params = {
+    //     params: {
+    //       key: this.input
+    //     }
+    //   };
+    //   getQuickSearch(params).then(response => {
+    //     if (response === null || response === "") {
+    //       return;
+    //     }
+    //     if (response.error) {
+    //       this.showError(response.error.reason);
+    //       return;
+    //     }
+    //     var array = [];
+    //     var maxSize = 5;
+    //     if (response.result.length <= 5) {
+    //       maxSize = response.result.length;
+    //     }
+    //     for (var i = 0; i < maxSize; i++) {
+    //       var obj = {};
+    //       obj.value = response.result[i].productName;
+    //       array.push(obj);
+    //     }
+    //     if (array.length !== 0) {
+    //       this.searchResults = array;
+    //     } else {
+    //       this.searchResults = [];
+    //     }
+    //   });
+    // },
     querySearchAsync(queryString, cb) {
       if (this.input === undefined) {
         cb([]);
@@ -430,36 +430,36 @@ export default {
     handleSelect(item) {
       this.input = item.value;
     },
-    // 购物车显示
-    cartShowState(state) {
-      this.SHOW_CART({ showCart: state });
-    },
-    // 登陆时获取一次购物车商品
-    _getCartList() {
-      getCartList({ userId: getStore("userId") })
-        .then(res => {
-          if (res.success === true) {
-            setStore("buyCart", res.result);
-          }
-          // 重新初始化一次本地数据
-        })
-        .then(this.INIT_BUYCART);
-    },
-    // 删除商品
-    delGoods(productId) {
-      if (this.login) {
-        // 登陆了
-        cartDel({ userId: getStore("userId"), productId }).then(res => {
-          this.EDIT_CART({ productId });
-        });
-      } else {
-        this.EDIT_CART({ productId });
-      }
-    },
-    toCart() {
-      this.$router.push({ path: "/cart" });
-    },
-    // 控制顶部
+   
+    // cartShowState(state) {
+    //   this.SHOW_CART({ showCart: state });
+    // },
+   
+    // _getCartList() {
+    //   getCartList({ userId: getStore("userId") })
+    //     .then(res => {
+    //       if (res.success === true) {
+    //         setStore("buyCart", res.result);
+    //       }
+         
+    //     })
+    //     .then(this.INIT_BUYCART);
+    // },
+
+    // delGoods(productId) {
+    //   if (this.login) {
+     
+    //     cartDel({ userId: getStore("userId"), productId }).then(res => {
+    //       this.EDIT_CART({ productId });
+    //     });
+    //   } else {
+    //     this.EDIT_CART({ productId });
+    //   }
+    // },
+    // toCart() {
+    //   this.$router.push({ path: "/cart" });
+    // },
+  
     navFixed() {
       const fixedPages = ["goods/*", "/home", "product/*"];
       let path = this.$route.path;
@@ -486,103 +486,103 @@ export default {
         });
       }
     },
-    // 退出登陆
-    _loginOut() {
-      let params = {
-        params: {
-          token: this.token
-        }
-      };
-      loginOut(params).then(res => {
-        removeStore("buyCart");
-        window.location.href = "/";
-      });
-    },
-    // 通过路由改变导航文字样式
-    getPage() {
-      let path = this.$route.path;
-      // let fullPath = this.$route.fullPath
-      if (path === "/" || path === "/home") {
-        this.changePage(-1);
-      } else if (path === "/goods") {
-        this.changePage(-2);
-      } else {
-        this.changePage(0);
-      }
-    },
-    openProduct(productId) {
-      window.open("//" + window.location.host + "/#/product/" + productId);
-    },
-    _getNavList() {
-      navList().then(res => {
-        this.navList = res.result;
-      });
-    },
-    _getGoodsCategoryList() {
-      getAllGoodsCategories().then(res => {
-        this.goodsCateList = res.result;
-        this.goodsCateTree = this._buildCateTree(this.goodsCateList);
-      });
-    },
-    _buildCateTree(goodsCateList) {
-      let parentCateList = goodsCateList.filter(cate => cate.isParent) || [];
-      let tree = {};
-      if (parentCateList) {
-        // 遍历父级产品分类
-        for (let parentCate of parentCateList) {
-          let parentCateId = parentCate.id; // 父级分类id
-          let parentCateName = parentCate.name; // 分类名称
 
-          let childCateList = goodsCateList
-            .filter(cate => cate.parentId === parentCateId && !cate.isParent) // 获取当前父级父类对应的二级子分类
-            .map(cate => {
-              let childCateId = cate.id;
-              // 查询三级分类
-              let children = goodsCateList.filter(
-                cate => cate.parentId === childCateId && !cate.isParent
-              );
-              // 重新构造子分类对象
-              return {
-                ...cate,
-                children: children
-              };
-            });
-          tree[parentCateName] = {
-            ...parentCate,
-            children: childCateList
-          };
-        }
-      }
-      return tree;
-    },
-    _getRecommendGoodsAsPhone() {
-      recommend().then(res => {
-        let data = res.result;
-        this.recommendPanel = data[0];
-      });
-    }
+    // _loginOut() {
+    //   let params = {
+    //     params: {
+    //       token: this.token
+    //     }
+    //   };
+    //   loginOut(params).then(res => {
+    //     removeStore("buyCart");
+    //     window.location.href = "/";
+    //   });
+    // },
+  
+    // getPage() {
+    //   let path = this.$route.path;
+
+    //   if (path === "/" || path === "/home") {
+    //     this.changePage(-1);
+    //   } else if (path === "/goods") {
+    //     this.changePage(-2);
+    //   } else {
+    //     this.changePage(0);
+    //   }
+    // },
+    // openProduct(productId) {
+    //   window.open("//" + window.location.host + "/#/product/" + productId);
+    // },
+    // _getNavList() {
+    //   navList().then(res => {
+    //     this.navList = res.result;
+    //   });
+    // },
+    // _getGoodsCategoryList() {
+    //   getAllGoodsCategories().then(res => {
+    //     this.goodsCateList = res.result;
+    //     this.goodsCateTree = this._buildCateTree(this.goodsCateList);
+    //   });
+    // },
+    // _buildCateTree(goodsCateList) {
+    //   let parentCateList = goodsCateList.filter(cate => cate.isParent) || [];
+    //   let tree = {};
+    //   if (parentCateList) {
+    
+    //     for (let parentCate of parentCateList) {
+    //       let parentCateId = parentCate.id; 
+    //       let parentCateName = parentCate.name; 
+
+    //       let childCateList = goodsCateList
+    //         .filter(cate => cate.parentId === parentCateId && !cate.isParent) 
+    //         .map(cate => {
+    //           let childCateId = cate.id;
+              
+    //           let children = goodsCateList.filter(
+    //             cate => cate.parentId === childCateId && !cate.isParent
+    //           );
+             
+    //           return {
+    //             ...cate,
+    //             children: children
+    //           };
+    //         });
+    //       tree[parentCateName] = {
+    //         ...parentCate,
+    //         children: childCateList
+    //       };
+    //     }
+    //   }
+    //   return tree;
+    // },
+    // _getRecommendGoodsAsPhone() {
+    //   recommend().then(res => {
+    //     let data = res.result;
+    //     this.recommendPanel = data[0];
+    //   });
+    // }
   },
   mounted() {
-    this._getNavList();
-    this._getGoodsCategoryList();
-    this._getRecommendGoodsAsPhone();
-    this.token = getStore("token");
-    if (this.login) {
-      this._getCartList();
-    } else {
-      this.INIT_BUYCART();
-    }
-    this.navFixed();
-    this.getPage();
+    // this._getNavList();
+    // this._getGoodsCategoryList();
+    // this._getRecommendGoodsAsPhone();
+    // this.token = getStore("token");
+    // if (this.login) {
+    //   this._getCartList();
+    // } else {
+    //   this.INIT_BUYCART();
+    // }
+    // this.navFixed();
+    // this.getPage();
     window.addEventListener("scroll", this.navFixed);
     window.addEventListener("resize", this.navFixed);
-    if (typeof this.$route.query.key !== undefined) {
-      this.input = this.$route.query.key;
-    }
+    // if (typeof this.$route.query.key !== undefined) {
+    //   this.input = this.$route.query.key;
+    // }
   },
-  components: {
-    YButton
-  }
+  // components: {
+  //   YButton
+  // }
 };
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
