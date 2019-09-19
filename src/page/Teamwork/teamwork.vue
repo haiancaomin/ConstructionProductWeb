@@ -1,25 +1,26 @@
 <template>
-  <div class="container" id="app">
-    <div class="row submit-comment">
+  <div class="container">
+    <div class="submit-comment">
       <textarea name="content" id rows="10" v-model="content" @keydown.enter="add"></textarea>
-      <div class="submit-comment-action">
+      <div class="submit-comment-action clearfix">
         <el-button @click="add" type="success">提交</el-button>
-        <span class="text-muted">(可按Enter 回复)</span>
+        <span>(可按Enter 回复)</span>
       </div>
     </div>
     <div class="comment-list">
-      <div class="nomess text-muted" v-show="msgData.length==0">
+      <div class="nomess" v-show="msgData.length==0">
         <h5>暂无留言</h5>
       </div>
-      <div class="messlist">
-        <div class="reply" v-for="(item,index) in msgData" v-cloak>
+      <div>
+        <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
+          <p class="person-name">华新集团-张三-15195910513</p>
           <p class="replyContent">{{item.content}}</p>
           <p class="operation">
             <span class="time">{{item.time}}</span>
           </p>
         </div>
       </div>
-      <div style="float:right">
+      <div class="page">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -38,7 +39,17 @@ export default {
   data() {
     return {
       content: "",
-      msgData: [],
+      msgData: [
+        {
+          content: "真特么帅气",
+          time: "2019-9-19 15:22:00"
+        },
+        {
+          content:
+            "真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气真特么帅气",
+          time: "2019-9-19 15:22:00"
+        }
+      ],
       nowIndex: -100,
       currentPage: 1,
       pageSize: 5,
@@ -65,11 +76,8 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-[v-cloak] {
-  display: none;
-}
-.title {
-  padding: 20px;
+.container {
+  background: #fff;
 }
 .submit-comment {
   height: 250px;
@@ -80,7 +88,6 @@ export default {
   border: #a5bcff solid 1px;
 }
 .comment-list {
-  height: auto;
   width: 800px;
   margin-right: auto;
   margin-left: auto;
@@ -99,55 +106,41 @@ textarea {
   width: 750px;
 }
 .submit-comment-action span {
-  /* display: inline-block; */
   width: 150px;
   float: right;
   text-align: center;
   padding: 10px;
 }
 .submit-comment-action button {
-  /* display: inline-block; */
   float: right;
 }
 .nomess {
-  padding: 5px;
-  height: 40px;
+  padding: 15px;
   text-align: center;
 }
-.messlist {
-  font-family: "Microsoft YaHei UI";
-  font-weight: 300;
-}
+
 .reply {
   border-bottom: 1px solid #8d92a0;
 }
-.replyContent {
-  padding: 10px;
+.replyContent,
+.operation,
+.person-name {
+  padding: 8px 10px;
+  text-align: justify;
 }
-.operation {
-  padding: 10px;
-}
-.operation .time {
-  /* display: inline-block; */
-  float: left;
-}
-.operation .handle {
-  float: right;
-}
-.handle a {
-  text-decoration: none;
-  display: inline-block;
-  padding-right: 5px;
+.person-name,
+.time {
+  font-size: 12px;
+  color: #999;
 }
 .page {
   background-color: #f3f8fd;
-  clear: right;
-  height: 50px;
-  padding: 5px;
+  padding: 10px 5px;
 }
-.pagination {
-  margin: 0;
-  padding: 0;
-  float: right;
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
 }
 </style>
