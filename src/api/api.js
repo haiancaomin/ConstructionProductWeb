@@ -43,5 +43,7 @@ export const apis = {
   indexCarousel: '/jzbppt/jzbp_findIndexPicList.do',
   homeHotList: '/jzbppt/jzbp_findHotspotPicList.do',
   messageBoardFun: '/jzbppt/jzbp_saveFeedback.do',
-  homeNewListFun: '/jzbppt/jzbp_findNewProductList.do'
+  homeNewListFun: '/jzbppt/jzbp_findNewProductList.do',
+  productTypeListFun: '/jzbppt/jzbp_getHtTypeList.do',
+  productListBySrarchOrTyprFun: '/jzbppt/jzbp_findProductList.do'
 }

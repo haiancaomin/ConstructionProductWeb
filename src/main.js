@@ -64,6 +64,7 @@ Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 Vue.prototype.$ajax = axios
+Vue.prototype.bus = new Vue()
 Vue.use(infiniteScroll)
 Vue.use(VueCookie)
 Vue.use(VueLazyload, {

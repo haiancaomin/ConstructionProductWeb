@@ -80,17 +80,13 @@
             </div>
           </router-link>
           <div class="nav_search_head index_search_input_head">
-            <el-autocomplete
-              placeholder="请输入商品信息"
+            <el-input
+              placeholder="请输入商品名称"
               icon="search"
               v-model="input"
-              minlength="1"
-              maxlength="100"
-              :fetch-suggestions="querySearchAsync"
-              @select="handleSelect"
               :on-icon-click="handleIconClick"
               @keydown.enter.native="handleIconClick"
-            ></el-autocomplete>
+            ></el-input>
           </div>
           <div class="right-box">
             <div class="nav-aside" ref="aside">
@@ -137,31 +133,31 @@
               <ul class="nav-list2">
                 <li>
                   <router-link to="/">
-                    <div @click="changGoods(-1)" :class="{active:choosePage===-1}">首页</div>
+                    <div @click="changGoods(1)" :class="{active:choosePage===1}">首页</div>
                   </router-link>
                 </li>
                 <li>
-                  <div @click="changGoods(-2)" :class="{active:choosePage===-2}">
-                    产品分类
-                    <i class="iconfont_down_arrow">&#xe60a;</i>
-                  </div>
+                  <router-link to="/goods">
+                    <div @click="changGoods(2)" :class="{active:choosePage===2}">
+                      产品分类
+                      <i class="iconfont_down_arrow">&#xe60a;</i>
+                    </div>
+                  </router-link>
                 </li>
                 <li>
-                  <div @click="changGoods(-3)" :class="{active:choosePage===-3}">协同办公</div>
+                  <router-link to="/admin">
+                    <div @click="changGoods(3)" :class="{active:choosePage===3}">协同办公</div>
+                  </router-link>
                 </li>
               </ul>
               <div class="nav-search index_search_input" v-if="st">
-                <el-autocomplete
-                  placeholder="请输入商品信息"
+                <el-input
+                  placeholder="请输入商品名称"
                   icon="search"
                   v-model="input"
-                  minlength="1"
-                  maxlength="100"
-                  :fetch-suggestions="querySearchAsync"
-                  @select="handleSelect"
                   :on-icon-click="handleIconClick"
                   @keydown.enter.native="handleIconClick"
-                ></el-autocomplete>
+                ></el-input>
               </div>
               <div class="shpping_cart" v-if="st">
                 <i class="iconfont">&#xe625;</i>报价器
@@ -171,10 +167,10 @@
                 <ul _ngcontent-c1 class="nav-list">
                   <!---->
                   <li _ngcontent-c1>
-                    <a _ngcontent-c1 class="active" title="智聚装配" href="/" target>智聚装配</a>
+                    <a _ngcontent-c1 title="智聚官网" href="http://zhjcx.cn" target="_blank">智聚官网</a>
                   </li>
                   <li _ngcontent-c1>
-                    <a _ngcontent-c1 title="智聚官网" href="http://zhjcx.cn" target="_blank">智聚官网</a>
+                    <a _ngcontent-c1 class="active" title="智聚装配" href="/" target>智聚装配</a>
                   </li>
                   <li _ngcontent-c1>
                     <a _ngcontent-c1 title="智聚实训" href="http://www.智聚实训.cn" target="_blank">智聚实训</a>
@@ -299,24 +295,25 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      "ADD_CART",
-      "INIT_BUYCART",
-      "ADD_ANIMATION",
-      "SHOW_CART",
-      "REDUCE_CART",
-      "RECORD_USERINFO",
-      "EDIT_CART"
-    ]),
+    // ...mapMutations([
+    //   "SET_KEYWORD",
+    //   "ADD_CART",
+    //   "INIT_BUYCART",
+    //   "ADD_ANIMATION",
+    //   "SHOW_CART",
+    //   "REDUCE_CART",
+    //   "RECORD_USERINFO",
+    //   "EDIT_CART"
+    // ]),
     _messageBoardFun() {
       let paramz = new URLSearchParams();
-      if(this.messageBoardDesc.trim() == "") {
+      if (this.messageBoardDesc.trim() == "") {
         this.$message({
           message: "留言内容不要为空",
           type: "error",
           center: true
         });
-      } else if(this.userPhone.trim() == "") {
+      } else if (this.userPhone.trim() == "") {
         this.$message({
           message: "请留下您的联系方式",
           type: "error",
@@ -324,17 +321,16 @@ export default {
         });
       } else {
         paramz.append("question", this.messageBoardDesc);
-      paramz.append("phone", this.userPhone);
-      messageBoardFun(paramz).then(res => {
-        this.messageBoardFlag = false;
-        this.$message({
-          message: "提交成功！",
-          type: "success",
-          center: true
+        paramz.append("phone", this.userPhone);
+        messageBoardFun(paramz).then(res => {
+          this.messageBoardFlag = false;
+          this.$message({
+            message: "提交成功！",
+            type: "success",
+            center: true
+          });
         });
-      });
       }
-      
     },
     showAttention() {
       this.showAttentionHover = true;
@@ -377,21 +373,22 @@ export default {
       this.showRecommend = false;
     },
     handleIconClick(ev) {
-      if (this.$route.path === "/search") {
-        this.$router.push({
-          path: "/refreshsearch",
-          query: {
-            key: this.input
-          }
-        });
-      } else {
-        this.$router.push({
-          path: "/search",
-          query: {
-            key: this.input
-          }
-        });
-      }
+      // if (this.$route.path === "/search") {
+      console.log("ccccccccccc");
+      this.$router.push({
+        path: "/goods",
+        query: {
+          keyWord: this.input
+        }
+      });
+      // } else {
+      //   this.$router.push({
+      //     path: "/search",
+      //     query: {
+      //       key: this.input
+      //     }
+      //   });
+      // }
     },
     // goGoodsCatePage(childCateItem) {
     //   let { id } = childCateItem;
@@ -414,19 +411,19 @@ export default {
     },
     changGoods(v, item) {
       this.changePage(v);
-      if (v === -1) {
-        this.$router.push({
-          path: "/"
-        });
-      } else if (v === -2) {
-        this.$router.push({
-          path: "/refreshgoods"
-        });
-      }else{
-        this.$router.push({
-          path: "/admin"
-        });
-      }
+      // if (v === -1) {
+      //   this.$router.push({
+      //     path: "/"
+      //   });
+      // } else if (v === -2) {
+      //   this.$router.push({
+      //     path: "/refreshgoods"
+      //   });
+      // }else{
+      //   this.$router.push({
+      //     path: "/admin"
+      //   });
+      // }
     },
 
     // loadAll() {
@@ -623,12 +620,27 @@ export default {
     // }
     // this.navFixed();
     // this.getPage();
+    let that = this;
+    this.bus.$on("clearKeyWord", function(val) {
+      that.input = val.keyWord
+    });
     window.addEventListener("scroll", this.navFixed);
     window.addEventListener("resize", this.navFixed);
+    this.$route.query.keyWord="";
+    console.log();
+    if (this.$router.history.current.path == "/home") {
+      this.changePage(1);
+    } else if (this.$router.history.current.path == "/goods") {
+      this.changePage(2);
+    } else if (this.$router.history.current.path == "/admin") {
+      this.changePage(3);
+    }
+
     // if (typeof this.$route.query.key !== undefined) {
     //   this.input = this.$route.query.key;
     // }
-  }
+  },
+  
   // components: {
   //   YButton
   // }
@@ -1650,11 +1662,11 @@ header {
 }
 </style>
 <style>
-.index_search_input .el-autocomplete input {
+.index_search_input .el-input input {
   height: 34px;
   border-radius: 17px;
 }
-.index_search_input_head .el-autocomplete input {
+.index_search_input_head .el-input input {
   height: 36px;
   border-radius: 18px;
 }

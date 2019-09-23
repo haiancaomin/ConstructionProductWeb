@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="nav">
+    <!-- <div class="nav">
       <div class="w">
         <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
         <a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>
@@ -12,13 +12,19 @@
           <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
         </div>
       </div>
-    </div>
-
+    </div>-->
+    <div class="search_notice" v-if="keyWord != ''&&keyWord != undefined">当前搜索条件："{{keyWord}}"</div>
     <div class="type_choose_div">
-      <div class="type_btn">全部商品</div>
-      <div class="type_btn">减震部件</div>
-      <div class="type_btn">抗震部件</div>
-      <div class="type_btn">加热模台</div>
+      <div class="choose_zone">
+        <div class="type_btn" @click="getAllProduct()" :class="{'btn_active':productType==''}">全部商品</div>
+      </div>
+      <div class="choose_zone" v-for="(item,i) in productTypeList" :key="i">
+        <div
+          class="type_btn"
+          @click="changeProductType(item.type)"
+          :class="{'btn_active':productType==item.type}"
+        >{{item.type}}</div>
+      </div>
     </div>
     <!-- <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;"> -->
     <div>
@@ -28,9 +34,8 @@
           <mall-goods v-for="(item,i) in goods" :key="i" :msg="item"></mall-goods>
         </div>-->
         <div class="hot_list_outbody">
-    
           <div class="hot_list_body">
-            <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
+            <div class="hot_product_body" v-for="(iitem,j) in productList" :key="j">
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <div class="hot_product_hover"></div>
@@ -59,18 +64,15 @@
             </div>
           </div>
         </div>
-        <div class="pagination_div">
-        <el-pagination
-          v-if="!noResult&&!error"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[8, 20, 40, 80]"
-          :page-size="pageSize"
-          layout="prev, pager, next, jumper"
-          :total="total"
-          id="product_list_pagination"
-        ></el-pagination>
+        <div class="pagination_div" v-if="productCount>0">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            layout="prev, pager, next, jumper"
+            :total="productCount"
+            :page-size="8"
+            id="product_list_pagination"
+          ></el-pagination>
         </div>
       </div>
       <div class="no-info" v-if="noResult">
@@ -108,9 +110,8 @@ import { recommend } from "/api/index.js";
 import mallGoods from "/components/mallGoods";
 import YButton from "/components/YButton";
 import YShelf from "/components/shelf";
-
 import Utils from "/utils";
-import { homeHotList } from "/api/index";
+import { productTypeListFun, productListBySrarchOrTyprFun } from "/api/index";
 export default {
   data() {
     return {
@@ -129,28 +130,55 @@ export default {
       currentPage: 1,
       total: 0,
       pageSize: 20,
-      hotList: []
+      hotList: [],
+      productTypeList: [],
+      productList: [],
+      productCount: 0,
+      productType: "",
+      keyWord: ""
     };
   },
   methods: {
     isEmpty: Utils.isEmpty,
-
-    _homeHotList() {
-      homeHotList("").then(res => {
-        console.log(res.data);
-        
-        this.hotList = res.data;
+    getAllProduct() {
+      this.keyWord = "";
+      this.productType = "";
+      this.currentPage = 1;
+      this._productListBySrarchOrTyprFun();
+      this.bus.$emit("clearKeyWord", {
+                keyWord: ""
+              });
+    },
+    changeProductType(type) {
+      this.keyWord = "";
+      this.currentPage = 1;
+      this.productType = type;
+      this._productListBySrarchOrTyprFun();
+    },
+    _productListBySrarchOrTyprFun() {
+      let paramProduct = new URLSearchParams();
+      paramProduct.append("name", this.keyWord);
+      paramProduct.append("type", this.productType);
+      paramProduct.append("selectIndex", this.currentPage);
+      paramProduct.append("pageIndex", (this.currentPage - 1) * 8);
+      productListBySrarchOrTyprFun(paramProduct).then(res => {
+        this.productList = res.data;
+        this.productCount = res.count;
+        if (this.keyWord != "") {
+          this.productType = "-1";
+        }
       });
     },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this._getAllGoods();
-      this.loading = true;
+    _productTypeListFun() {
+      productTypeListFun("").then(res => {
+        console.log(res.data);
+        this.productTypeList = res.data;
+        console.log(this.productTypeList);
+      });
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._getAllGoods();
-      this.loading = true;
+      this._productListBySrarchOrTyprFun();
     },
     _getAllGoods() {
       let cid;
@@ -211,25 +239,42 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if (to.fullPath.indexOf("/goods?cid=") >= 0) {
-        this.cId = to.query.cid;
-        this._getAllGoods();
+      if (to.fullPath.indexOf("/goods") >= 0) {
+        this.keyWord = this.$route.query.keyWord;
+        if (this.keyWord == "" || this.keyWord == undefined) {
+          this.keyWord = "";
+          this.productType="";
+          this.currentPage = 1;
+          this._productListBySrarchOrTyprFun();
+        } else {
+          this.productType = "";
+          this.currentPage = 1;
+          this._productListBySrarchOrTyprFun();
+        }
       }
-      if (to.fullPath.includes("/goods/cate")) {
-        this._getAllGoods();
-      }
+      // if (to.fullPath.includes("/goods/cate")) {
+      //   this._getAllGoods();
+      // }
     }
   },
   created() {},
   mounted() {
-    this._homeHotList();
-    this.windowHeight = window.innerHeight;
-    this.windowWidth = window.innerWidth;
-    this._getAllGoods();
-    recommend().then(res => {
-      let data = res.result;
-      this.recommendPanel = data[0];
-    });
+    this.keyWord = this.$route.query.keyWord;
+    this._productTypeListFun();
+    if (this.keyWord == "" || this.keyWord == undefined) {
+      this.keyWord = "";
+      this._productListBySrarchOrTyprFun();
+    } else {
+      this._productListBySrarchOrTyprFun();
+    }
+
+    // this.windowHeight = window.innerHeight;
+    // this.windowWidth = window.innerWidth;
+    // this._getAllGoods();
+    // recommend().then(res => {
+    //   let data = res.result;
+    //   this.recommendPanel = data[0];
+    // });
   },
   components: {
     mallGoods,
@@ -325,9 +370,10 @@ export default {
 }
 .hot_list_body {
   width: 1280px;
+  height: 664px;
   display: flex;
   flex-wrap: wrap;
-  margin:0 auto;
+  margin: 0 auto;
 }
 .new_list_outbody {
   width: 300px;
@@ -342,6 +388,7 @@ export default {
   margin-bottom: 30px;
 }
 .hot_product_body {
+  height: 312px;
   margin: 0 20px 20px 0;
   background: #fff;
 }
@@ -460,20 +507,50 @@ export default {
   background-color: #f6f7fb;
 }
 .pagination_div {
-  width:1280px;
-  margin:0 auto;
+  width: 1280px;
+  margin: 0 auto;
 }
 #product_list_pagination {
   text-align: center;
-  margin-top:20px;
+  margin-top: 20px;
 }
 .type_choose_div {
-  width:1280px;
-  margin:0 auto;
+  width: 1280px;
+  margin: 0 auto;
   display: flex;
 }
+.choose_zone {
+  width: 105px;
+  height: 30px;
+  margin: 20px 0;
+}
 .type_btn {
-
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #cf1132;
+  color: #cf1132;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.btn_active {
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background: #cf1132;
+  border: 1px solid #cf1132;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.search_notice {
+  width:1280px;
+  margin:0 auto;
+  margin-top:20px;
 }
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */

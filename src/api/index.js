@@ -1,6 +1,14 @@
 import http from './public'
 import {apis} from './api'
 
+//产品分类页面商品列表
+export const productListBySrarchOrTyprFun = (params) => {
+  return http.fetchPost(apis.productListBySrarchOrTyprFun, params)
+}
+//产品分类页面调用产品类型接口
+export const productTypeListFun = (params) => {
+  return http.fetchGet(apis.productTypeListFun, params)
+}
 //右侧留言板
 export const homeNewListFun = (params) => {
   return http.fetchPost(apis.homeNewListFun, params)
