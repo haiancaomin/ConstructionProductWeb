@@ -1,8 +1,5 @@
 <template>
   <div class="layout-container">
-    <y-header>
-      <div slot="nav"></div>
-    </y-header>
     <div class="w">
       <div class="content">
         <div class="account-sidebar">
@@ -32,12 +29,9 @@
         </div>
       </div>
     </div>
-    <y-footer></y-footer>
   </div>
 </template>
 <script>
-import YFooter from "/common/footer";
-import YHeader from "/common/header";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -65,10 +59,6 @@ export default {
         this.title = item.name;
       }
     });
-  },
-  components: {
-    YFooter,
-    YHeader
   },
   watch: {
     $route(to) {
