@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;">
+    <!-- <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;"> -->
+    <div>
       <div class="banner" v-for="(item, i) in carouselList" :key="i" v-show="i===mark">
         <!-- :style="{background: item.bgColor}" -->
         <div class="bg">
@@ -33,7 +34,7 @@
         <div class="hot_list_outbody">
           <div class="hot_title">热门商品</div>
           <div class="hot_list_body">
-            <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j" v-show="j<6">
+            <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <div class="hot_product_hover"></div>
@@ -43,10 +44,8 @@
                 </div>
               </div>
               <div class="hot_product_info_div">
-                <!-- <div class="hot_product_name">{{iitem.name}}</div> -->
-                <div class="hot_product_name">这是部件名称</div>
-                <!-- <div class="hot_product_description">{{iitem.description}}</div> -->
-                <div class="hot_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div>
+                <div class="hot_product_name">{{iitem.name}}</div>
+                <div class="hot_product_description">{{iitem.description}}</div>
                 <div class="hot_split_line_div">
                   <div class="hot_split_line"></div>
                 </div>
@@ -65,15 +64,14 @@
         <div class="new_list_outbody">
           <div class="hot_title">新品上线</div>
           <div class="new_list_body">
-            <div class="new_product_body" v-for="(iitem,j) in hotList" :key="j" v-show="j<6">
+            <div class="new_product_body" v-for="(iitem,j) in nweList" :key="j">
               <i class="iconfont_new_right_arrow">&#xe606;</i>
               <div class="new_product_img_div">
                 <img v-lazy="iitem.picurl" class="new_product_img" />
               </div>
               <div class="new_product_info_div">
                 <div class="new_product_name">{{iitem.name}}</div>
-                <!-- <div class="new_product_description">{{iitem.description}}</div> -->
-                <div class="new_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div>
+                <div class="new_product_description">{{iitem.description}}</div>
                 <div class="new_product_price">
                   <span>¥</span>
                   {{iitem.price}}
@@ -160,7 +158,7 @@ import YShelf from "/components/shelf";
 import product from "/components/product";
 import mallGoods from "/components/mallGoods";
 import { setStore, getStore } from "/utils/storage.js";
-import { indexCarousel, homeHotList } from "/api/index";
+import { indexCarousel, homeHotList, homeNewListFun } from "/api/index";
 export default {
   data() {
     return {
@@ -178,21 +176,29 @@ export default {
       dialogVisible: false,
       timer: "",
       carouselList: [],
-      hotList: []
+      hotList: [],
+      nweList:[],
     };
   },
   methods: {
+    _homeNewListFun() {
+      homeNewListFun("").then(res => {
+        console.log(res.data);
+        this.nweList = res.data;
+      });
+    },
     _homeHotList() {
       homeHotList("").then(res => {
         console.log(res.data);
+        // this.loading = false;
         this.hotList = res.data;
-        this.loading = false;
       });
     },
     _indexCarousel() {
       indexCarousel("").then(res => {
         this.carouselList = res.data;
         this._homeHotList();
+        this._homeNewListFun();
       });
     },
     autoPlay() {
@@ -620,7 +626,6 @@ ul.box {
   width: 300px;
 }
 .hot_title {
-  position: relative;
   line-height: 22px;
   font-size: 22px;
   color: #272a2c;
@@ -818,37 +823,36 @@ ul.box {
 .friend_zone_div {
   width: 1280px;
   margin: 20px auto 30px;
-  
 }
 .friend_out_body {
   display: flex;
 }
 .friend_body1 {
-  width:300px;
-  height:130px;
+  width: 300px;
+  height: 130px;
   background: #cf1132;
-  margin-right:20px;
+  margin-right: 20px;
   cursor: pointer;
 }
 .friend_body2 {
-  width:300px;
-  height:130px;
+  width: 300px;
+  height: 130px;
   background: #cf1132;
-  margin-right:20px;
+  margin-right: 20px;
   cursor: pointer;
 }
 .friend_body3 {
-  width:300px;
-  height:130px;
+  width: 300px;
+  height: 130px;
   background: #cf1132;
-  margin-right:20px;
+  margin-right: 20px;
   cursor: pointer;
 }
 .friend_body4 {
-  width:300px;
-  height:130px;
+  width: 300px;
+  height: 130px;
   background: #cf1132;
-  margin-right:20px;
+  margin-right: 20px;
   cursor: pointer;
 }
 

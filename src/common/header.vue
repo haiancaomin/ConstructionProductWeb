@@ -5,11 +5,16 @@
       <el-input type="textarea" v-model="messageBoardDesc" id="messageBoardTextarea"></el-input>
       <div class="message_board_notice2">联系方式（请留下您的联系方式，方便我们联系您）</div>
       <el-input v-model="userPhone"></el-input>
-      <div class="message_board_submit_btn">提交</div>
+      <div class="message_board_submit_btn" @click="_messageBoardFun()">提交</div>
     </el-dialog>
 
     <div class="suspension_frame">
-      <div class="suspension_zone1" @mouseenter="showBoard" @mouseleave="hideBoard" @click="messageBoardFlag=true">
+      <div
+        class="suspension_zone1"
+        @mouseenter="showBoard"
+        @mouseleave="hideBoard"
+        @click="messageBoardFlag=true"
+      >
         <i class="iconfont_suspension" v-show="!showBoradHover">&#xe663;</i>
         <div class="hover_div1" v-show="showBoradHover">我要留言</div>
       </div>
@@ -229,6 +234,7 @@ import {
 } from "/api/goods";
 import { loginOut, navList, recommend } from "/api/index";
 import { setStore, getStore, removeStore } from "/utils/storage";
+import { messageBoardFun } from "/api/index";
 
 // import store from '../store/'
 import "element-ui/lib/theme-default/index.css";
@@ -267,8 +273,8 @@ export default {
       showBoradHover: false,
       showAttentionHover: false,
       messageBoardFlag: false,
-      messageBoardDesc:"",
-      userPhone:"",
+      messageBoardDesc: "",
+      userPhone: ""
     };
   },
   computed: {
@@ -302,6 +308,34 @@ export default {
       "RECORD_USERINFO",
       "EDIT_CART"
     ]),
+    _messageBoardFun() {
+      let paramz = new URLSearchParams();
+      if(this.messageBoardDesc.trim() == "") {
+        this.$message({
+          message: "留言内容不要为空",
+          type: "error",
+          center: true
+        });
+      } else if(this.userPhone.trim() == "") {
+        this.$message({
+          message: "请留下您的联系方式",
+          type: "error",
+          center: true
+        });
+      } else {
+        paramz.append("question", this.messageBoardDesc);
+      paramz.append("phone", this.userPhone);
+      messageBoardFun(paramz).then(res => {
+        this.messageBoardFlag = false;
+        this.$message({
+          message: "提交成功！",
+          type: "success",
+          center: true
+        });
+      });
+      }
+      
+    },
     showAttention() {
       this.showAttentionHover = true;
     },
@@ -1149,6 +1183,7 @@ header {
         position: relative;
         width: 120px;
         text-align: center;
+        cursor: pointer;
         div {
           font-size: 16px;
           color: #333;
@@ -1589,25 +1624,25 @@ header {
   z-index: 399;
 }
 .message_board_notice1 {
-  line-height:30px;
+  line-height: 30px;
 }
 .message_board_notice2 {
-  margin-top:20px;
-  line-height:30px;
+  margin-top: 20px;
+  line-height: 30px;
 }
 .message_board_submit_btn {
-  width:100px;
-  height:40px;
+  width: 100px;
+  height: 40px;
   border-radius: 20px;
   line-height: 40px;
   text-align: center;
-  color:#fff;
-  background: #409EFF;
-  margin:20px auto 0;
+  color: #fff;
+  background: #409eff;
+  margin: 20px auto 0;
   cursor: pointer;
 }
 .message_board_submit_btn:hover {
-  background: rgb(97, 167, 236);
+  background: rgb(120, 184, 248);
 }
 </style>
 <style>
@@ -1619,7 +1654,7 @@ header {
   height: 36px;
   border-radius: 18px;
 }
-#messageBoard .el-dialog__header{
+#messageBoard .el-dialog__header {
   text-align: center;
 }
 #messageBoard .el-dialog--small {
@@ -1629,7 +1664,7 @@ header {
   max-height: 500px;
   overflow: auto;
 }
-#messageBoardTextarea .el-textarea__inner{
-  height:100px;
+#messageBoardTextarea .el-textarea__inner {
+  height: 100px;
 }
 </style>

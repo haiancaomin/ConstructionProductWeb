@@ -1,7 +1,11 @@
 import http from './public'
 import {apis} from './api'
 
-//左侧留言板
+//右侧留言板
+export const homeNewListFun = (params) => {
+  return http.fetchPost(apis.homeNewListFun, params)
+}
+//右侧留言板
 export const messageBoardFun = (params) => {
   return http.fetchPost(apis.messageBoardFun, params)
 }

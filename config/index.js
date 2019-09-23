@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       // '/jzbppt/*': {
-      //   target: 'http://192.168.1.146:8080'
+      //   target: 'http://192.168.1.188:8080'
       // }
       // ,
       // '/shopping/**': {

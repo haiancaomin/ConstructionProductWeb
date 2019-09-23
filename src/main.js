@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -36,6 +37,7 @@ import {
 // import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import axios from 'axios' //引入axios
+
 // import Mock from './mock/mock.js'
 
 Vue.use(VueContentPlaceholders)
