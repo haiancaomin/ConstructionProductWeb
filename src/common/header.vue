@@ -375,12 +375,16 @@ export default {
     handleIconClick(ev) {
       // if (this.$route.path === "/search") {
       console.log("ccccccccccc");
+      if(this.$route.query.keyWord == this.input){
+        this.input = this.input+" "
+      }
       this.$router.push({
         path: "/goods",
         query: {
           keyWord: this.input
         }
       });
+
       // } else {
       //   this.$router.push({
       //     path: "/search",
@@ -634,6 +638,8 @@ export default {
       this.changePage(2);
     } else if (this.$router.history.current.path == "/admin") {
       this.changePage(3);
+    } else if (this.$router.history.current.path.toString().indexOf("/product") >= 0) {
+      this.changePage(2);
     }
 
     // if (typeof this.$route.query.key !== undefined) {

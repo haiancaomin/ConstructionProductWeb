@@ -16,6 +16,7 @@ import {
   Pagination,
   Checkbox,
   Icon,
+  InputNumber,
   Autocomplete,
   Loading,
   Message,
@@ -51,6 +52,7 @@ Vue.use(Step)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Input)
+Vue.use(InputNumber)
 Vue.use(Dialog)
 Vue.use(Select)
 Vue.use(Option)

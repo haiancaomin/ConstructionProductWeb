@@ -35,7 +35,12 @@
         </div>-->
         <div class="hot_list_outbody">
           <div class="hot_list_body">
-            <div class="hot_product_body" v-for="(iitem,j) in productList" :key="j">
+            <div
+              class="hot_product_body"
+              v-for="(iitem,j) in productList"
+              :key="j"
+              v-show="productCount>0"
+            >
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <div class="hot_product_hover"></div>
@@ -61,6 +66,12 @@
                   </span>
                 </div>
               </div>
+            </div>
+            <div class="no_data_notice" v-if="productCount < 1">
+              <div class="nodata_img_div">
+                <img src="/static/images/no-search.png" class="nodata_img" />
+              </div>
+              <div class="no_data_notice_con">抱歉，未查询到您搜索的商品，您可以留言给我们哦~</div>
             </div>
           </div>
         </div>
@@ -146,8 +157,8 @@ export default {
       this.currentPage = 1;
       this._productListBySrarchOrTyprFun();
       this.bus.$emit("clearKeyWord", {
-                keyWord: ""
-              });
+        keyWord: ""
+      });
     },
     changeProductType(type) {
       this.keyWord = "";
@@ -162,6 +173,7 @@ export default {
       paramProduct.append("selectIndex", this.currentPage);
       paramProduct.append("pageIndex", (this.currentPage - 1) * 8);
       productListBySrarchOrTyprFun(paramProduct).then(res => {
+        // this.$route.query.keyWord = "";
         this.productList = res.data;
         this.productCount = res.count;
         if (this.keyWord != "") {
@@ -243,10 +255,11 @@ export default {
         this.keyWord = this.$route.query.keyWord;
         if (this.keyWord == "" || this.keyWord == undefined) {
           this.keyWord = "";
-          this.productType="";
+          this.productType = "";
           this.currentPage = 1;
           this._productListBySrarchOrTyprFun();
         } else {
+          this.keyWord = this.keyWord.toString().trim();
           this.productType = "";
           this.currentPage = 1;
           this._productListBySrarchOrTyprFun();
@@ -265,6 +278,7 @@ export default {
       this.keyWord = "";
       this._productListBySrarchOrTyprFun();
     } else {
+      this.keyWord = this.keyWord.toString().trim();
       this._productListBySrarchOrTyprFun();
     }
 
@@ -548,9 +562,27 @@ export default {
   cursor: pointer;
 }
 .search_notice {
-  width:1280px;
-  margin:0 auto;
-  margin-top:20px;
+  width: 1280px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.no_data_notice {
+  width: 100%;
+  height: 100%;
+}
+.nodata_img_div {
+  width: 480px;
+  height: 300px;
+  margin: 90px auto 0;
+}
+.nodata_img {
+  width: 100%;
+  height: 100%;
+}
+.no_data_notice_con {
+  width: 100%;
+  text-align: center;
+  margin: 20px auto 0;
 }
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */
