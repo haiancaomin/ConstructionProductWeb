@@ -36,7 +36,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      title: "项目管理",
+      title: "人员管理",
       nav: [
         { name: "人员管理", path: "member" },
         { name: "项目管理", path: "project" }

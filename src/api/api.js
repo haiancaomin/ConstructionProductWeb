@@ -13,6 +13,8 @@ export const apis = {
   homeNewListFun: '/jzbppt/jzbp_findNewProductList.do',
   productTypeListFun: '/jzbppt/jzbp_getHtTypeList.do',
   productListBySrarchOrTyprFun: '/jzbppt/jzbp_findProductList.do',
-  getProductDetailFun: '/jzbppt/jzbp_getProductById.do'
+  getProductDetailFun: '/jzbppt/jzbp_getProductById.do',
 
+  saveMember:'/jzbppt/employee_saveUser.do',
+  getMemberList:'/jzbppt/employee_findUserListByParams.do'
 }
