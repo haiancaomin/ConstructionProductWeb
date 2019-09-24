@@ -21,7 +21,7 @@
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-                <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_deleteMember(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { saveMember, getMemberList } from "/api";
+import { saveMember, getMemberList, deleteMember } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -115,9 +115,9 @@ export default {
       });
     },
     _saveMember(formName) {
-      this.loading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.loading = true;
           let params = new URLSearchParams();
           params.append("name", this.ruleForm.name);
           params.append("phone", this.ruleForm.phone);
@@ -137,10 +137,30 @@ export default {
           });
         } else {
           this.$message.error({
-            message: "请求失败！"
+            message: "表单验证未通过！"
           });
         }
       });
+    },
+    _deleteMember(row) {
+      this.$confirm("确认删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     newMember() {
       this.newMemberVisible = true;
@@ -292,6 +312,9 @@ export default {
   div:last-child {
     padding-right: 24px;
   }
+}
+.el-pagination {
+  margin-bottom: 30px;
 }
 </style>
 <style>

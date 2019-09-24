@@ -16,5 +16,6 @@ export const apis = {
   getProductDetailFun: '/jzbppt/jzbp_getProductById.do',
 
   saveMember:'/jzbppt/employee_saveUser.do',
-  getMemberList:'/jzbppt/employee_findUserListByParams.do'
+  getMemberList:'/jzbppt/employee_findUserListByParams.do',
+  deleteMember:'/jzbppt/employee_deleteUser.do'
 }
