@@ -71,6 +71,7 @@
       </div>
       <div class="top_right_div">
         <div class="bottom_head_div">看了还看</div>
+        <div class="recommend_body"></div>
       </div>
     </div>
     <div class="bottom_div"></div>
@@ -360,6 +361,14 @@ export default {
   border-top: 1px solid #ccc;
   border-right: 1px solid #ccc;
   text-align: center;
+}
+.top_right_div {
+  width:280px;
+}
+.bottom_head_div {
+  width:100%;
+  text-align: center;
+  margin-top:30px;
 }
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */
