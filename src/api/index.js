@@ -36,6 +36,10 @@ export const saveMember = (params) => {
 export const getMemberList = (params) => {
   return http.fetchPost(apis.getMemberList, params)
 }
+//人员管理删除
+export const deleteMember = (params) => {
+  return http.fetchPost(apis.deleteMember, params)
+}
 
 
 

@@ -20,6 +20,7 @@ import {
   Autocomplete,
   Loading,
   Message,
+  MessageBox,
   Notification,
   Steps,
   Step,
@@ -65,6 +66,7 @@ Vue.use(DatePicker)
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$ajax = axios
 Vue.prototype.bus = new Vue()
 Vue.use(infiniteScroll)
