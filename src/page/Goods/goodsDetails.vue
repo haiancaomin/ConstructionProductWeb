@@ -31,15 +31,15 @@
         </div>
       </div>
       <div class="top_center_div">
-        <div class="product_name">温碧泉牌亮瞎你的狗眼超闪亮冰箱温碧泉牌亮瞎你的狗眼超闪亮冰箱温碧泉牌亮瞎你的狗眼超闪亮冰箱</div>
+        <div class="product_name">{{productName}}</div>
         <div class="product_info">
-          <div class="product_info_title">产品规格</div>
+          <div class="product_info_title">产品参数</div>
           <div class="product_info_table">
-            <div class="product_info_detail">
-              <div class="product_info_param">产品尺寸（长）mm</div>
-              <div class="product_info_param_value">636mm</div>
+            <div class="product_info_detail" v-for="i in specification.split(';').length-1" :key="i">
+              <div class="product_info_param">{{specification.split(';')[i].split(':')[0]}}</div>
+              <div class="product_info_param_value">{{specification.split(';')[i].split(':')[1]}}</div>
             </div>
-            <div class="product_info_detail">
+            <!-- <div class="product_info_detail">
               <div class="product_info_param">产品尺寸（宽）mm</div>
               <div class="product_info_param_value">836mm</div>
             </div>
@@ -50,13 +50,13 @@
             <div class="product_info_detail">
               <div class="product_info_param">材质</div>
               <div class="product_info_param_value">钛合金</div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="product_price">
           价格：
           <span class="symbol">¥</span>
-          <span class="price">120</span>
+          <span class="price">{{productPrice}}</span>
         </div>
         <div class="add_cart">
           <el-input-number
@@ -93,10 +93,10 @@
       <div class="bottom_title_div">
         <div class="bottom_title">产品介绍</div>
       </div>
-      <div class="bottom_product_introduction">
-        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
-        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
-        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
+      <div class="bottom_product_introduction" >
+        <img :src="item.atturl" class="bottom_product_introduction_img" v-for="(item,i) in productIntroductionImgList"
+              :key="i"/>
+        
       </div>
     </div>
   </div>
@@ -113,6 +113,7 @@ import YShelf from "/components/shelf";
 import BuyNum from "/components/buynum";
 import YButton from "/components/YButton";
 import { getStore } from "/utils/storage";
+import { getProductDetailFun } from "/api/index";
 export default {
   data() {
     return {
@@ -125,17 +126,21 @@ export default {
       },
       productNum: 1,
       userId: "",
-      // form
       pageForm: {
         page: 0,
         size: 10
       },
-
-      // data
       activeTab: "itemInfo",
       totalCommentCount: 0,
       commentList: [],
-      commentType: null
+      commentType: null,
+
+      productName:"",
+      specification:"",
+      productPrice:"",
+      productType:"",
+      productImgList:[],
+      productIntroductionImgList: []
     };
   },
   computed: {
@@ -145,6 +150,18 @@ export default {
     ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
     handleChange() {
 
+    },
+    _getProductDetailFun() {
+      let paramProID = new URLSearchParams();
+        paramProID.append("pid", "702BBA5A-86F3-4B31-9CA4-9A95B131995F");
+        getProductDetailFun(paramProID).then(res => {
+          this.productName = res.data.name;
+          this.specification = res.data.specification;
+          this.productPrice = res.data.price;
+          this.productType = res.data.type;
+          this.productImgList = res.data.polist;
+          this.productIntroductionImgList = res.data.volist;
+        });
     },
     _productDet(productId) {
       productDet({ params: { productId } }).then(res => {
@@ -261,6 +278,9 @@ export default {
     // this._productDet(id);
     // this._productCommentCount(id);
     // this.userId = getStore("userId");
+  },
+  mounted() {
+    this._getProductDetailFun();
   }
 };
 </script>

@@ -373,10 +373,15 @@ export default {
     },
     handleIconClick(ev) {
       // if (this.$route.path === "/search") {
-      console.log("ccccccccccc");
+
       if(this.$route.query.keyWord == this.input){
-        this.input = this.input+" "
-      }
+        if(this.input.toString().trim() != this.input) {
+          this.input = this.input.toString().trim();
+        } else {
+          this.input = this.input+" "
+        }
+        
+      } 
       this.$router.push({
         path: "/goods",
         query: {

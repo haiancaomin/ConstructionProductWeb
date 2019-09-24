@@ -165,6 +165,9 @@ export default {
       this.currentPage = 1;
       this.productType = type;
       this._productListBySrarchOrTyprFun();
+      this.bus.$emit("clearKeyWord", {
+        keyWord: ""
+      });
     },
     _productListBySrarchOrTyprFun() {
       let paramProduct = new URLSearchParams();
