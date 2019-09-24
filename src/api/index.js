@@ -25,6 +25,14 @@ export const homeHotList = (params) => {
 export const indexCarousel = (params) => {
   return http.fetchGet(apis.indexCarousel, params)
 }
+//人员管理添加
+export const saveMember = (params) => {
+  return http.fetchPost(apis.saveMember, params)
+}
+//人员管理列表
+export const getMemberList = (params) => {
+  return http.fetchPost(apis.getMemberList, params)
+}
 
 
 

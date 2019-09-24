@@ -14,10 +14,10 @@
         >
           <el-table :data="tableData" border style="width: 100%">
             <el-table-column fixed prop="name" label="姓名" width="120"></el-table-column>
+            <el-table-column prop="role" label="角色" width="120" :formatter="roleFun"></el-table-column>
             <el-table-column prop="phone" label="联系方式" width="130"></el-table-column>
-            <el-table-column prop="company" label="所属公司" width="310"></el-table-column>
-            <el-table-column prop="project" label="所属项目" width="310"></el-table-column>
-            <el-table-column prop="address" label="地址" width="300"></el-table-column>
+            <el-table-column prop="companyname" label="所属公司" width="320"></el-table-column>
+            <el-table-column prop="companyaddress" label="公司地址" width="320"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
@@ -33,10 +33,9 @@
     </y-shelf>
     <div style="float:right">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
+        :page-sizes="[10]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next"
         :total="total"
@@ -59,13 +58,13 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newMemberVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitMember">提 交</el-button>
+        <el-button type="primary" @click="_saveMember('ruleForm')">提 交</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import { orderList, delOrder } from "/api/goods";
+import { saveMember, getMemberList } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -76,118 +75,90 @@ export default {
         name: "",
         phone: "",
         companyname: "",
-        companyaddress: "",
+        companyaddress: ""
       },
-       rules: {
-          name: [
-            { required: true, message: '请输入联系人姓名', trigger: 'blur' }
-          ],
-          phone: [
-            { required: true, message: '请输入联系人电话', trigger: 'blur' }
-          ],
-          companyname: [
-            { required: true, message: '请输入公司名称', trigger: 'blur' }
-          ],
-          companyaddress: [
-            { required: true, message: '请输入公司地址', trigger: 'blur' }
-          ]
-        },
+      rules: {
+        name: [
+          { required: true, message: "请输入联系人姓名", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, message: "请输入联系人电话", trigger: "blur" }
+        ],
+        companyname: [
+          { required: true, message: "请输入公司名称", trigger: "blur" }
+        ],
+        companyaddress: [
+          { required: true, message: "请输入公司地址", trigger: "blur" }
+        ]
+      },
       formLabelWidth: "120px",
       userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
       loading: false,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 0,
-      tableData: [
-        {
-          name: "王小虎",
-          phone: "15195910513",
-          company: "智聚装配式绿色建筑创新中心南通有限公司",
-          project: "抗震支架M-3501 华新建工集团",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ]
+      tableData: [],
+      name: ""
     };
   },
   methods: {
-    submitMember(){
-
+    _getMemberList() {
+      this.loading = true;
+      let params = new URLSearchParams();
+      params.append("name", this.name);
+      params.append("selectIndex", this.currentPage);
+      params.append("pageIndex", (this.currentPage - 1) * 10);
+      getMemberList(params).then(res => {
+        this.loading = false;
+        this.tableData = res.data;
+        this.total = res.count;
+      });
+    },
+    _saveMember(formName) {
+      this.loading = true;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let params = new URLSearchParams();
+          params.append("name", this.ruleForm.name);
+          params.append("phone", this.ruleForm.phone);
+          params.append("companyname", this.ruleForm.companyname);
+          params.append("companyaddress", this.ruleForm.companyaddress);
+          params.append("userid", this.userid);
+          saveMember(params).then(res => {
+            if (res.data == 0) {
+              this.loading = false;
+              this.newMemberVisible = false;
+              this.$message({
+                message: "提交成功！",
+                type: "success",
+                center: true
+              });
+            }
+          });
+        } else {
+          this.$message.error({
+            message: "请求失败！"
+          });
+        }
+      });
     },
     newMember() {
       this.newMemberVisible = true;
     },
-    message(m) {
-      this.$message.error({
-        message: m
-      });
-    },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this._orderList();
-    },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._orderList();
+      this._getMemberList();
     },
-    orderPayment(orderId) {
-      window.open(window.location.origin + "#/order/payment/" + orderId);
-    },
-    goodsDetails(id) {
-      window.open(window.location.origin + "#/product/" + id);
-    },
-    orderDetail(orderId) {
-      this.$router.push({
-        path: "orderDetail",
-        query: {
-          orderId: orderId
-        }
-      });
-    },
-    getOrderStatus(status) {
-      if (status === "0") {
-        return "支付审核中";
-      } else if (status === "2") {
-        return "待发货";
-      } else if (status === "3") {
-        return "待收货";
-      } else if (status === "4") {
-        return "交易成功";
-      } else if (status === "5") {
-        return "交易关闭";
-      } else if (status === "6") {
-        return "支付失败";
+    roleFun(row, column, cellValue) {
+      if (cellValue == 1) {
+        return "内部";
       }
-    },
-    _orderList() {
-      let params = {
-        params: {
-          size: this.pageSize,
-          page: this.currentPage
-        }
-      };
-      orderList(params).then(res => {
-        this.orderList = res.result.data;
-        this.total = res.result.total;
-        this.loading = false;
-      });
-    },
-    _delOrder(orderId, i) {
-      let params = {
-        params: {
-          orderId: orderId
-        }
-      };
-      delOrder(params).then(res => {
-        if (res.success === true) {
-          this.orderList.splice(i, 1);
-        } else {
-          this.message("删除失败");
-        }
-      });
+      return "外部";
     }
   },
   created() {
-    this.userId = getStore("userId");
+    this._getMemberList();
+    // this.userid = getStore("userid");
     // this._orderList();
   },
   components: {

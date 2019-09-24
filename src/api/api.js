@@ -12,5 +12,7 @@ export const apis = {
   messageBoardFun: '/jzbppt/jzbp_saveFeedback.do',
   homeNewListFun: '/jzbppt/jzbp_findNewProductList.do',
   productTypeListFun: '/jzbppt/jzbp_getHtTypeList.do',
-  productListBySrarchOrTyprFun: '/jzbppt/jzbp_findProductList.do'
+  productListBySrarchOrTyprFun: '/jzbppt/jzbp_findProductList.do',
+  saveMember:'/jzbppt/employee_saveUser.do',
+  getMemberList:'/jzbppt/employee_findUserListByParams.do'
 }
