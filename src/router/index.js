@@ -62,7 +62,7 @@ export default new Router({
           path: '/admin',
           name: 'admin',
           component: admin,
-          redirect: '/admin/project',
+          redirect: '/admin/member',
           children: [{
               path: 'project',
               name: '项目管理',
