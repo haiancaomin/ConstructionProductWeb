@@ -40,6 +40,9 @@ export const apis = {
   delOrder: '/shopping/delOrder',
   getSearch: '/shopping/search',
   getQuickSearch: '/shopping/search',
+
+
+  
   indexCarousel: '/jzbppt/jzbp_findIndexPicList.do',
   homeHotList: '/jzbppt/jzbp_findHotspotPicList.do',
   messageBoardFun: '/jzbppt/jzbp_saveFeedback.do',
