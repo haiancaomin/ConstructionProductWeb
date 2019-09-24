@@ -25,6 +25,11 @@ export const homeHotList = (params) => {
 export const indexCarousel = (params) => {
   return http.fetchGet(apis.indexCarousel, params)
 }
+
+
+
+
+
 // 登陆
 export const userLogin = (params) => {
   return http.fetchPost(apis.userLogin, params)

@@ -27,7 +27,7 @@
           </el-table>
         </div>
         <div v-loading="loading" element-loading-text="加载中..." class="no-info" v-else>
-          <div style="padding: 100px 0;text-align: center">你还添加任何人员</div>
+          <div style="padding: 100px 0;text-align: center">你还未添加任何人员</div>
         </div>
       </div>
     </y-shelf>
@@ -43,32 +43,23 @@
       ></el-pagination>
     </div>
     <el-dialog title="新增人员" :visible.sync="newMemberVisible" id="memberForm">
-      <el-form :model="form">
-        <el-form-item label="项目名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人姓名"></el-input>
         </el-form-item>
-        <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
+        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="phone">
+          <el-input v-model="ruleForm.phone" auto-complete="off" placeholder="请输入联系人电话"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off" placeholder="请选择活动区域"></el-input>
+        <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyname">
+          <el-input v-model="ruleForm.companyname" auto-complete="off" placeholder="请输入公司名称"></el-input>
         </el-form-item>
-        <el-form-item label="项目开始日期" :label-width="formLabelWidth">
-          <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="活动形式" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="form.desc" placeholder="请选择活动区域"></el-input>
+        <el-form-item label="公司地址" :label-width="formLabelWidth" prop="companyaddress">
+          <el-input v-model="ruleForm.companyaddress" auto-complete="off" placeholder="请输入公司地址"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newMemberVisible = false">取 消</el-button>
-        <el-button type="primary" @click="newMemberVisible = false">提 交</el-button>
+        <el-button type="primary" @click="submitMember">提 交</el-button>
       </div>
     </el-dialog>
   </div>
@@ -81,21 +72,28 @@ export default {
   data() {
     return {
       newMemberVisible: false,
-      form: {
+      ruleForm: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
+        phone: "",
+        companyname: "",
+        companyaddress: "",
       },
+       rules: {
+          name: [
+            { required: true, message: '请输入联系人姓名', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, message: '请输入联系人电话', trigger: 'blur' }
+          ],
+          companyname: [
+            { required: true, message: '请输入公司名称', trigger: 'blur' }
+          ],
+          companyaddress: [
+            { required: true, message: '请输入公司地址', trigger: 'blur' }
+          ]
+        },
       formLabelWidth: "120px",
-      value1: "",
-      memberList: [0],
-      userId: "",
-      orderStatus: "",
+      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
       loading: false,
       currentPage: 1,
       pageSize: 5,
@@ -112,6 +110,9 @@ export default {
     };
   },
   methods: {
+    submitMember(){
+
+    },
     newMember() {
       this.newMemberVisible = true;
     },
