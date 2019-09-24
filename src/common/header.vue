@@ -295,16 +295,16 @@ export default {
     }
   },
   methods: {
-    // ...mapMutations([
-    //   "SET_KEYWORD",
-    //   "ADD_CART",
-    //   "INIT_BUYCART",
-    //   "ADD_ANIMATION",
-    //   "SHOW_CART",
-    //   "REDUCE_CART",
-    //   "RECORD_USERINFO",
-    //   "EDIT_CART"
-    // ]),
+    ...mapMutations([
+      "SET_KEYWORD",
+      "ADD_CART",
+      "INIT_BUYCART",
+      "ADD_ANIMATION",
+      "SHOW_CART",
+      "REDUCE_CART",
+      "RECORD_USERINFO",
+      "EDIT_CART"
+    ]),
     _messageBoardFun() {
       let paramz = new URLSearchParams();
       if (this.messageBoardDesc.trim() == "") {
@@ -636,7 +636,7 @@ export default {
       this.changePage(1);
     } else if (this.$router.history.current.path == "/goods") {
       this.changePage(2);
-    } else if (this.$router.history.current.path == "/admin") {
+    } else if (this.$router.history.current.path.toString().indexOf("/admin") >= 0) {
       this.changePage(3);
     } else if (this.$router.history.current.path.toString().indexOf("/product") >= 0) {
       this.changePage(2);

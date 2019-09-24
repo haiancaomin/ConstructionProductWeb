@@ -70,11 +70,35 @@
         </div>
       </div>
       <div class="top_right_div">
-        <div class="bottom_head_div">看了还看</div>
-        <div class="recommend_body"></div>
+        <div class="top_right_head_div">看了还看</div>
+        <div class="recommend_body">
+          <div class="recommend_signal_body">
+            <div class="recommend_img_div">
+              <img src="/static/images/wechat-explain.png" class="recommend_img" />
+            </div>
+            <div class="recommend_product_name">温碧泉牌亮瞎你的狗眼超闪亮冰箱</div>
+            <div class="recommend_product_price">¥120</div>
+          </div>
+          <div class="recommend_signal_body">
+            <div class="recommend_img_div">
+              <img src="/static/images/wechat-explain.png" class="recommend_img" />
+            </div>
+            <div class="recommend_product_name">温碧泉牌亮瞎你的狗眼超闪亮冰箱</div>
+            <div class="recommend_product_price">¥120</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="bottom_div"></div>
+    <div class="bottom_div">
+      <div class="bottom_title_div">
+        <div class="bottom_title">产品介绍</div>
+      </div>
+      <div class="bottom_product_introduction">
+        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
+        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
+        <img src="/static/images/wechat-explain.png" class="bottom_product_introduction_img" />
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -119,6 +143,9 @@ export default {
   },
   methods: {
     ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
+    handleChange() {
+
+    },
     _productDet(productId) {
       productDet({ params: { productId } }).then(res => {
         let result = res.result;
@@ -231,9 +258,9 @@ export default {
   },
   created() {
     let id = this.$route.params.productId;
-    this._productDet(id);
-    this._productCommentCount(id);
-    this.userId = getStore("userId");
+    // this._productDet(id);
+    // this._productCommentCount(id);
+    // this.userId = getStore("userId");
   }
 };
 </script>
@@ -285,6 +312,7 @@ export default {
 }
 .top_center_div {
   width: 600px;
+  margin-left: 30px;
 }
 .product_name {
   font-size: 16px;
@@ -363,12 +391,57 @@ export default {
   text-align: center;
 }
 .top_right_div {
-  width:280px;
+  width: 240px;
 }
-.bottom_head_div {
+.top_right_head_div {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+.recommend_signal_body {
+  width: 150px;
+  margin: 15px auto 0;
+}
+.recommend_img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+.recommend_product_name {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+.recommend_product_price {
+  width: 150px;
+  text-align: center;
+  color: #c81623;
+}
+.bottom_div {
+  width:1280px;
+  margin:30px auto 0;
+}
+.bottom_title_div {
+  border-bottom: 1px solid #cf1132;
+}
+.bottom_title {
+  width: 106px;
+  height: 38px;
+  line-height: 38px;
+  background-color: #cf1132;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+}
+.bottom_product_introduction {
   width:100%;
   text-align: center;
-  margin-top:30px;
+  padding:20px;
+}
+.bottom_product_introduction_img {
+  width:800px;
 }
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */

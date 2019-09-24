@@ -1,6 +1,9 @@
 import http from './public'
 import {apis} from './api'
-
+//获取产品详情
+export const getProductDetailFun = (params) => {
+  return http.fetchPost(apis.getProductDetailFun, params)
+}
 //产品分类页面商品列表
 export const productListBySrarchOrTyprFun = (params) => {
   return http.fetchPost(apis.productListBySrarchOrTyprFun, params)

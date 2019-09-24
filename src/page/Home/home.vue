@@ -779,7 +779,6 @@ ul.box {
 .new_product_info_div {
   margin-left: 22px;
 }
-
 .new_product_name {
   font-size: 16px;
   color: #555;
