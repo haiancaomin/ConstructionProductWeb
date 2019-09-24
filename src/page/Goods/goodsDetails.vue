@@ -35,9 +35,9 @@
         <div class="product_info">
           <div class="product_info_title">产品参数</div>
           <div class="product_info_table">
-            <div class="product_info_detail" v-for="i in specification.split(';').length-1" :key="i">
-              <div class="product_info_param">{{specification.split(';')[i].split(':')[0]}}</div>
-              <div class="product_info_param_value">{{specification.split(';')[i].split(':')[1]}}</div>
+            <div class="product_info_detail" v-for="i in specification.split(';').length" :key="i">
+              <div class="product_info_param">{{specification.split(';')[i-1].split(':')[0]}}</div>
+              <div class="product_info_param_value">{{specification.split(';')[i-1].split(':')[1]}}</div>
             </div>
             <!-- <div class="product_info_detail">
               <div class="product_info_param">产品尺寸（宽）mm</div>
