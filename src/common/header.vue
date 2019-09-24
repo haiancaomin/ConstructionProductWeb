@@ -140,7 +140,6 @@
                   <router-link to="/goods">
                     <div @click="changGoods(2)" :class="{active:choosePage===2}">
                       产品分类
-                      <i class="iconfont_down_arrow">&#xe60a;</i>
                     </div>
                   </router-link>
                 </li>
@@ -1452,15 +1451,15 @@ header {
   -moz-osx-font-smoothing: grayscale;
   margin-right: 3px;
 }
-.iconfont_down_arrow {
-  font-family: "iconfont" !important;
-  font-size: 12px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
-  margin-left: 4px;
-}
+// .iconfont_down_arrow {
+//   font-family: "iconfont" !important;
+//   font-size: 12px;
+//   font-style: normal;
+//   -webkit-font-smoothing: antialiased;
+//   -webkit-text-stroke-width: 0.2px;
+//   -moz-osx-font-smoothing: grayscale;
+//   margin-left: 4px;
+// }
 .w-box .nav_search_head {
   width: 320px;
 }
