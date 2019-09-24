@@ -2,7 +2,7 @@
   <div>
     <y-shelf title="人员管理">
       <div slot="right">
-        <el-button @click="newMember">新增人员</el-button>
+        <el-button @click="newMemberVisible=true">新增人员</el-button>
       </div>
       <div slot="content">
         <div
@@ -188,9 +188,6 @@ export default {
             message: "已取消删除"
           });
         });
-    },
-    newMember() {
-      this.newMemberVisible = true;
     },
     handleCurrentChange(val) {
       this.currentPage = val;
