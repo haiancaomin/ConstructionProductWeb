@@ -20,7 +20,7 @@
             <el-table-column prop="companyaddress" label="公司地址" width="320"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                <el-button @click="_updateMember(scope.row)" type="text" size="small">编辑</el-button>
                 <el-button @click="_deleteMember(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { saveMember, getMemberList, deleteMember } from "/api";
+import { saveMember, getMemberList, deleteMember, updateMember } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -98,7 +98,8 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      name: ""
+      name: "", //查询人员字段
+      addOrEdit: ""
     };
   },
   methods: {
@@ -117,30 +118,49 @@ export default {
     _saveMember(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.loading = true;
           let params = new URLSearchParams();
           params.append("name", this.ruleForm.name);
           params.append("phone", this.ruleForm.phone);
           params.append("companyname", this.ruleForm.companyname);
           params.append("companyaddress", this.ruleForm.companyaddress);
-          params.append("userid", this.userid);
-          saveMember(params).then(res => {
-            if (res.data == 0) {
-              this.loading = false;
-              this.newMemberVisible = false;
-              this.$message({
-                message: "提交成功！",
-                type: "success",
-                center: true
-              });
-            }
-          });
+          if (this.addOrEdit) {
+            params.append("personid", this.addOrEdit);
+            updateMember(params).then(res => {
+              if (res.data == 0) {
+                this.newMemberVisible = false;
+                this.$message({
+                  message: "保存成功！",
+                  type: "success",
+                  center: true
+                });
+                this._getMemberList();
+              }
+            });
+          } else {
+            params.append("userid", this.userid);
+            saveMember(params).then(res => {
+              if (res.data == 0) {
+                this.newMemberVisible = false;
+                this.$message({
+                  message: "保存成功！",
+                  type: "success",
+                  center: true
+                });
+                this._getMemberList();
+              }
+            });
+          }
         } else {
           this.$message.error({
             message: "表单验证未通过！"
           });
         }
       });
+    },
+    _updateMember(row) {
+      this.newMemberVisible = true;
+      this.ruleForm = row;
+      this.addOrEdit = row.userid;
     },
     _deleteMember(row) {
       this.$confirm("确认删除？", "提示", {
@@ -150,9 +170,16 @@ export default {
         center: true
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
+          let params = new URLSearchParams();
+          params.append("personid", row.userid);
+          deleteMember(params).then(res => {
+            if (res.data == true) {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this._getMemberList();
+            }
           });
         })
         .catch(() => {

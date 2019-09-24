@@ -32,6 +32,10 @@ export const indexCarousel = (params) => {
 export const saveMember = (params) => {
   return http.fetchPost(apis.saveMember, params)
 }
+//人员管理修改
+export const updateMember = (params) => {
+  return http.fetchPost(apis.updateMember, params)
+}
 //人员管理列表
 export const getMemberList = (params) => {
   return http.fetchPost(apis.getMemberList, params)
