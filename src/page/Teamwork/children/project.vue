@@ -53,20 +53,15 @@
           <el-input v-model="ruleForm.contractno" auto-complete="off" placeholder="请输入合同编号"></el-input>
         </el-form-item>
         <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入项目联系人"></el-input>
-        </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人电话"></el-input>
-        </el-form-item>
-        <el-form-item label="项目开始日期" :label-width="formLabelWidth">
-          <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select v-model="ruleForm.person" placeholder="请选择项目联系人">
+            <el-option label="张三" value="shanghai"></el-option>
+            <el-option label="李四" value="beijing"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="项目开始日期" :label-width="formLabelWidth">
+          <el-date-picker v-model="ruleForm.startDate" type="date" placeholder="选择日期"></el-date-picker>
+        </el-form-item>
+        
         <el-form-item label="项目介绍" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="ruleForm.introduction" placeholder="请输入项目备注"></el-input>
         </el-form-item>
@@ -88,36 +83,14 @@ export default {
       newProjectVisible: false,
       ruleForm: {
         projectname: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
+        contractno:"",
+        person: "",
+        startDate: "",
         introduction: ""
       },
        rules: {
           projectname: [
-            { required: true, message: '请输入项目名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
-          ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-          ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-          ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+            { required: true, message: '请输入项目名称', trigger: 'blur' }
           ]
         },
       formLabelWidth: "120px",

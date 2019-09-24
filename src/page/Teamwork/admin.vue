@@ -38,8 +38,8 @@ export default {
     return {
       title: "项目管理",
       nav: [
-        { name: "项目管理", path: "project" },
-        { name: "人员管理", path: "member" }
+        { name: "人员管理", path: "member" },
+        { name: "项目管理", path: "project" }
       ],
       editAvatar: true
     };
