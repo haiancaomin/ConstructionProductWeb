@@ -157,6 +157,10 @@ export default {
                   center: true
                 });
                 this._getProjectList();
+              } else {
+                this.$message.error({
+                  message: "保存失败！"
+                });
               }
             });
           } else {
@@ -169,6 +173,10 @@ export default {
                   center: true
                 });
                 this._getProjectList();
+              } else {
+                this.$message.error({
+                  message: "保存失败！"
+                });
               }
             });
           }
@@ -213,6 +221,10 @@ export default {
                 message: "删除成功!"
               });
               this._getProjectList();
+            } else {
+              this.$message.error({
+                message: "删除失败！"
+              });
             }
           });
         })
