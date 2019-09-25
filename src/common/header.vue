@@ -272,6 +272,19 @@ export default {
       userPhone: ""
     };
   },
+  watch: {
+    $route(to, from) {
+      if (to.fullPath.indexOf("/product") >= 0) {
+        this.changePage(2);
+      } else if (to.fullPath.indexOf("/home") >= 0) {
+        this.changePage(1);
+      } else if (to.fullPath.indexOf("/goods") >= 0) {
+        this.changePage(2);
+      } else if (to.fullPath.indexOf("/admin") >= 0) {
+        this.changePage(3);
+      } 
+    }
+  },
   computed: {
     ...mapState(["cartList", "login", "receiveInCart", "showCart", "userInfo"]),
     // 计算价格

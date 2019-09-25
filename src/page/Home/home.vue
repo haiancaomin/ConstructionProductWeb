@@ -44,7 +44,7 @@
                 </div>
               </div>
               <div class="hot_product_info_div">
-                <div class="hot_product_name">{{iitem.name}}</div>
+                <div class="hot_product_name" @click="gotoDetail(iitem.pid)">{{iitem.name}}</div>
                 <div class="hot_product_description">{{iitem.description}}</div>
                 <div class="hot_split_line_div">
                   <div class="hot_split_line"></div>
@@ -52,7 +52,7 @@
                 <div class="hot_product_price">
                   ¥
                   <span class="hot_price_span">{{iitem.price}}</span>
-                  <span class="hot_check_detail_btn">
+                  <span class="hot_check_detail_btn" @click="gotoDetail(iitem.pid)">
                     查看详情
                     <i class="iconfont">&#xe64b;</i>
                   </span>
@@ -64,7 +64,7 @@
         <div class="new_list_outbody">
           <div class="hot_title">新品上线</div>
           <div class="new_list_body">
-            <div class="new_product_body" v-for="(iitem,j) in nweList" :key="j">
+            <div class="new_product_body" v-for="(iitem,j) in nweList" :key="j" @click="gotoDetail(iitem.pid)">
               <i class="iconfont_new_right_arrow">&#xe606;</i>
               <div class="new_product_img_div">
                 <img v-lazy="iitem.picurl" class="new_product_img" />
@@ -181,6 +181,14 @@ export default {
     };
   },
   methods: {
+    gotoDetail(pid) {
+      this.$router.push({
+        path: "/product",
+        query: {
+          productId: pid
+        }
+      });
+    },
     _homeNewListFun() {
       homeNewListFun("").then(res => {
         console.log(res.data);

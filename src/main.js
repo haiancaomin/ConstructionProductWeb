@@ -40,6 +40,7 @@ import {
 import VueContentPlaceholders from 'vue-content-placeholders'
 import axios from 'axios' //引入axios
 
+
 // import Mock from './mock/mock.js'
 
 Vue.use(VueContentPlaceholders)

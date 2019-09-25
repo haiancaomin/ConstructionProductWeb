@@ -50,7 +50,7 @@
                 </div>
               </div>
               <div class="hot_product_info_div">
-                <div class="hot_product_name">{{iitem.name}}</div>
+                <div class="hot_product_name" @click="gotoDetail(iitem.pid)">{{iitem.name}}</div>
                 <!-- <div class="hot_product_name">这是部件名称</div> -->
                 <div class="hot_product_description">{{iitem.description}}</div>
                 <!-- <div class="hot_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div> -->
@@ -60,7 +60,7 @@
                 <div class="hot_product_price">
                   ¥
                   <span class="hot_price_span">{{iitem.price}}</span>
-                  <span class="hot_check_detail_btn">
+                  <span class="hot_check_detail_btn" @click="gotoDetail(iitem.pid)">
                     查看详情
                     <i class="iconfont">&#xe64b;</i>
                   </span>
@@ -151,6 +151,15 @@ export default {
   },
   methods: {
     isEmpty: Utils.isEmpty,
+    gotoDetail(pid) {
+      // this.$router.push({ name: 'product', params: { productId: pid }})
+      this.$router.push({
+        path: "/product",
+        query: {
+          productId: pid
+        }
+      });
+    },
     getAllProduct() {
       this.keyWord = "";
       this.productType = "";
@@ -178,6 +187,7 @@ export default {
       productListBySrarchOrTyprFun(paramProduct).then(res => {
         // this.$route.query.keyWord = "";
         this.productList = res.data;
+        console.log(this.productList);
         this.productCount = res.count;
         if (this.keyWord != "") {
           this.productType = "-1";
