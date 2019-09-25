@@ -2,7 +2,7 @@
   <div>
     <y-shelf title="人员管理">
       <div slot="right">
-        <el-button @click="newMemberVisible=true">新增人员</el-button>
+        <el-button @click="newMember">新增人员</el-button>
       </div>
       <div slot="content">
         <div
@@ -41,7 +41,12 @@
         :total="total"
       ></el-pagination>
     </div>
-    <el-dialog title="新增人员" :visible.sync="newMemberVisible" id="memberForm">
+    <el-dialog
+      :title="addOrEdit?'修改人员':'新增人员'"
+      :visible.sync="newMemberVisible"
+      id="memberForm"
+      @close="clearAddOrEdit"
+    >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人姓名"></el-input>
@@ -103,6 +108,10 @@ export default {
     };
   },
   methods: {
+    newMember() {
+      this.newMemberVisible = true;
+      this.reset();
+    },
     _getMemberList() {
       this.loading = true;
       let params = new URLSearchParams();
@@ -159,7 +168,10 @@ export default {
     },
     _updateMember(row) {
       this.newMemberVisible = true;
-      this.ruleForm = row;
+      this.ruleForm.name = row.name;
+      this.ruleForm.phone = row.phone;
+      this.ruleForm.companyname = row.companyname;
+      this.ruleForm.companyaddress = row.companyaddress;
       this.addOrEdit = row.userid;
     },
     _deleteMember(row) {
@@ -198,6 +210,15 @@ export default {
         return "内部";
       }
       return "外部";
+    },
+    clearAddOrEdit() {
+      this.addOrEdit = "";
+    },
+    reset() {
+      this.ruleForm.name = "";
+      this.ruleForm.phone = "";
+      this.ruleForm.companyname = "";
+      this.ruleForm.companyaddress = "";
     }
   },
   created() {

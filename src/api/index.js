@@ -60,6 +60,11 @@ export const getProjectList = (params) => {
 export const deleteProject = (params) => {
   return http.fetchPost(apis.deleteProject, params)
 }
+//项目管理获取下拉选择人员
+export const getSelectUsers = (params) => {
+  return http.fetchGet(apis.getSelectUsers, params)
+}
+
 
 
 
