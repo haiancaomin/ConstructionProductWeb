@@ -87,7 +87,12 @@ export default {
           { required: true, message: "请输入联系人姓名", trigger: "blur" }
         ],
         phone: [
-          { required: true, message: "请输入联系人电话", trigger: "blur" }
+          { required: true, message: "请输入联系人电话", trigger: "blur" },
+          {
+            pattern: /^1[3456789]\d{9}$/,
+            message: "手机号码格式不正确",
+            trigger: "blur"
+          }
         ],
         companyname: [
           { required: true, message: "请输入公司名称", trigger: "blur" }
