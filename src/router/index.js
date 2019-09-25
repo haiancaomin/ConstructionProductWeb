@@ -58,11 +58,11 @@ export default new Router({
           path: '/refreshgoods',
           name: 'refreshgoods',
           component: RefreshGoods
-        },{
-          path: '/admin',
+        }, {
+          path: 'admin',
           name: 'admin',
           component: admin,
-          redirect: '/admin/member',
+          redirect: 'admin/member',
           children: [{
               path: 'project',
               name: '项目管理',
@@ -76,9 +76,10 @@ export default new Router({
           ]
         },
         {
-          path: '/teamwork',
+          path: 'teamwork/:pid',
           name: 'teamwork',
-          component: teamwork
+          component: teamwork,
+          props: true
         }
       ]
     },
