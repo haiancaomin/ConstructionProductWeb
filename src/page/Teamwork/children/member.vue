@@ -20,7 +20,7 @@
             <el-table-column prop="companyaddress" label="公司地址" width="320"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                <el-button @click="_updateMember(scope.row)" type="text" size="small">编辑</el-button>
                 <el-button @click="_deleteMember(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
@@ -41,7 +41,12 @@
         :total="total"
       ></el-pagination>
     </div>
-    <el-dialog title="新增人员" :visible.sync="newMemberVisible" id="memberForm">
+    <el-dialog
+      :title="addOrEdit?'修改人员':'新增人员'"
+      :visible.sync="newMemberVisible"
+      id="memberForm"
+      @close="clearAddOrEdit"
+    >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人姓名"></el-input>
@@ -64,7 +69,7 @@
   </div>
 </template>
 <script>
-import { saveMember, getMemberList, deleteMember } from "/api";
+import { saveMember, getMemberList, deleteMember, updateMember } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -82,7 +87,12 @@ export default {
           { required: true, message: "请输入联系人姓名", trigger: "blur" }
         ],
         phone: [
-          { required: true, message: "请输入联系人电话", trigger: "blur" }
+          { required: true, message: "请输入联系人电话", trigger: "blur" },
+          {
+            pattern: /^1[3456789]\d{9}$/,
+            message: "手机号码格式不正确",
+            trigger: "blur"
+          }
         ],
         companyname: [
           { required: true, message: "请输入公司名称", trigger: "blur" }
@@ -98,10 +108,15 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      name: ""
+      name: "", //查询人员字段
+      addOrEdit: ""
     };
   },
   methods: {
+    newMember() {
+      this.newMemberVisible = true;
+      this.reset();
+    },
     _getMemberList() {
       this.loading = true;
       let params = new URLSearchParams();
@@ -117,30 +132,60 @@ export default {
     _saveMember(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.loading = true;
           let params = new URLSearchParams();
           params.append("name", this.ruleForm.name);
           params.append("phone", this.ruleForm.phone);
           params.append("companyname", this.ruleForm.companyname);
           params.append("companyaddress", this.ruleForm.companyaddress);
-          params.append("userid", this.userid);
-          saveMember(params).then(res => {
-            if (res.data == 0) {
-              this.loading = false;
-              this.newMemberVisible = false;
-              this.$message({
-                message: "提交成功！",
-                type: "success",
-                center: true
-              });
-            }
-          });
+          if (this.addOrEdit) {
+            params.append("personid", this.addOrEdit);
+            updateMember(params).then(res => {
+              if (res.data == 0) {
+                this.newMemberVisible = false;
+                this.$message({
+                  message: "保存成功！",
+                  type: "success",
+                  center: true
+                });
+                this._getMemberList();
+              } else {
+                this.$message.error({
+                  message: "保存失败！"
+                });
+              }
+            });
+          } else {
+            params.append("userid", this.userid);
+            saveMember(params).then(res => {
+              if (res.data == 0) {
+                this.newMemberVisible = false;
+                this.$message({
+                  message: "保存成功！",
+                  type: "success",
+                  center: true
+                });
+                this._getMemberList();
+              } else {
+                this.$message.error({
+                  message: "保存失败！"
+                });
+              }
+            });
+          }
         } else {
           this.$message.error({
             message: "表单验证未通过！"
           });
         }
       });
+    },
+    _updateMember(row) {
+      this.newMemberVisible = true;
+      this.ruleForm.name = row.name;
+      this.ruleForm.phone = row.phone;
+      this.ruleForm.companyname = row.companyname;
+      this.ruleForm.companyaddress = row.companyaddress;
+      this.addOrEdit = row.userid;
     },
     _deleteMember(row) {
       this.$confirm("确认删除？", "提示", {
@@ -150,9 +195,20 @@ export default {
         center: true
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
+          let params = new URLSearchParams();
+          params.append("personid", row.userid);
+          deleteMember(params).then(res => {
+            if (res.data == true) {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this._getMemberList();
+            } else {
+              this.$message.error({
+                message: "删除失败！"
+              });
+            }
           });
         })
         .catch(() => {
@@ -161,9 +217,6 @@ export default {
             message: "已取消删除"
           });
         });
-    },
-    newMember() {
-      this.newMemberVisible = true;
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -174,6 +227,15 @@ export default {
         return "内部";
       }
       return "外部";
+    },
+    clearAddOrEdit() {
+      this.addOrEdit = "";
+    },
+    reset() {
+      this.ruleForm.name = "";
+      this.ruleForm.phone = "";
+      this.ruleForm.companyname = "";
+      this.ruleForm.companyaddress = "";
     }
   },
   created() {
