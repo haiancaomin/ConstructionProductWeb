@@ -64,7 +64,10 @@ export const deleteProject = (params) => {
 export const getSelectUsers = (params) => {
   return http.fetchGet(apis.getSelectUsers, params)
 }
-
+//沟通页面获取留言列表
+export const getMsgList = (params) => {
+  return http.fetchPost(apis.getMsgList, params)
+}
 
 
 

@@ -24,5 +24,7 @@ export const apis = {
   updateProject:'/jzbppt/jzbp_updateProject.do',
   getProjectList:'/jzbppt/jzbp_findProjectList.do',
   deleteProject:'/jzbppt/jzbp_deleteProjectById.do',
-  getSelectUsers:'/jzbppt/employee_findUserList.do'
+  getSelectUsers:'/jzbppt/employee_findUserList.do',
+
+  getMsgList:'/jzbppt/jzbp_findMessageListByProjectId.do'
 }

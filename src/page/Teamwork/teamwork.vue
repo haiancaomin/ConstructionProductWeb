@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="submit-comment">
-      <textarea name="content" id rows="10" v-model="content" @keydown.enter="add"></textarea>
+      <textarea name="content" id rows="10" v-model="content"></textarea>
       <div class="submit-comment-action clearfix">
-        <el-button @click="add" type="success">提交</el-button>
+        <el-button type="success">提交</el-button>
       </div>
     </div>
     <div class="comment-list">
@@ -21,10 +21,9 @@
       </div>
       <div class="page clearfix">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 50]"
+          :page-sizes="[10]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next"
           :total="total"
@@ -34,6 +33,7 @@
   </div>
 </template>
 <script>
+import { getMsgList } from "/api";
 export default {
   data() {
     return {
@@ -53,27 +53,29 @@ export default {
       ],
       nowIndex: -100,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 0
     };
   },
+  props: ["pid"],
   methods: {
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this._orderList();
+    _getMsgList() {
+      let params = new URLSearchParams();
+      params.append("projectid", this.pid);
+      params.append("selectIndex", this.currentPage);
+      params.append("pageIndex", (this.currentPage - 1) * 10);
+      getMsgList(params).then(res => {
+        console.log(res);
+      });
     },
+
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._orderList();
-    },
-    add: function() {},
-    getPageData: function(n) {},
-    top: function(id, index) {},
-    down: function(id, index) {},
-    del: function(nowIndex) {},
-    send: function() {}
+    }
   },
-  created: function() {}
+  created() {
+    this._getMsgList();
+  }
 };
 </script>
 <style lang="css" scoped>
