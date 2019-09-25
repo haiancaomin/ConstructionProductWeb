@@ -373,6 +373,9 @@ export default {
     padding-right: 24px;
   }
 }
+.el-pagination {
+  margin-bottom: 30px;
+}
 </style>
 <style>
 .required label::before {
