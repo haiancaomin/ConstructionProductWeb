@@ -99,7 +99,7 @@ export default {
       ruleForm: {
         projectname: "",
         contractno: "",
-        personids: "",
+        personids: [],
         introduction: ""
       },
       rules: {
@@ -225,7 +225,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._orderList();
+      this._getProjectList();
     },
     clearAddOrEdit() {
       this.addOrEdit = "";
@@ -233,7 +233,7 @@ export default {
     reset() {
       this.ruleForm.projectname = "";
       this.ruleForm.contractno = "";
-      this.ruleForm.personids = "";
+      this.ruleForm.personids = [];
       this.ruleForm.introduction = "";
     }
   },
