@@ -18,5 +18,10 @@ export const apis = {
   saveMember:'/jzbppt/employee_saveUser.do',
   updateMember:'/jzbppt/employee_updateUser.do',
   getMemberList:'/jzbppt/employee_findUserListByParams.do',
-  deleteMember:'/jzbppt/employee_deleteUser.do'
+  deleteMember:'/jzbppt/employee_deleteUser.do',
+
+  saveProject:'/jzbppt/jzbp_saveProject.do',
+  updateProject:'/jzbppt/jzbp_updateProject.do',
+  getProjectList:'/jzbppt/jzbp_findProjectList.do',
+  deleteProject:'/jzbppt/jzbp_deleteProjectById.do',
 }

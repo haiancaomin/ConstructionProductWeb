@@ -44,6 +44,22 @@ export const getMemberList = (params) => {
 export const deleteMember = (params) => {
   return http.fetchPost(apis.deleteMember, params)
 }
+//项目管理添加
+export const saveProject = (params) => {
+  return http.fetchPost(apis.saveProject, params)
+}
+//项目管理修改
+export const updateProject = (params) => {
+  return http.fetchPost(apis.updateProject, params)
+}
+//项目管理列表
+export const getProjectList = (params) => {
+  return http.fetchPost(apis.getProjectList, params)
+}
+//项目管理删除
+export const deleteProject = (params) => {
+  return http.fetchPost(apis.deleteProject, params)
+}
 
 
 
