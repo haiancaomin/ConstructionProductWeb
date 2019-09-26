@@ -248,10 +248,13 @@ export default {
       this.ruleForm.personids = [];
       this.ruleForm.introduction = "";
     },
-    toTeamwork(row){
+    toTeamwork(row) {
       this.$router.push({
-        path:'/teamwork/pid='+row.pid
-      })
+        path: "/teamwork",
+        query: {
+          pid: row.pid
+        }
+      });
     }
   },
   created() {

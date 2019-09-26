@@ -1,30 +1,29 @@
 <template>
   <div>
-    <div class="submit-comment">
-      <textarea name="content" id rows="10" v-model="content" @keydown.enter="add"></textarea>
+    <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
+      <textarea name="content" id rows="10" v-model="content"></textarea>
       <div class="submit-comment-action clearfix">
-        <el-button @click="add" type="success">提交</el-button>
+        <el-button type="success" @click="_sendMsg">提交</el-button>
       </div>
     </div>
     <div class="comment-list">
-      <div class="nomess" v-show="msgData.length==0">
-        <h5>暂无留言</h5>
-      </div>
-      <div>
+      <div v-loading="loading" element-loading-text="加载中..." v-if="msgData.length">
         <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
-          <p class="person-name">{{item.creater}}</p>
+          <p class="person-name">{{item.companyname}} - {{item.name}} - {{item.phone}}</p>
           <p class="replyContent">{{item.content}}</p>
           <p class="operation">
-            <span class="time">{{item.time}}</span>
+            <span class="time">{{item.createdate}}</span>
           </p>
         </div>
       </div>
+      <div class="no-info" v-loading="loading" element-loading-text="加载中..." v-else>
+        <h5>暂无留言</h5>
+      </div>
       <div class="page clearfix">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 50]"
+          :page-sizes="[10]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next"
           :total="total"
@@ -34,46 +33,70 @@
   </div>
 </template>
 <script>
+import { getMsgList, sendMsg } from "/api";
 export default {
   data() {
     return {
       content: "",
-      msgData: [
-        {
-          content: "真特么帅气",
-          time: "2019-9-19 15:22:00",
-          creater: "华新集团 - 张三 - 15195910513"
-        },
-        {
-          content:
-            "行数据的 Key，用来优化 Table 的渲染；在使用 reserve-selection 功能的情况下，该属性是必填的。类型为 String 时，支持多层访问：user.info.id，但不支持 user.info[0].id，此种情况请使用 Function。",
-          time: "2019-9-19 15:22:00",
-          creater: "智聚公司 - 黄徐林 - 15195910513"
-        }
-      ],
+      msgData: [],
       nowIndex: -100,
       currentPage: 1,
-      pageSize: 5,
-      total: 0
+      pageSize: 10,
+      total: 0,
+      pid: "",
+      loading: false,
+      msgloading: false,
+      content: "",
+      userid: "B0A11FC2-59AC-443C-894B-5412145473D3"
     };
   },
   methods: {
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this._orderList();
+    _getMsgList(pid) {
+      this.loading = true;
+      let params = new URLSearchParams();
+      params.append("projectid", pid);
+      params.append("selectIndex", this.currentPage);
+      params.append("pageIndex", (this.currentPage - 1) * 10);
+      getMsgList(params).then(res => {
+        this.loading = false;
+        this.msgData = res.data;
+        this.total = res.count;
+      });
     },
+
+    _sendMsg() {
+      this.msgloading = true;
+      let params = new URLSearchParams();
+      params.append("userid", this.userid);
+      params.append("projectid", this.pid);
+      params.append("content", this.content);
+      sendMsg(params).then(res => {
+        this.msgloading = false;
+        if (res.data == 0) {
+          this.$message({
+            message: "留言成功！",
+            type: "success",
+            center: true
+          });
+          this._getMsgList(this.pid);
+          this.content = "";//重置
+        } else {
+          this.$message.error({
+            message: "留言失败！"
+          });
+        }
+      });
+    },
+
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._orderList();
-    },
-    add: function() {},
-    getPageData: function(n) {},
-    top: function(id, index) {},
-    down: function(id, index) {},
-    del: function(nowIndex) {},
-    send: function() {}
+      this._getMsgList(this.pid);
+    }
   },
-  created: function() {}
+  created() {
+    this.pid = this.$route.query.pid;
+    this._getMsgList(this.pid);
+  }
 };
 </script>
 <style lang="css" scoped>
