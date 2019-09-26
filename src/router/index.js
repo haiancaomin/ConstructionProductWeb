@@ -77,10 +77,9 @@ export default new Router({
           ]
         },
         {
-          path: 'teamwork/:pid',
+          path: 'teamwork',
           name: 'teamwork',
-          component: teamwork,
-          props: true
+          component: teamwork
         }
       ]
     },
