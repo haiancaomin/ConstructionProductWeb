@@ -44,9 +44,9 @@
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <div class="hot_product_hover"></div>
-                <div class="hot_hover_product_name">
-                  加入报价器
-                  <i class="iconfont_cart">&#xe625;</i>
+                <div class="hot_hover_product_name" @click="gotoDetail(iitem.pid)">
+                  查看详情
+                  <i class="iconfont_cart">&#xe61f;</i>
                 </div>
               </div>
               <div class="hot_product_info_div">
@@ -597,15 +597,15 @@ export default {
   text-align: center;
   margin: 20px auto 0;
 }
+
 @font-face {
-  font-family: "iconfont"; /* project id 1414486 */
-  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot");
-  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot?#iefix")
-      format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff") format("woff"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.svg#iconfont") format("svg");
+  font-family: 'iconfont';  /* project id 1414486 */
+  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot');
+  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.svg#iconfont') format('svg');
 }
 
 .iconfont_cart {

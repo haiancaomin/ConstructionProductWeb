@@ -1,6 +1,18 @@
 <!--商品详情-->
 <template>
   <div class="out_body">
+    <el-dialog title="留言板" :visible.sync="messageBoardFlag" id="messageBoard">
+      <div class="message_board_notice1">留言内容</div>
+      <el-input type="textarea" v-model="messageBoardDesc" id="messageBoardTextarea"></el-input>
+      <div class="message_board_notice2">联系方式（请留下您的手机号或电话号码，方便我们联系您）</div>
+      <el-input v-model="userPhone"></el-input>
+      <div class="message_board_submit_btn" @click="_messageBoardFun()">提交</div>
+    </el-dialog>
+    <el-dialog title="联系我们" :visible.sync="connectFlag" id="connectDialog">
+      <div class="connection_info_detail">电话：0513-81055866</div>
+      <div class="connection_info_detail">邮箱：MKT_Dept@zhjcx.cn</div>
+
+    </el-dialog>
     <div class="detail_page_head">
       <div class="head_con">
         <router-link to="/goods" class="to_product_type">产品分类</router-link>
@@ -60,19 +72,20 @@
           </div>
         </div>
         <div class="product_price">
-          单价：
+          定额：
           <span class="symbol">¥</span>
           <span class="price">{{productPrice}}</span>
         </div>
         <div class="add_cart">
-          <el-input-number
+          <!-- <el-input-number
             v-model="num"
             @change="handleChange"
             :min="1"
             :max="10"
             id="add_cart_input"
-          ></el-input-number>
-          <div class="add_btn">加入报价器</div>
+          ></el-input-number> -->
+          <div class="leave_message_btn" @click="messageBoardFlag=true">给我们留言</div>
+          <div class="add_btn" @click="connectFlag=true">联系我们</div>
         </div>
       </div>
       <div class="top_right_div">
@@ -136,7 +149,7 @@ import YShelf from "/components/shelf";
 import BuyNum from "/components/buynum";
 import YButton from "/components/YButton";
 import { getStore } from "/utils/storage";
-import { getProductDetailFun, productListBySrarchOrTyprFun } from "/api/index";
+import { getProductDetailFun, productListBySrarchOrTyprFun,messageBoardFun } from "/api/index";
 export default {
   data() {
     return {
@@ -176,7 +189,11 @@ export default {
       recName1: "",
       recName2: "",
       recPrice1: "",
-      recPrice2: ""
+      recPrice2: "",
+      messageBoardDesc:"",
+      userPhone:"",
+      messageBoardFlag: false,
+      connectFlag: false,
     };
   },
   computed: {
@@ -185,6 +202,45 @@ export default {
   methods: {
     ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
     handleChange() {},
+    _messageBoardFun() {
+      let paramz = new URLSearchParams();
+      if (this.messageBoardDesc.trim() == "") {
+        this.$message({
+          message: "留言内容不要为空",
+          type: "error",
+          center: true
+        });
+      } else if(this.messageBoardDesc.length>100) {
+        this.$message({
+          message: "内容不能超过100个字符",
+          type: "error",
+          center: true
+        });
+      } else if (this.userPhone.trim() == "") {
+        this.$message({
+          message: "请留下您的联系方式",
+          type: "error",
+          center: true
+        });
+      } else if(this.userPhone.length>15) {
+        this.$message({
+          message: "手机号或电话号码过长",
+          type: "error",
+          center: true
+        });
+      } else {
+        paramz.append("question", this.messageBoardDesc);
+        paramz.append("phone", this.userPhone);
+        messageBoardFun(paramz).then(res => {
+          this.messageBoardFlag = false;
+          this.$message({
+            message: "提交成功！",
+            type: "success",
+            center: true
+          });
+        });
+      }
+    },
     gotoDetail(pid) {
       // this.$router.push({ name: 'product', params: { productId: pid }});
       // this.$router.push({ path: `/product/${pid}`});
@@ -544,6 +600,27 @@ export default {
   font-size: 18px;
   text-align: center;
   cursor: pointer;
+  transition: all 0.3s;
+}
+.add_btn:hover {
+  background-color: #49af4f;
+}
+.leave_message_btn {
+  height: 46px;
+  line-height: 46px;
+  width: 150px;
+  background-color: #49af4f;
+  color: #fff;
+  font-weight: bold;
+  font-family: "microsoft yahei";
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 10px 0 280px;
+  transition: all 0.3s;
+}
+.leave_message_btn:hover {
+  background-color: #df3033;
 }
 .add_cart {
   display: flex;
@@ -721,6 +798,33 @@ export default {
   border-top: 1px solid #ccc;
   width: 40px;
 }
+.message_board_notice1 {
+  line-height: 30px;
+}
+.message_board_notice2 {
+  margin-top: 20px;
+  line-height: 30px;
+}
+.message_board_submit_btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  background: #409eff;
+  margin: 20px auto 0;
+  cursor: pointer;
+}
+.message_board_submit_btn:hover {
+  background: rgb(120, 184, 248);
+}
+.connection_info_detail {
+  width:100%;
+  text-align: center;
+  height:40px;
+  line-height: 40px;
+}
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */
   src: url("//at.alicdn.com/t/font_1414486_o0l5xo0q8ah.eot");
@@ -758,5 +862,28 @@ export default {
 #add_cart_input .el-input-number__increase {
   height: 44px;
   line-height: 44px;
+}
+#messageBoard .el-dialog__header {
+  text-align: center;
+}
+#messageBoard .el-dialog--small {
+  width: 500px;
+}
+#messageBoard .el-dialog__body {
+  max-height: 500px;
+  overflow: auto;
+}
+#messageBoardTextarea .el-textarea__inner {
+  height: 100px;
+}
+#connectDialog .el-dialog__header {
+  text-align: center;
+}
+#connectDialog .el-dialog--small {
+  width: 400px;
+}
+#connectDialog .el-dialog__body {
+  max-height: 500px;
+  overflow: auto;
 }
 </style>

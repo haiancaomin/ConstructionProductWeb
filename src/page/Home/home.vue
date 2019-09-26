@@ -38,9 +38,9 @@
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <div class="hot_product_hover"></div>
-                <div class="hot_hover_product_name">
-                  加入报价器
-                  <i class="iconfont_cart">&#xe625;</i>
+                <div class="hot_hover_product_name" @click="gotoDetail(iitem.pid)">
+                  查看详情
+                  <i class="iconfont_cart">&#xe61f;</i>
                 </div>
               </div>
               <div class="hot_product_info_div">
@@ -64,7 +64,12 @@
         <div class="new_list_outbody">
           <div class="hot_title">新品上线</div>
           <div class="new_list_body">
-            <div class="new_product_body" v-for="(iitem,j) in nweList" :key="j" @click="gotoDetail(iitem.pid)">
+            <div
+              class="new_product_body"
+              v-for="(iitem,j) in nweList"
+              :key="j"
+              @click="gotoDetail(iitem.pid)"
+            >
               <i class="iconfont_new_right_arrow">&#xe606;</i>
               <div class="new_product_img_div">
                 <img v-lazy="iitem.picurl" class="new_product_img" />
@@ -159,6 +164,7 @@ import product from "/components/product";
 import mallGoods from "/components/mallGoods";
 import { setStore, getStore } from "/utils/storage.js";
 import { indexCarousel, homeHotList, homeNewListFun } from "/api/index";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -177,10 +183,14 @@ export default {
       timer: "",
       carouselList: [],
       hotList: [],
-      nweList:[],
+      nweList: []
     };
   },
   methods: {
+    ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
+    addIntoCart(pid) {
+      this.ADD_CART({productId: pid})
+    },
     gotoDetail(pid) {
       this.$router.push({
         path: "/product",
@@ -864,14 +874,13 @@ ul.box {
 }
 
 @font-face {
-  font-family: "iconfont"; /* project id 1414486 */
-  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot");
-  src: url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.eot?#iefix")
-      format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.woff") format("woff"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_1414486_fwwu3rqmy4.svg#iconfont") format("svg");
+  font-family: 'iconfont';  /* project id 1414486 */
+  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot');
+  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.svg#iconfont') format('svg');
 }
 .iconfont {
   font-family: "iconfont" !important;

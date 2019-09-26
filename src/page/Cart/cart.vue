@@ -1,7 +1,6 @@
 <template>
   <div class="shopping-cart">
     <y-header>
-      
     </y-header>
     <div class="store-content page-cart">
       <div class="gray-box">
@@ -35,7 +34,7 @@
                       <div class="name hide-row fl">
                         <div class="name-table">
                           <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"
-                             v-text="item.productName"></a>
+                             v-text="item.productId"></a>
                           <!-- <ul class="attribute">
                             <li>白色</li>
                           </ul> -->
@@ -103,7 +102,7 @@
         <div v-else style="padding:50px">
           <div class="cart-e">
           </div>
-          <p style="text-align: center;padding: 20px;color: #8d8d8d">你的购物车空空如也</p>
+          <p style="text-align: center;padding: 20px;color: #8d8d8d">你的购物车ddd空空如也</p>
           <div style="text-align: center">
             <router-link to="/goods">
               <y-button text="现在选购" style="width: 150px;height: 40px;line-height: 38px;color: #8d8d8d"></y-button>
@@ -136,6 +135,7 @@
       ...mapState(
         ['cartList']
       ),
+      
       // 是否全选
       checkAllFlag () {
         return this.checkedCount === this.cartList.length
@@ -179,7 +179,7 @@
     },
     methods: {
       ...mapMutations([
-        'INIT_BUYCART', 'EDIT_CART'
+        'INIT_BUYCART', 'EDIT_CART', 'REDUCE_CART'
       ]),
       message (m) {
         this.$message.error({
@@ -226,20 +226,20 @@
           // 勾选
           if (type === 'check') {
             let newChecked = checked === 'true' ? 'false' : 'true'
-            this._cartEdit(this.userId, productId, productNum, newChecked)
+            // this._cartEdit(this.userId, productId, productNum, newChecked)
           }
         } else {
           console.log('缺少所需参数')
         }
       },
       EditNum (productNum, productId, checked) { // 数量
-        this._cartEdit(this.userId, productId, productNum, checked)
+        // this._cartEdit(this.userId, productId, productNum, checked)
+        this.EDIT_CART({ productId,productNum });
       },
       // 删除整条购物车
       cartdel (productId) {
-        cartDel({userId: this.userId, productId: productId}).then(res => {
-          this.EDIT_CART({productId})
-        })
+        this.REDUCE_CART({ productId });
+        // this.$router.go(0);
       },
       checkout () {
         this.checkoutNow = '结算中...'

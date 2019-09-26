@@ -1,9 +1,9 @@
 <template>
   <div class="header-box">
-    <el-dialog title="留言板" :visible.sync="messageBoardFlag" width="10%" id="messageBoard">
+    <el-dialog title="留言板" :visible.sync="messageBoardFlag" id="messageBoard">
       <div class="message_board_notice1">留言内容</div>
       <el-input type="textarea" v-model="messageBoardDesc" id="messageBoardTextarea"></el-input>
-      <div class="message_board_notice2">联系方式（请留下您的联系方式，方便我们联系您）</div>
+      <div class="message_board_notice2">联系方式（请留下您的手机号或电话号码，方便我们联系您）</div>
       <el-input v-model="userPhone"></el-input>
       <div class="message_board_submit_btn" @click="_messageBoardFun()">提交</div>
     </el-dialog>
@@ -89,23 +89,15 @@
             ></el-input>
           </div>
           <div class="right-box">
-            <div class="nav-aside" ref="aside">
-              <div
-                class="shop pr"
-                @mouseover="cartShowState(true)"
-                @mouseout="cartShowState(false)"
-                ref="positionMsg"
-              >
-                <router-link to="/cart"></router-link>
-                <span class="cart-num">
-                  报价器
-                  <i
+            用户登录
+            <i class="iconfont_user">&#xe6fd;</i>
+            <!-- <i
                     class="num"
                     :class="{no:totalNum <= 0,move_in_cart:receiveInCart}"
-                  >{{totalNum}}</i>
-                </span>
-                <!--购物车显示块-->
-                <div class="nav-user-wrapper pa active" v-show="showCart">
+            >{{totalNum}}</i>-->
+
+            <!--购物车显示块-->
+            <!-- <div class="nav-user-wrapper pa active" v-show="showCart">
                   <div class="nav-user-list">
                     <div class="full" v-show="totalNum"></div>
                     <div
@@ -116,9 +108,7 @@
                       <p>您的购物车竟然是空的!</p>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </header>
@@ -138,9 +128,7 @@
                 </li>
                 <li>
                   <router-link to="/goods">
-                    <div @click="changGoods(2)" :class="{active:choosePage===2}">
-                      产品分类
-                    </div>
+                    <div @click="changGoods(2)" :class="{active:choosePage===2}">产品分类</div>
                   </router-link>
                 </li>
                 <li>
@@ -159,8 +147,8 @@
                 ></el-input>
               </div>
               <div class="shpping_cart" v-if="st">
-                <i class="iconfont">&#xe625;</i>报价器
-                <div class="cart_num">12</div>
+                用户登录
+            <i class="iconfont_user" :class="{white_bg:st}">&#xe6fd;</i>
               </div>
               <div _ngcontent-c1 class="container" v-if="!st">
                 <ul _ngcontent-c1 class="nav-list">
@@ -282,7 +270,7 @@ export default {
         this.changePage(2);
       } else if (to.fullPath.indexOf("/admin") >= 0) {
         this.changePage(3);
-      } 
+      }
     }
   },
   computed: {
@@ -325,9 +313,21 @@ export default {
           type: "error",
           center: true
         });
+      } else if(this.messageBoardDesc.length>100) {
+        this.$message({
+          message: "内容不能超过100个字符",
+          type: "error",
+          center: true
+        });
       } else if (this.userPhone.trim() == "") {
         this.$message({
           message: "请留下您的联系方式",
+          type: "error",
+          center: true
+        });
+      } else if(this.userPhone.length>15) {
+        this.$message({
+          message: "手机号或电话号码过长",
           type: "error",
           center: true
         });
@@ -387,14 +387,13 @@ export default {
     handleIconClick(ev) {
       // if (this.$route.path === "/search") {
 
-      if(this.$route.query.keyWord == this.input){
-        if(this.input.toString().trim() != this.input) {
+      if (this.$route.query.keyWord == this.input) {
+        if (this.input.toString().trim() != this.input) {
           this.input = this.input.toString().trim();
         } else {
-          this.input = this.input+" "
+          this.input = this.input + " ";
         }
-        
-      } 
+      }
       this.$router.push({
         path: "/goods",
         query: {
@@ -544,13 +543,13 @@ export default {
         var st = document.documentElement.scrollTop || document.body.scrollTop;
         st >= 100 ? (this.st = true) : (this.st = false);
         // 计算小圆当前位置
-        let num = document.querySelector(".num");
-        this.positionL = num.getBoundingClientRect().left;
-        this.positionT = num.getBoundingClientRect().top;
-        this.ADD_ANIMATION({
-          cartPositionL: this.positionL,
-          cartPositionT: this.positionT
-        });
+        // let num = document.querySelector(".num");
+        // this.positionL = num.getBoundingClientRect().left;
+        // this.positionT = num.getBoundingClientRect().top;
+        // this.ADD_ANIMATION({
+        //   cartPositionL: this.positionL,
+        //   cartPositionT: this.positionT
+        // });
       }
     }
 
@@ -643,27 +642,31 @@ export default {
     // this.getPage();
     let that = this;
     this.bus.$on("clearKeyWord", function(val) {
-      that.input = val.keyWord
+      that.input = val.keyWord;
     });
     window.addEventListener("scroll", this.navFixed);
     window.addEventListener("resize", this.navFixed);
-    this.$route.query.keyWord="";
+    this.$route.query.keyWord = "";
     console.log();
     if (this.$router.history.current.path == "/home") {
       this.changePage(1);
     } else if (this.$router.history.current.path == "/goods") {
       this.changePage(2);
-    } else if (this.$router.history.current.path.toString().indexOf("/admin") >= 0) {
+    } else if (
+      this.$router.history.current.path.toString().indexOf("/admin") >= 0
+    ) {
       this.changePage(3);
-    } else if (this.$router.history.current.path.toString().indexOf("/product") >= 0) {
+    } else if (
+      this.$router.history.current.path.toString().indexOf("/product") >= 0
+    ) {
       this.changePage(2);
     }
 
     // if (typeof this.$route.query.key !== undefined) {
     //   this.input = this.$route.query.key;
     // }
-  },
-  
+  }
+
   // components: {
   //   YButton
   // }
@@ -775,7 +778,21 @@ header {
 
   .right-box {
     display: flex;
-    margin-right: 40px;
+    margin-right: 20px;
+    height: 30px;
+    line-height: 30px;
+    color:#666;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .right-box:hover {
+    color:#cf1132;
+   
+    
+  }
+   .right-box:hover .iconfont_user{
+    color:#cf1132;
+    font-weight: 100;
   }
   .nav-aside {
     position: relative;
@@ -920,30 +937,8 @@ header {
       margin-top: -1px;
       min-width: 30px;
       text-indent: 0;
-      line-height: 20px;
+      line-height: 30px;
       width: 100px;
-      > i {
-        margin-left: 4px;
-        background: #eb746b;
-        background-image: -webkit-linear-gradient(#eb746b, #e25147);
-        background-image: linear-gradient(#eb746b, #e25147);
-        box-shadow: inset 0 0 1px hsla(0, 0%, 100%, 0.15),
-          0 1px 2px hsla(0, 0%, 100%, 0.15);
-        text-align: center;
-        font-style: normal;
-        display: inline-block;
-        @include wh(20px);
-        line-height: 20px;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 12px;
-        &.no {
-          background: #969696;
-          background-image: -webkit-linear-gradient(#a4a4a4, #909090);
-          background-image: linear-gradient(#a4a4a4, #909090);
-          box-shadow: inset 0 0 1px #838383, 0 1px 2px #838383;
-        }
-      }
     }
     .nav-user-wrapper {
       right: 0;
@@ -1246,25 +1241,25 @@ header {
         width: 100%;
       }
     }
-    .shpping_cart {
-      width: 100px;
-      font-size: 14px;
-      color: #fff;
-      margin-left: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .cart_num {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: #ff4400;
-        font-size: 12px;
-        line-height: 16px;
-        margin-left: 4px;
-      }
-    }
+    // .shpping_cart {
+    //   width: 100px;
+    //   font-size: 14px;
+    //   color: #fff;
+    //   margin-left: 20px;
+    //   cursor: pointer;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   .cart_num {
+    //     width: 16px;
+    //     height: 16px;
+    //     border-radius: 50%;
+    //     background: #ff4400;
+    //     font-size: 12px;
+    //     line-height: 16px;
+    //     margin-left: 4px;
+    //   }
+    // }
     &.fixed {
       height: 60px;
       line-height: 60px;
@@ -1302,23 +1297,22 @@ header {
         }
       }
       .shpping_cart {
-        width: 100px;
+        width: 90px;
         font-size: 14px;
         color: #fff;
-        margin-left: 20px;
+        margin-left: 30px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        .cart_num {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background: #ff4400;
-          font-size: 12px;
-          line-height: 16px;
-          margin-left: 4px;
-        }
+        transition: all 0.3s;
+        // font-weight: 100;
+      }
+      .shpping_cart:hover {
+        color: #39cf41;
+      }
+      .shpping_cart:hover .iconfont_user{
+        color: #39cf41;
       }
     }
     .logo_zhuangpei_sub_div {
@@ -1452,13 +1446,13 @@ header {
 
 @font-face {
   font-family: "iconfont"; /* project id 1414486 */
-  src: url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.eot");
-  src: url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.eot?#iefix")
+  src: url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.eot");
+  src: url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.eot?#iefix")
       format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.woff") format("woff"),
-    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_1414486_p97h8nxy65r.svg#iconfont") format("svg");
+    url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.woff") format("woff"),
+    url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_1414486_ftssw8yz3u.svg#iconfont") format("svg");
 }
 .iconfont {
   font-family: "iconfont" !important;
@@ -1468,6 +1462,20 @@ header {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   margin-right: 3px;
+}
+.iconfont_user {
+  font-family: "iconfont" !important;
+  font-size: 28px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  margin-left: 3px;
+  color:#999;
+  transition: all 0.3s;
+}
+.white_bg {
+  color:#f2f2f2;
 }
 // .iconfont_down_arrow {
 //   font-family: "iconfont" !important;
