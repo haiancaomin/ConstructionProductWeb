@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="submit-comment">
+    <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
       <textarea name="content" id rows="10" v-model="content"></textarea>
       <div class="submit-comment-action clearfix">
-        <el-button type="success" @click="_send">提交</el-button>
+        <el-button type="success" @click="_sendMsg">提交</el-button>
       </div>
     </div>
     <div class="comment-list">
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { getMsgList } from "/api";
+import { getMsgList, sendMsg } from "/api";
 export default {
   data() {
     return {
@@ -45,7 +45,9 @@ export default {
       total: 0,
       pid: "",
       loading: false,
-      content: ""
+      msgloading: false,
+      content: "",
+      userid: "B0A11FC2-59AC-443C-894B-5412145473D3"
     };
   },
   methods: {
@@ -62,8 +64,28 @@ export default {
       });
     },
 
-    _send() {
-      console.log(this.content)
+    _sendMsg() {
+      this.msgloading = true;
+      let params = new URLSearchParams();
+      params.append("userid", this.userid);
+      params.append("projectid", this.pid);
+      params.append("content", this.content);
+      sendMsg(params).then(res => {
+        this.msgloading = false;
+        if (res.data == 0) {
+          this.$message({
+            message: "留言成功！",
+            type: "success",
+            center: true
+          });
+          this._getMsgList(this.pid);
+          this.content = "";//重置
+        } else {
+          this.$message.error({
+            message: "留言失败！"
+          });
+        }
+      });
     },
 
     handleCurrentChange(val) {

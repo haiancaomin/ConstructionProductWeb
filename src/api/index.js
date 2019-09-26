@@ -68,6 +68,10 @@ export const getSelectUsers = (params) => {
 export const getMsgList = (params) => {
   return http.fetchPost(apis.getMsgList, params)
 }
+//发表留言
+export const sendMsg = (params) => {
+  return http.fetchPost(apis.sendMsg, params)
+}
 
 
 
