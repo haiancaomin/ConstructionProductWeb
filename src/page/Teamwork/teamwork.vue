@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
       <textarea name="content" id rows="10" v-model="content"></textarea>
       <div class="submit-comment-action clearfix">
@@ -30,10 +30,12 @@
         ></el-pagination>
       </div>
     </div>
+    <my-step></my-step>
   </div>
 </template>
 <script>
 import { getMsgList, sendMsg } from "/api";
+import myStep from "/components/myStep";
 export default {
   data() {
     return {
@@ -49,6 +51,9 @@ export default {
       content: "",
       userid: "B0A11FC2-59AC-443C-894B-5412145473D3"
     };
+  },
+  components: {
+    myStep
   },
   methods: {
     _getMsgList(pid) {
@@ -79,7 +84,7 @@ export default {
             center: true
           });
           this._getMsgList(this.pid);
-          this.content = "";//重置
+          this.content = ""; //重置
         } else {
           this.$message.error({
             message: "留言失败！"
@@ -100,6 +105,9 @@ export default {
 };
 </script>
 <style lang="css" scoped>
+.home{
+  background-color: #f6f7fb
+}
 .submit-comment {
   height: 250px;
   width: 800px;

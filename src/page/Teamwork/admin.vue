@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container home">
     <div class="w">
       <div class="content">
         <div class="account-sidebar">
@@ -74,7 +74,9 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../assets/style/mixin";
-
+.home{
+  background-color: #f6f7fb
+}
 .w {
   padding-top: 40px;
 }
