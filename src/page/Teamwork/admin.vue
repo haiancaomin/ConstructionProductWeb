@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container home">
     <div class="w">
       <div class="content">
         <div class="account-sidebar">
@@ -39,7 +39,8 @@ export default {
       title: "人员管理",
       nav: [
         { name: "人员管理", path: "member" },
-        { name: "项目管理", path: "project" }
+        { name: "项目管理", path: "project" },
+        { name: "项目节点", path: "step" }
       ],
       editAvatar: true
     };
@@ -74,7 +75,9 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../assets/style/mixin";
-
+.home{
+  background-color: #f6f7fb
+}
 .w {
   padding-top: 40px;
 }

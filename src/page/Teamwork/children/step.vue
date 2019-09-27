@@ -1,8 +1,8 @@
 <template>
   <div>
-    <y-shelf title="项目管理">
+    <y-shelf title="项目节点">
       <div slot="right">
-        <el-button @click="newProject">新建项目</el-button>
+        <el-button @click="newStep">新建节点</el-button>
       </div>
       <div slot="content">
         <div
@@ -13,21 +13,17 @@
           style="min-height: 10vw;"
         >
           <el-table :data="tableData" border style="width: 100%">
-            <el-table-column fixed prop="projectname" label="项目名称" width="250"></el-table-column>
-            <el-table-column prop="contractno" label="合同编号" width="120"></el-table-column>
-            <el-table-column prop="userinfo" label="联系人/电话" width="310"></el-table-column>
-            <el-table-column prop="introduction" label="项目备注" width="310"></el-table-column>
-            <el-table-column fixed="right" label="操作" width="150">
+            <el-table-column prop="name" label="节点名称"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
-                <el-button @click="toTeamwork(scope.row)" type="text" size="small">工作流</el-button>
-                <el-button @click="_updateProject(scope.row)" type="text" size="small">编辑</el-button>
-                <el-button @click="_deleteProject(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_updateStep(scope.row)" type="text" size="small">编辑</el-button>
+                <el-button @click="_deleteStep(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div v-loading="loading" element-loading-text="加载中..." class="no-info" v-else>
-          <div style="padding: 100px 0;text-align: center">你还未创建过任何项目</div>
+          <div style="padding: 100px 0;text-align: center">你还未添加任何节点</div>
         </div>
       </div>
     </y-shelf>
@@ -42,121 +38,92 @@
       ></el-pagination>
     </div>
     <el-dialog
-      :title="addOrEdit?'修改项目':'新建项目'"
-      :visible.sync="newProjectVisible"
-      id="projectForm"
-      @open="_getSelectUsers"
+      :title="addOrEdit?'修改节点':'新增节点'"
+      :visible.sync="newStepVisible"
+      id="stepForm"
       @close="clearAddOrEdit"
     >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item
-          label="项目名称"
-          :label-width="formLabelWidth"
-          class="required"
-          prop="projectname"
-        >
-          <el-input v-model="ruleForm.projectname" auto-complete="off" placeholder="请输入项目名称"></el-input>
-        </el-form-item>
-        <el-form-item label="合同编号" :label-width="formLabelWidth">
-          <el-input v-model="ruleForm.contractno" auto-complete="off" placeholder="请输入合同编号"></el-input>
-        </el-form-item>
-        <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-select v-model="ruleForm.personids" placeholder="请选择项目联系人" multiple>
-            <el-option
-              v-for="(item,index) in selectUsers"
-              :key="index"
-              :label="item.name +'  '+ item.phone+'  '+item.companyname"
-              :value="item.userid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="项目介绍" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="ruleForm.introduction" placeholder="请输入项目备注"></el-input>
+        <el-form-item label="节点名称" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入节点名称"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="newProjectVisible = false">取 消</el-button>
-        <el-button type="primary" @click="_saveProject('ruleForm')">提 交</el-button>
+        <el-button @click="newStepVisible = false">取 消</el-button>
+        <el-button type="primary" @click="_saveStep('ruleForm')">提 交</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import {
-  saveProject,
-  updateProject,
-  getProjectList,
-  deleteProject,
-  getSelectUsers
+  saveMember,
+  getMemberList,
+  deleteMember,
+  updateMember,
+  getRoles
 } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
   data() {
     return {
-      newProjectVisible: false,
-      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
+      newStepVisible: false,
       ruleForm: {
-        projectname: "",
-        contractno: "",
-        personids: [],
-        introduction: ""
+        name: ""
       },
       rules: {
-        projectname: [
-          { required: true, message: "请输入项目名称", trigger: "blur" }
+        name: [
+          { required: true, message: "请输入节点名称", trigger: "blur" }
         ]
       },
       formLabelWidth: "120px",
+      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
       loading: false,
       currentPage: 1,
       pageSize: 10,
       total: 0,
       tableData: [],
-      name: "",
-      selectUsers: [],
       addOrEdit: ""
     };
   },
   methods: {
-    newProject() {
-      this.newProjectVisible = true;
+    newStep() {
+      this.newStepVisible = true;
       this.reset();
     },
-    _getProjectList() {
+    _getStepList() {
       this.loading = true;
       let params = new URLSearchParams();
       params.append("name", this.name);
-      params.append("userid", this.userid);
       params.append("selectIndex", this.currentPage);
       params.append("pageIndex", (this.currentPage - 1) * 10);
-      getProjectList(params).then(res => {
+      getStepList(params).then(res => {
         this.loading = false;
         this.tableData = res.data;
         this.total = res.count;
       });
     },
-    _saveProject(formName) {
+    _saveStep(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let params = new URLSearchParams();
-          params.append("projectname", this.ruleForm.projectname);
-          params.append("contractno", this.ruleForm.contractno);
-          params.append("personids", this.ruleForm.personids);
-          params.append("introduction", this.ruleForm.introduction);
-          params.append("userid", this.userid);
-
+          params.append("name", this.ruleForm.name);
+          params.append("phone", this.ruleForm.phone);
+          params.append("companyname", this.ruleForm.companyname);
+          params.append("companyaddress", this.ruleForm.companyaddress);
+          params.append("role", this.ruleForm.role);
           if (this.addOrEdit) {
-            params.append("pid", this.addOrEdit);
-            updateProject(params).then(res => {
+            params.append("personid", this.addOrEdit);
+            updateStep(params).then(res => {
               if (res.data == 0) {
-                this.newProjectVisible = false;
+                this.newMemberVisible = false;
                 this.$message({
                   message: "保存成功！",
                   type: "success",
                   center: true
                 });
-                this._getProjectList();
+                this._getStepList();
               } else {
                 this.$message.error({
                   message: "保存失败！"
@@ -164,15 +131,16 @@ export default {
               }
             });
           } else {
-            saveProject(params).then(res => {
+            params.append("userid", this.userid);
+            saveStep(params).then(res => {
               if (res.data == 0) {
-                this.newProjectVisible = false;
+                this.newStepVisible = false;
                 this.$message({
                   message: "保存成功！",
                   type: "success",
                   center: true
                 });
-                this._getProjectList();
+                this._getStepList();
               } else {
                 this.$message.error({
                   message: "保存失败！"
@@ -187,24 +155,16 @@ export default {
         }
       });
     },
-    _getSelectUsers() {
-      getSelectUsers().then(res => {
-        this.selectUsers = res.data;
-      });
+    _updateStep(row) {
+      this.newStepVisible = true;
+      this.ruleForm.name = row.name;
+      this.ruleForm.phone = row.phone;
+      this.ruleForm.companyname = row.companyname;
+      this.ruleForm.companyaddress = row.companyaddress;
+      this.ruleForm.role = row.roleid;
+      this.addOrEdit = row.userid;
     },
-    _updateProject(row) {
-      this.newProjectVisible = true;
-      this.addOrEdit = row.pid;
-      var ids = [];
-      row.plist.forEach(element => {
-        ids.push(element.personid);
-      });
-      this.ruleForm.projectname = row.projectname;
-      this.ruleForm.contractno = row.contractno;
-      this.ruleForm.personids = ids;
-      this.ruleForm.introduction = row.introduction;
-    },
-    _deleteProject(row) {
+    _deleteStep(row) {
       this.$confirm("确认删除？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -213,14 +173,14 @@ export default {
       })
         .then(() => {
           let params = new URLSearchParams();
-          params.append("pid", row.pid);
-          deleteProject(params).then(res => {
+          params.append("personid", row.userid);
+          deleteStep(params).then(res => {
             if (res.data == true) {
               this.$message({
                 type: "success",
                 message: "删除成功!"
               });
-              this._getProjectList();
+              this._getStepList();
             } else {
               this.$message.error({
                 message: "删除失败！"
@@ -237,29 +197,24 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._getProjectList();
+      this._getMemberList();
     },
+    
     clearAddOrEdit() {
       this.addOrEdit = "";
     },
     reset() {
-      this.ruleForm.projectname = "";
-      this.ruleForm.contractno = "";
-      this.ruleForm.personids = [];
-      this.ruleForm.introduction = "";
-    },
-    toTeamwork(row) {
-      this.$router.push({
-        path: "/teamwork",
-        query: {
-          pid: row.pid
-        }
-      });
+      this.ruleForm.name = "";
+      this.ruleForm.phone = "";
+      this.ruleForm.companyname = "";
+      this.ruleForm.companyaddress = "";
+      this.ruleForm.role = "";
     }
   },
   created() {
-    // this.userId = getStore("userId");
-    this._getProjectList();
+    this._getStepList();
+    // this.userid = getStore("userid");
+    // this._orderList();
   },
   components: {
     YShelf
@@ -398,22 +353,18 @@ export default {
 }
 </style>
 <style>
-.required label::before {
-  content: "*";
-  color: red;
-}
 #teamworkTableList .el-table td,
 #teamworkTableList .el-table th {
   height: 45px;
 }
-#projectForm .el-input,
-#projectForm textarea {
+#memberForm .el-input,
+#memberForm textarea {
   width: 300px;
 }
-#projectForm .el-dialog--small {
+#memberForm .el-dialog--small {
   width: 500px;
 }
-#projectForm .el-dialog__body {
+#memberForm .el-dialog__body {
   max-height: 500px;
   overflow: auto;
 }

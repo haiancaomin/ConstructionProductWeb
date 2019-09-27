@@ -19,6 +19,7 @@ export const apis = {
   updateMember:'/jzbppt/employee_updateUser.do',
   getMemberList:'/jzbppt/employee_findUserListByParams.do',
   deleteMember:'/jzbppt/employee_deleteUser.do',
+  getRoles:'/jzbppt/employee_getRoleList.do',
 
   saveProject:'/jzbppt/jzbp_saveProject.do',
   updateProject:'/jzbppt/jzbp_updateProject.do',

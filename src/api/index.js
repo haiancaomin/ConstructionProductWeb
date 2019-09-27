@@ -44,6 +44,10 @@ export const getMemberList = (params) => {
 export const deleteMember = (params) => {
   return http.fetchPost(apis.deleteMember, params)
 }
+//人员管理获取下拉权限
+export const getRoles = (params) => {
+  return http.fetchGet(apis.getRoles, params)
+}
 //项目管理添加
 export const saveProject = (params) => {
   return http.fetchPost(apis.saveProject, params)
