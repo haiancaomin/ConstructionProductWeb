@@ -88,7 +88,7 @@
               @keydown.enter.native="handleIconClick"
             ></el-input>
           </div>
-          <div class="right-box">
+          <div class="right-box" @click="gotoLogin()">
             用户登录
             <i class="iconfont_user">&#xe6fd;</i>
             <!-- <i
@@ -146,9 +146,9 @@
                   @keydown.enter.native="handleIconClick"
                 ></el-input>
               </div>
-              <div class="shpping_cart" v-if="st">
+              <div class="shpping_cart" v-if="st" @click="gotoLogin()">
                 用户登录
-            <i class="iconfont_user" :class="{white_bg:st}">&#xe6fd;</i>
+                <i class="iconfont_user" :class="{white_bg:st}">&#xe6fd;</i>
               </div>
               <div _ngcontent-c1 class="container" v-if="!st">
                 <ul _ngcontent-c1 class="nav-list">
@@ -305,6 +305,11 @@ export default {
       "RECORD_USERINFO",
       "EDIT_CART"
     ]),
+    gotoLogin() {
+      this.$router.push({
+          path: "/login",
+        });
+    },
     _messageBoardFun() {
       let paramz = new URLSearchParams();
       if (this.messageBoardDesc.trim() == "") {
@@ -313,7 +318,7 @@ export default {
           type: "error",
           center: true
         });
-      } else if(this.messageBoardDesc.length>100) {
+      } else if (this.messageBoardDesc.length > 100) {
         this.$message({
           message: "内容不能超过100个字符",
           type: "error",
@@ -325,7 +330,7 @@ export default {
           type: "error",
           center: true
         });
-      } else if(this.userPhone.length>15) {
+      } else if (this.userPhone.length > 15) {
         this.$message({
           message: "手机号或电话号码过长",
           type: "error",
@@ -781,17 +786,15 @@ header {
     margin-right: 20px;
     height: 30px;
     line-height: 30px;
-    color:#666;
+    color: #666;
     cursor: pointer;
     transition: all 0.3s;
   }
   .right-box:hover {
-    color:#cf1132;
-   
-    
+    color: #cf1132;
   }
-   .right-box:hover .iconfont_user{
-    color:#cf1132;
+  .right-box:hover .iconfont_user {
+    color: #cf1132;
     font-weight: 100;
   }
   .nav-aside {
@@ -1311,7 +1314,7 @@ header {
       .shpping_cart:hover {
         color: #39cf41;
       }
-      .shpping_cart:hover .iconfont_user{
+      .shpping_cart:hover .iconfont_user {
         color: #39cf41;
       }
     }
@@ -1342,7 +1345,7 @@ header {
   }
   .w {
     display: flex;
-
+  
     position: relative;
   }
 }
@@ -1471,11 +1474,11 @@ header {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   margin-left: 3px;
-  color:#999;
+  color: #999;
   transition: all 0.3s;
 }
 .white_bg {
-  color:#f2f2f2;
+  color: #f2f2f2;
 }
 // .iconfont_down_arrow {
 //   font-family: "iconfont" !important;
@@ -1691,6 +1694,27 @@ header {
 .message_board_submit_btn:hover {
   background: rgb(120, 184, 248);
 }
+.login_logo_div {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: #555;
+  font-weight: bold;
+  font-weight: "Microsoft YaHei";
+}
+.login_logo {
+  width: 25px;
+  height: 25px;
+  margin-right: 4px;
+}
+.form_body {
+  margin-top:20px;
+}
+.el-button {
+  width:100%;
+  height:42px;
+  border-radius: 0px;
+}
 </style>
 <style>
 .index_search_input .el-input input {
@@ -1713,5 +1737,16 @@ header {
 }
 #messageBoardTextarea .el-textarea__inner {
   height: 100px;
+}
+#loginDialog .el-dialog--small {
+  width: 360px;
+}
+#loginDialog .el-dialog__body {
+  padding: 0 20px 20px 20px;
+  overflow: auto;
+}
+#loginRuleForm .el-input__inner{
+  height:42px;
+  border-radius: 0px;
 }
 </style>

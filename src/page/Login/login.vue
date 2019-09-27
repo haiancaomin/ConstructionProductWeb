@@ -1,7 +1,72 @@
 <template>
   <div class="login v2">
+    <!-- <y-header>
+    </y-header>-->
     <div class="wrapper">
-      <div class="dialog dialog-shadow" style="display: block; margin-top: -362px;">
+      <div class="login_head">
+        <div class="login_head_zone">
+          <div class="logo_zhuangpei_img_div">
+            <router-link to="/">
+              <img src="/static/images/nav_logo.png" class="logo_zhuangpei_img" />
+            </router-link>
+          </div>
+          <div class="gotoIndexBtn">
+            <router-link to="/">
+              <div class="toBtn">首页</div>
+            </router-link>
+            <div class="split_line_div">
+              <div class="split_line"></div>
+            </div>
+            <router-link to="/goods">
+              <div class="toBtn">产品分类</div>
+            </router-link>
+            <div class="split_line_div">
+              <div class="split_line"></div>
+            </div>
+            <router-link to="/admin">
+              <div class="toBtn">协同办公</div>
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <div class="login_outbody">
+        <div class="login_body">
+          <div class="login_zone">
+            <div class="dialog_title">账号登录</div>
+            <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
+            <div class="username_input_div">
+              <div class="username_input_icon_div">
+                <i class="iconfont_username">&#xe735;</i>
+              </div>
+              <input type="text" placeholder="用户名" class="username_input" v-model="userName" />
+            </div>
+            <div class="user_password_div">
+              <div class="user_password_icon_div">
+                <i class="iconfont_password">&#xe6fc;</i>
+              </div>
+              <input type="password" placeholder="密码" class="user_password" v-model="userPwd" />
+            </div>
+            <div class="code_div">
+              <div class="code_icon_div">
+                <i class="iconfont_code">&#xe63d;</i>
+              </div>
+              <input type="text" placeholder="验证码" class="code_input" v-model="captcha" />
+              <img src="/static/images/login_bg.jpg" class="code_img" />
+            </div>
+
+            <div class="submit_btn" @click="login()">登&nbsp;录</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot_outbody_div">
+        <div class="foot_div">
+          <div class="foot_con">地址：南通市开发区通盛大道188号C座6楼 联系电话：0513-81055866 (工作时间：工作日10点--17点)</div>
+          <div class="foot_con">©2018-2019 All Rights Reserved 智聚装配式绿色建筑创新中心南通有限公司 版权所有</div>
+        </div>
+      </div>
+      <!-- <div class="dialog dialog-shadow" style="display: block; margin-top: -362px;">
         <div class="title">
           <h4>使用 智聚装配 账号 登录</h4>
         </div>
@@ -26,19 +91,19 @@
             </li>
             <li style="text-align: right" class="pr">
               <el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>
-              <!-- <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span> -->
+             
               <a href="javascript:;" class="register" @click="toRegister">注册 GPmall 账号</a>
               <a style="padding: 1px 0 0 10px" @click="open('找回密码','请联系作者邮箱找回密码或使用测试账号登录：test | test')">忘记密码 ?</a>
             </li>
           </ul>
-          <!--登陆-->
+         
           <div style="margin-top: 25px">
             <y-button :text="logintxt"
                       :classStyle="ruleForm.userPwd&& ruleForm.userName&& logintxt === '登录'?'main-btn':'disabled-btn'"
                       @btnClick="login"
                       style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
           </div>
-          <!--返回-->
+         
           <div>
             <y-button text="返回" @btnClick="login_back"
               style="marginTop: 10px;marginBottom: 15px;width: 100%;height: 48px;font-size: 18px;line-height: 48px">
@@ -50,168 +115,173 @@
             <a><img @click="open('待开发','此功能开发中...')" style="height: 15px; margin-top: 22px;" src="/static/images/other-login.png"></a>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 <script src="../../../static/geetest/gt.js"></script>
 <script>
-import YFooter from '/common/footer'
-import YButton from '/components/YButton'
-import { userLogin, initKaptcha } from '/api/index.js'
-import { addCart } from '/api/goods.js'
-import { setStore, getStore, removeStore } from '/utils/storage.js'
-require('../../../static/geetest/gt.js')
+// import YHeader from '/common/header'
+import YFooter from "/common/footer";
+import YButton from "/components/YButton";
+import { userLogin, initKaptcha } from "/api/index.js";
+import { addCart } from "/api/goods.js";
+import { setStore, getStore, removeStore } from "/utils/storage.js";
+require("../../../static/geetest/gt.js");
 export default {
-  data () {
+  data() {
     return {
       cart: [],
       loginPage: true,
-      ruleForm: {
-        userName: '',
-        userPwd: '',
-        captcha: '',
-        errMsg: ''
-      },
       registered: {
-        userName: '',
-        userPwd: '',
-        userPwd2: '',
-        errMsg: ''
+        userName: "",
+        userPwd: "",
+        userPwd2: "",
+        errMsg: ""
       },
       autoLogin: false,
-      logintxt: '登录',
-      imageCode: ''
-    }
+      logintxt: "登录",
+      imageCode: "",
+      userName: "",
+      userPwd: "",
+      captcha: "",
+      errMsg: ""
+    };
   },
   computed: {
-    count () {
-      return this.$store.state.login
+    count() {
+      return this.$store.state.login;
     }
   },
   methods: {
-    open (t, m) {
+    open(t, m) {
       this.$notify.info({
         title: t,
         message: m
-      })
+      });
     },
-    messageSuccess () {
+    messageSuccess() {
       this.$message({
-        message: '恭喜您，注册成功！赶紧登录体验吧',
-        type: 'success'
-      })
+        message: "恭喜您，注册成功！赶紧登录体验吧",
+        type: "success"
+      });
     },
-    message (m) {
+    message(m) {
       this.$message.error({
         message: m
-      })
+      });
     },
-    getRemembered () {
-      var judge = getStore('remember')
-      if (judge === 'true') {
-        this.autoLogin = true
-        this.ruleForm.userName = getStore('rusername')
-        this.ruleForm.userPwd = getStore('rpassword')
+    getRemembered() {
+      var judge = getStore("remember");
+      if (judge === "true") {
+        this.autoLogin = true;
+        this.ruleForm.userName = getStore("rusername");
+        this.ruleForm.userPwd = getStore("rpassword");
       }
     },
-    rememberPass () {
+    rememberPass() {
       if (this.autoLogin === true) {
-        setStore('remember', 'true')
-        setStore('rusername', this.ruleForm.userName)
-        setStore('rpassword', this.ruleForm.userPwd)
+        setStore("remember", "true");
+        setStore("rusername", this.ruleForm.userName);
+        setStore("rpassword", this.ruleForm.userPwd);
       } else {
-        setStore('remember', 'false')
-        removeStore('rusername')
-        removeStore('rpassword')
+        setStore("remember", "false");
+        removeStore("rusername");
+        removeStore("rpassword");
       }
     },
-    toRegister () {
+    toRegister() {
       this.$router.push({
-        path: '/register'
-      })
+        path: "/register"
+      });
     },
     // 登录返回按钮
-    login_back () {
-      this.$router.go(-1)
+    login_back() {
+      this.$router.go(-1);
     },
     // 登陆时将本地的添加到用户购物车
-    login_addCart () {
-      let cartArr = []
-      let locaCart = JSON.parse(getStore('buyCart'))
+    login_addCart() {
+      let cartArr = [];
+      let locaCart = JSON.parse(getStore("buyCart"));
       if (locaCart && locaCart.length) {
         locaCart.forEach(item => {
           cartArr.push({
-            userId: getStore('userId'),
+            userId: getStore("userId"),
             productId: item.productId,
             productNum: item.productNum
-          })
-        })
+          });
+        });
       }
-      this.cart = cartArr
+      this.cart = cartArr;
     },
-    login () {
-      this.logintxt = '登录中...'
-      this.rememberPass()
-      if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
-        this.message('账号或者密码不能为空!')
-        return false
-      }
-      if (!this.ruleForm.captcha) {
-        this.message('请输入验证码!')
-        return false
-      }
-      var params = {
-        userName: this.ruleForm.userName,
-        userPwd: this.ruleForm.userPwd,
-        captcha: this.ruleForm.captcha
-      }
-      userLogin(params).then(res => {
-        if (res.success) {
-          setStore('access_token', res.result.token)
-          setStore('userId', res.result.id)
-          // 登录后添加当前缓存中的购物车
-          if (this.cart.length) {
-            for (var i = 0; i < this.cart.length; i++) {
-              addCart(this.cart[i]).then(res => {
-                if (res.success === true) {
-                }
-              })
+    login() {
+      this.logintxt = "登录中...";
+      this.rememberPass();
+      if (this.userName == "" || this.userPwd == "") {
+        this.errMsg = "账号或密码不能为空!";
+      } else if (this.userName.length > 20) {
+        this.errMsg = "用户名不能超过20个字符!";
+      } else if (this.userPwd.length > 20) {
+        this.errMsg = "密码不能超过20个字符!";
+      } else if (this.captcha == "") {
+        this.errMsg = "验证码不能为空!";
+      } else if (this.captcha.length > 10) {
+        this.errMsg = "验证码错误!";
+      } else {
+        alert("sss");
+        var params = {
+          userName: this.ruleForm.userName,
+          userPwd: this.ruleForm.userPwd,
+          captcha: this.ruleForm.captcha
+        };
+        userLogin(params).then(res => {
+          if (res.success) {
+            setStore("access_token", res.result.token);
+            setStore("userId", res.result.id);
+            // 登录后添加当前缓存中的购物车
+            if (this.cart.length) {
+              for (var i = 0; i < this.cart.length; i++) {
+                addCart(this.cart[i]).then(res => {
+                  if (res.success === true) {
+                  }
+                });
+              }
+              removeStore("buyCart");
+              this.$router.push({
+                path: "/"
+              });
+            } else {
+              this.$router.push({
+                path: "/"
+              });
             }
-            removeStore('buyCart')
-            this.$router.push({
-              path: '/'
-            })
           } else {
-            this.$router.push({
-              path: '/'
-            })
+            this.logintxt = "登录";
+            this.message(res.message);
+            this.init_geetest();
+            return false;
           }
-        } else {
-          this.logintxt = '登录'
-          this.message(res.message)
-          this.init_geetest()
-          return false
-        }
-      })
+        });
+      }
     },
-    init_geetest () {
+    init_geetest() {
       initKaptcha().then(res => {
-        this.imageCode = 'data:image/gif;base64,' + res.result
-      })
+        this.imageCode = "data:image/gif;base64," + res.result;
+      });
     }
   },
-  mounted () {
-    this.getRemembered()
-    this.login_addCart()
-    this.init_geetest()
-    this.open('登录提示', '测试体验账号密码：test | test')
+  mounted() {
+    // this.getRemembered();
+    // this.login_addCart();
+    // this.init_geetest();
+    // this.open('登录提示', '测试体验账号密码：test | test')
   },
   components: {
+    // YHeader,
     YFooter,
     YButton
   }
-}
+};
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 * {
@@ -221,6 +291,7 @@ export default {
 .login {
   overflow-x: hidden;
   overflow-y: hidden;
+  // position: relative;
   .input {
     height: 50px;
     display: flex;
@@ -236,10 +307,14 @@ export default {
     }
   }
   .wrapper {
-    background: url(/static/images/bg_9b9dcb65ff.png) repeat;
-    background-size: 100px;
-    min-height: 800px;
-    min-width: 630px;
+    background: url(/static/images/login_bg.jpg) no-repeat;
+    // background-size: 100%;
+    background-size: cover;
+    // background-position:center;
+    overflow: hidden;
+
+    // min-height: 800px;
+    // min-width: 630px;
   }
 }
 
@@ -403,5 +478,209 @@ export default {
   text-align: left;
   color: #999;
   margin: 0;
+}
+.login_head {
+  width: 100%;
+  height: 40px;
+  background: #1e1b29;
+}
+.login_head_zone {
+  width: 1280px;
+  margin: 0 auto;
+  display: flex;
+}
+.logo_zhuangpei_img_div {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.logo_zhuangpei_img {
+  height: 28px;
+  width: 130px;
+}
+.gotoIndexBtn {
+  height: 40px;
+  line-height: 40px;
+  margin-left: 950px;
+  display: flex;
+}
+.toBtn {
+  color: #aaabaf;
+  transition: all 0.3s;
+}
+.toBtn:hover {
+  color: #f0f0f0;
+}
+.split_line_div {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  margin: 0px 10px;
+}
+.split_line {
+  width: 2px;
+  height: 14px;
+  border-left: 1px solid #aaabaf;
+}
+.login_outbody {
+  width: 100%;
+}
+.login_body {
+  width: 1280px;
+  margin: 0 auto;
+}
+.login_zone {
+  width: 350px;
+  background: rgba(0, 0, 0, 0.6);
+  margin: 150px 0 0 850px;
+  padding-bottom: 40px;
+}
+.dialog_title {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: 2px #cf1132 solid;
+  color: #cf1132;
+}
+.username_input_div {
+  width: 100%;
+  margin: 30px 0px 0px 0px;
+  display: flex;
+  justify-content: center;
+}
+.username_input_icon_div {
+  width: 44px;
+  height: 44px;
+  background: #aaabab;
+  line-height: 44px;
+  text-align: center;
+}
+.username_input {
+  width: 240px;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
+.user_password_div {
+  margin: 25px 0px 0px 0px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.user_password_icon_div {
+  width: 44px;
+  height: 44px;
+  background: #aaabab;
+  line-height: 44px;
+  text-align: center;
+}
+.user_password {
+  width: 240px;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
+.code_div {
+  margin: 25px 0px 0px 0px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.code_icon_div {
+  width: 44px;
+  height: 44px;
+
+  background: #aaabab;
+  line-height: 44px;
+  text-align: center;
+}
+.code_input {
+  width: 130px;
+  height: 44px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
+.code_img {
+  height: 44px;
+  width: 100px;
+  cursor: pointer;
+}
+.submit_btn {
+  width: 284px;
+  height: 44px;
+  background: #cf1132;
+  margin: 25px auto 0;
+  line-height: 44px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+.foot_outbody_div {
+  width: 100%;
+  margin-top: 300px;
+}
+.foot_div {
+  width: 1280px;
+  margin: 0 auto;
+}
+.foot_con {
+  color: #fff;
+  text-align: center;
+  margin-top: 8px;
+  width: 100%;
+}
+.errorMsg {
+  box-sizing: border-box;
+  margin: 30px auto 0;
+  padding-left: 10px;
+  font-size: 12px;
+  color:#4D4D4D;
+  width:284px;
+  height:28px;
+  line-height: 28px;
+  background: #fdeee9;
+  border: 1px solid #fadcd3;
+}
+@font-face {
+  font-family: "iconfont"; /* project id 1414486 */
+  src: url("//at.alicdn.com/t/font_1414486_now8zjimxyn.eot");
+  src: url("//at.alicdn.com/t/font_1414486_now8zjimxyn.eot?#iefix")
+      format("embedded-opentype"),
+    url("//at.alicdn.com/t/font_1414486_now8zjimxyn.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_1414486_now8zjimxyn.woff") format("woff"),
+    url("//at.alicdn.com/t/font_1414486_now8zjimxyn.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_1414486_now8zjimxyn.svg#iconfont") format("svg");
+}
+.iconfont_username {
+  font-family: "iconfont" !important;
+  font-size: 22px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+}
+.iconfont_password {
+  font-family: "iconfont" !important;
+  font-size: 22px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+}
+.iconfont_code {
+  font-family: "iconfont" !important;
+  font-size: 24px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
 }
 </style>
