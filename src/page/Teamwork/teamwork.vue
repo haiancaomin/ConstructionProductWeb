@@ -1,46 +1,51 @@
 <template>
   <div class="home">
-    <div class="container">
-      <my-step></my-step>
+    <y-shelf title="工作流">
+      <div slot="content">
+        <div class="container">
+          <my-step></my-step>
 
-      <div class="msg-box">
-        <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
-          <textarea name="content" id rows="10" v-model="content"></textarea>
-          <div class="submit-comment-action clearfix">
-            <el-button type="success" @click="_sendMsg">提交</el-button>
-          </div>
-        </div>
-        <div class="comment-list">
-          <div v-loading="loading" element-loading-text="加载中..." v-if="msgData.length">
-            <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
-              <p class="person-name">{{item.companyname}} - {{item.name}} - {{item.phone}}</p>
-              <p class="replyContent">{{item.content}}</p>
-              <p class="operation">
-                <span class="time">{{item.createdate}}</span>
-              </p>
+          <div class="msg-box">
+            <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
+              <textarea name="content" id rows="10" v-model="content"></textarea>
+              <div class="submit-comment-action clearfix">
+                <el-button type="success" @click="_sendMsg">提交</el-button>
+              </div>
             </div>
-          </div>
-          <div class="no-info" v-loading="loading" element-loading-text="加载中..." v-else>
-            <h5>暂无留言</h5>
-          </div>
-          <div class="page clearfix">
-            <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[10]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next"
-              :total="total"
-            ></el-pagination>
+            <div class="comment-list">
+              <div v-loading="loading" element-loading-text="加载中..." v-if="msgData.length">
+                <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
+                  <p class="person-name">{{item.companyname}} - {{item.name}} - {{item.phone}}</p>
+                  <p class="replyContent">{{item.content}}</p>
+                  <p class="operation">
+                    <span class="time">{{item.createdate}}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="no-info" v-loading="loading" element-loading-text="加载中..." v-else>
+                <h5>暂无留言</h5>
+              </div>
+              <div class="page clearfix">
+                <el-pagination
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[10]"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next"
+                  :total="total"
+                ></el-pagination>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </y-shelf>
   </div>
 </template>
 <script>
 import { getMsgList, sendMsg } from "/api";
 import myStep from "/components/myStep";
+import YShelf from "/components/shelf";
 export default {
   data() {
     return {
@@ -58,7 +63,8 @@ export default {
     };
   },
   components: {
-    myStep
+    myStep,
+    YShelf
   },
   methods: {
     _getMsgList(pid) {
@@ -75,6 +81,12 @@ export default {
     },
 
     _sendMsg() {
+      if (this.content == "") {
+        this.$message.error({
+          message: "内容不能为空！"
+        });
+        return;
+      }
       this.msgloading = true;
       let params = new URLSearchParams();
       params.append("userid", this.userid);
@@ -110,6 +122,11 @@ export default {
 };
 </script>
 <style lang="css" scoped>
+.gray-box {
+  width: 1280px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
 .home {
   background-color: #f6f7fb;
 }

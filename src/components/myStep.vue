@@ -1,7 +1,7 @@
 <template>
   <div class="stepComponent">
     <div class="stepsTitle">
-      <div style="float:left;width:2px;height:20px; background:#219AFF;"></div>审批流程及意见
+      <div style="float:left;width:2px;height:20px; background:#219AFF;margin-right:5px"></div> 项目节点要素
     </div>
     <div class="approvalProcess">
       <el-steps :active="active" finish-status="success" direction="vertical">
