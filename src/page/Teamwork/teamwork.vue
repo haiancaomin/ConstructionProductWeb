@@ -1,36 +1,41 @@
 <template>
   <div class="home">
-    <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
-      <textarea name="content" id rows="10" v-model="content"></textarea>
-      <div class="submit-comment-action clearfix">
-        <el-button type="success" @click="_sendMsg">提交</el-button>
-      </div>
-    </div>
-    <div class="comment-list">
-      <div v-loading="loading" element-loading-text="加载中..." v-if="msgData.length">
-        <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
-          <p class="person-name">{{item.companyname}} - {{item.name}} - {{item.phone}}</p>
-          <p class="replyContent">{{item.content}}</p>
-          <p class="operation">
-            <span class="time">{{item.createdate}}</span>
-          </p>
+    <div class="container">
+      <my-step></my-step>
+
+      <div class="msg-box">
+        <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
+          <textarea name="content" id rows="10" v-model="content"></textarea>
+          <div class="submit-comment-action clearfix">
+            <el-button type="success" @click="_sendMsg">提交</el-button>
+          </div>
+        </div>
+        <div class="comment-list">
+          <div v-loading="loading" element-loading-text="加载中..." v-if="msgData.length">
+            <div class="reply" v-for="(item,index) in msgData" :key="index" v-cloak>
+              <p class="person-name">{{item.companyname}} - {{item.name}} - {{item.phone}}</p>
+              <p class="replyContent">{{item.content}}</p>
+              <p class="operation">
+                <span class="time">{{item.createdate}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="no-info" v-loading="loading" element-loading-text="加载中..." v-else>
+            <h5>暂无留言</h5>
+          </div>
+          <div class="page clearfix">
+            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[10]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next"
+              :total="total"
+            ></el-pagination>
+          </div>
         </div>
       </div>
-      <div class="no-info" v-loading="loading" element-loading-text="加载中..." v-else>
-        <h5>暂无留言</h5>
-      </div>
-      <div class="page clearfix">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[10]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next"
-          :total="total"
-        ></el-pagination>
-      </div>
     </div>
-    <my-step></my-step>
   </div>
 </template>
 <script>
@@ -105,26 +110,38 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-.home{
-  background-color: #f6f7fb
+.home {
+  background-color: #f6f7fb;
+}
+.container {
+  width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  padding: 20px 0;
+}
+.msg-box {
+  flex: 1;
+  margin-left: 30px;
+  background: #fff;
+  padding: 20px;
 }
 .submit-comment {
   height: 250px;
-  width: 800px;
+  width: 100%;
   margin: 0 auto;
   background-color: #d9edf7;
   padding: 20px 25px;
   border: #a5bcff solid 1px;
 }
 .comment-list {
-  width: 800px;
+  width: 100%;
   margin: 25px auto 40px;
   border: #a5bcff solid 1px;
   background: #fff;
 }
 textarea {
   padding: 5px;
-  width: 750px;
+  width: 100%;
   height: 150px;
   border: 1px solid #636c72;
   box-shadow: inset 0 0 5px 2px #a1a3b0;
@@ -132,7 +149,7 @@ textarea {
 .submit-comment-action {
   padding-top: 10px;
   height: 50px;
-  width: 750px;
+  width: 100%;
 }
 
 .submit-comment-action button {
