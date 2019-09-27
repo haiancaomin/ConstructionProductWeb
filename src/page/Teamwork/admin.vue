@@ -39,7 +39,8 @@ export default {
       title: "人员管理",
       nav: [
         { name: "人员管理", path: "member" },
-        { name: "项目管理", path: "project" }
+        { name: "项目管理", path: "project" },
+        { name: "项目节点", path: "step" }
       ],
       editAvatar: true
     };

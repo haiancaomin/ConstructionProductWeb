@@ -28,6 +28,7 @@ const QQpay = () => import('/page/Order/qqpay.vue')
 const admin = () => import('/page/Teamwork/admin.vue')
 const project = () => import('/page/Teamwork/children/project.vue')
 const member = () => import('/page/Teamwork/children/member.vue')
+const step = () => import('/page/Teamwork/children/step.vue')
 const teamwork = () => import('/page/Teamwork/teamwork.vue')
 Vue.use(Router)
 export default new Router({
@@ -73,6 +74,11 @@ export default new Router({
               path: 'member',
               name: '人员管理',
               component: member
+            },
+            {
+              path: 'step',
+              name: '项目节点',
+              component: step
             }
           ]
         },
