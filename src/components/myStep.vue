@@ -12,6 +12,8 @@
           :key="index"
         >
           <template slot="description">
+            <el-button size="small" type="text">附件上传</el-button>
+            <el-button size="small" type="text">添加节点信息</el-button>
             <div class="step-row" v-for="(item,index) in approvalProcessProject" :key="index">
               <table
                 width="100%"
