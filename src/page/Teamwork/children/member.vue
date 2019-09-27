@@ -14,7 +14,7 @@
         >
           <el-table :data="tableData" border style="width: 100%">
             <el-table-column fixed prop="name" label="姓名" width="120"></el-table-column>
-            <el-table-column prop="role" label="角色" width="120" :formatter="roleFun"></el-table-column>
+            <el-table-column prop="rolename" label="角色" width="120"></el-table-column>
             <el-table-column prop="phone" label="联系方式" width="130"></el-table-column>
             <el-table-column prop="companyname" label="所属公司" width="320"></el-table-column>
             <el-table-column prop="companyaddress" label="公司地址" width="320"></el-table-column>
@@ -45,6 +45,7 @@
       :title="addOrEdit?'修改人员':'新增人员'"
       :visible.sync="newMemberVisible"
       id="memberForm"
+      @open="_getRoles"
       @close="clearAddOrEdit"
     >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -60,6 +61,16 @@
         <el-form-item label="公司地址" :label-width="formLabelWidth" prop="companyaddress">
           <el-input v-model="ruleForm.companyaddress" auto-complete="off" placeholder="请输入公司地址"></el-input>
         </el-form-item>
+        <el-form-item label="用户角色" :label-width="formLabelWidth" prop="role">
+          <el-select v-model="ruleForm.role" placeholder="请选择用户角色">
+            <el-option
+              v-for="(item,index) in roles"
+              :key="index"
+              :label="item.rolename"
+              :value="item.rid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newMemberVisible = false">取 消</el-button>
@@ -69,7 +80,13 @@
   </div>
 </template>
 <script>
-import { saveMember, getMemberList, deleteMember, updateMember } from "/api";
+import {
+  saveMember,
+  getMemberList,
+  deleteMember,
+  updateMember,
+  getRoles
+} from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -80,7 +97,8 @@ export default {
         name: "",
         phone: "",
         companyname: "",
-        companyaddress: ""
+        companyaddress: "",
+        role: ""
       },
       rules: {
         name: [
@@ -99,7 +117,8 @@ export default {
         ],
         companyaddress: [
           { required: true, message: "请输入公司地址", trigger: "blur" }
-        ]
+        ],
+        role: [{ required: true, message: "请选择用户角色", trigger: "blur" }]
       },
       formLabelWidth: "120px",
       userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
@@ -109,7 +128,8 @@ export default {
       total: 0,
       tableData: [],
       name: "", //查询人员字段
-      addOrEdit: ""
+      addOrEdit: "",
+      roles: []
     };
   },
   methods: {
@@ -137,6 +157,7 @@ export default {
           params.append("phone", this.ruleForm.phone);
           params.append("companyname", this.ruleForm.companyname);
           params.append("companyaddress", this.ruleForm.companyaddress);
+          params.append("role", this.ruleForm.role);
           if (this.addOrEdit) {
             params.append("personid", this.addOrEdit);
             updateMember(params).then(res => {
@@ -179,12 +200,18 @@ export default {
         }
       });
     },
+    _getRoles() {
+      getRoles().then(res => {
+        this.roles = res.data;
+      });
+    },
     _updateMember(row) {
       this.newMemberVisible = true;
       this.ruleForm.name = row.name;
       this.ruleForm.phone = row.phone;
       this.ruleForm.companyname = row.companyname;
       this.ruleForm.companyaddress = row.companyaddress;
+      this.ruleForm.role = row.roleid;
       this.addOrEdit = row.userid;
     },
     _deleteMember(row) {
@@ -222,12 +249,7 @@ export default {
       this.currentPage = val;
       this._getMemberList();
     },
-    roleFun(row, column, cellValue) {
-      if (cellValue == 1) {
-        return "内部";
-      }
-      return "外部";
-    },
+    
     clearAddOrEdit() {
       this.addOrEdit = "";
     },
@@ -236,6 +258,7 @@ export default {
       this.ruleForm.phone = "";
       this.ruleForm.companyname = "";
       this.ruleForm.companyaddress = "";
+      this.ruleForm.role = "";
     }
   },
   created() {
