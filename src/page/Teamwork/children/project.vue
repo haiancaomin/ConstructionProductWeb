@@ -19,7 +19,7 @@
             <el-table-column prop="introduction" label="项目备注" width="310"></el-table-column>
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
-                <el-button @click="toTeamwork(scope.row)" type="text" size="small">沟通</el-button>
+                <el-button @click="toTeamwork(scope.row)" type="text" size="small">工作流</el-button>
                 <el-button @click="_updateProject(scope.row)" type="text" size="small">编辑</el-button>
                 <el-button @click="_deleteProject(scope.row)" type="text" size="small">删除</el-button>
               </template>
