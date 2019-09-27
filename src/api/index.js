@@ -1,5 +1,7 @@
 import http from './public'
-import {apis} from './api'
+import {
+  apis
+} from './api'
 //获取产品详情
 export const getProductDetailFun = (params) => {
   return http.fetchPost(apis.getProductDetailFun, params)
@@ -68,6 +70,22 @@ export const deleteProject = (params) => {
 export const getSelectUsers = (params) => {
   return http.fetchGet(apis.getSelectUsers, params)
 }
+//节点管理添加节点
+export const saveStep = (params) => {
+  return http.fetchPost(apis.saveStep, params)
+}
+//节点管理添加节点
+export const updateStep = (params) => {
+  return http.fetchPost(apis.updateStep, params)
+}
+//节点管理添加节点
+export const deleteStep = (params) => {
+  return http.fetchPost(apis.deleteStep, params)
+}
+//节点管理添加节点
+export const getStepList = (params) => {
+  return http.fetchPost(apis.getStepList, params)
+}
 //沟通页面获取留言列表
 export const getMsgList = (params) => {
   return http.fetchPost(apis.getMsgList, params)
@@ -130,4 +148,3 @@ export const thank = (params) => {
 export const initKaptcha = (params) => {
   return http.fetchGet('/user/kaptcha?t=' + (new Date()).getTime(), params)
 }
-

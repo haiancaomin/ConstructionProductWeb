@@ -13,7 +13,7 @@
           style="min-height: 10vw;"
         >
           <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="name" label="节点名称"></el-table-column>
+            <el-table-column prop="nodename" label="节点名称"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button @click="_updateStep(scope.row)" type="text" size="small">编辑</el-button>
@@ -44,8 +44,8 @@
       @close="clearAddOrEdit"
     >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item label="节点名称" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入节点名称"></el-input>
+        <el-form-item label="节点名称" :label-width="formLabelWidth" prop="nodename">
+          <el-input v-model="ruleForm.nodename" auto-complete="off" placeholder="请输入节点名称"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -56,13 +56,7 @@
   </div>
 </template>
 <script>
-import {
-  saveMember,
-  getMemberList,
-  deleteMember,
-  updateMember,
-  getRoles
-} from "/api";
+import { saveStep, getStepList, deleteStep, updateStep } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
 export default {
@@ -70,10 +64,10 @@ export default {
     return {
       newStepVisible: false,
       ruleForm: {
-        name: ""
+        nodename: ""
       },
       rules: {
-        name: [
+        nodename: [
           { required: true, message: "请输入节点名称", trigger: "blur" }
         ]
       },
@@ -95,7 +89,6 @@ export default {
     _getStepList() {
       this.loading = true;
       let params = new URLSearchParams();
-      params.append("name", this.name);
       params.append("selectIndex", this.currentPage);
       params.append("pageIndex", (this.currentPage - 1) * 10);
       getStepList(params).then(res => {
@@ -108,16 +101,15 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let params = new URLSearchParams();
-          params.append("name", this.ruleForm.name);
-          params.append("phone", this.ruleForm.phone);
-          params.append("companyname", this.ruleForm.companyname);
-          params.append("companyaddress", this.ruleForm.companyaddress);
-          params.append("role", this.ruleForm.role);
+          params.append("nodename", this.ruleForm.nodename);
+          params.append("userid", this.userid);
+
           if (this.addOrEdit) {
-            params.append("personid", this.addOrEdit);
+            params.append("nodeid", this.addOrEdit);
+
             updateStep(params).then(res => {
               if (res.data == 0) {
-                this.newMemberVisible = false;
+                this.newStepVisible = false;
                 this.$message({
                   message: "保存成功！",
                   type: "success",
@@ -131,7 +123,6 @@ export default {
               }
             });
           } else {
-            params.append("userid", this.userid);
             saveStep(params).then(res => {
               if (res.data == 0) {
                 this.newStepVisible = false;
@@ -157,12 +148,8 @@ export default {
     },
     _updateStep(row) {
       this.newStepVisible = true;
-      this.ruleForm.name = row.name;
-      this.ruleForm.phone = row.phone;
-      this.ruleForm.companyname = row.companyname;
-      this.ruleForm.companyaddress = row.companyaddress;
-      this.ruleForm.role = row.roleid;
-      this.addOrEdit = row.userid;
+      this.ruleForm.nodename = row.nodename;
+      this.addOrEdit = row.did;
     },
     _deleteStep(row) {
       this.$confirm("确认删除？", "提示", {
@@ -173,7 +160,7 @@ export default {
       })
         .then(() => {
           let params = new URLSearchParams();
-          params.append("personid", row.userid);
+          params.append("nodeid", row.did);
           deleteStep(params).then(res => {
             if (res.data == true) {
               this.$message({
@@ -197,18 +184,14 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this._getMemberList();
+      this._getStepList();
     },
-    
+
     clearAddOrEdit() {
       this.addOrEdit = "";
     },
     reset() {
-      this.ruleForm.name = "";
-      this.ruleForm.phone = "";
-      this.ruleForm.companyname = "";
-      this.ruleForm.companyaddress = "";
-      this.ruleForm.role = "";
+      this.ruleForm.nodename = "";
     }
   },
   created() {
@@ -357,14 +340,14 @@ export default {
 #teamworkTableList .el-table th {
   height: 45px;
 }
-#memberForm .el-input,
-#memberForm textarea {
+#stepForm .el-input,
+#stepForm textarea {
   width: 300px;
 }
-#memberForm .el-dialog--small {
+#stepForm .el-dialog--small {
   width: 500px;
 }
-#memberForm .el-dialog__body {
+#stepForm .el-dialog__body {
   max-height: 500px;
   overflow: auto;
 }
