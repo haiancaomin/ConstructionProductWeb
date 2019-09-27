@@ -81,7 +81,7 @@ export default {
     },
 
     _sendMsg() {
-      if (this.content == "") {
+      if (this.content.trim() == "") {
         this.$message.error({
           message: "内容不能为空！"
         });
