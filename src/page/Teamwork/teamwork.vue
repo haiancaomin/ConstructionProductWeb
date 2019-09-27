@@ -176,7 +176,10 @@ textarea {
   padding: 15px;
   text-align: center;
 }
-
+.no-info{
+  text-align: center;
+  line-height: 50px;
+}
 .reply {
   border-bottom: 1px solid #8d92a0;
 }
