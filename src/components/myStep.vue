@@ -1,7 +1,7 @@
 <template>
   <div class="stepComponent">
     <div class="stepsTitle">
-      <div style="float:left;width:2px;height:20px; background:#219AFF;margin-right:5px"></div> 项目节点要素
+      <div style="float:left;width:2px;height:20px; background:#219AFF;margin-right:5px"></div>项目节点要素
     </div>
     <div class="approvalProcess">
       <el-steps :active="active" finish-status="success" direction="vertical">
@@ -12,7 +12,7 @@
           :key="index"
         >
           <template slot="description">
-            <el-button size="small" type="text">添加节点信息</el-button>
+            <el-button size="small" type="text" @click="addNodeItem">添加节点信息</el-button>
             <div class="step-row" v-for="(item,index) in approvalProcessProject" :key="index">
               <table
                 width="100%"
@@ -53,6 +53,26 @@
       </el-steps>
       <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
     </div>
+    <el-dialog :title="addOrEdit?'修改人员':'新增人员'" :visible.sync="addNodeBoxVisible" id="memberForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="phone">
+          <el-input v-model="ruleForm.phone" auto-complete="off" placeholder="请输入联系人电话"></el-input>
+        </el-form-item>
+        <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyname">
+          <el-input v-model="ruleForm.companyname" auto-complete="off" placeholder="请输入公司名称"></el-input>
+        </el-form-item>
+        <el-form-item label="公司地址" :label-width="formLabelWidth" prop="companyaddress">
+          <el-input v-model="ruleForm.companyaddress" auto-complete="off" placeholder="请输入公司地址"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addNodeBoxVisible = false">取 消</el-button>
+        <el-button type="primary" @click="_saveMember('ruleForm')">提 交</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -61,6 +81,36 @@ export default {
   props: ["data", "defaultActive"],
   data() {
     return {
+      addNodeBoxVisible: false,
+      ruleForm: {
+        name: "",
+        phone: "",
+        companyname: "",
+        companyaddress: "",
+        role: ""
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入联系人姓名", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, message: "请输入联系人电话", trigger: "blur" },
+          {
+            pattern: /^1[3456789]\d{9}$/,
+            message: "手机号码格式不正确",
+            trigger: "blur"
+          }
+        ],
+        companyname: [
+          { required: true, message: "请输入公司名称", trigger: "blur" }
+        ],
+        companyaddress: [
+          { required: true, message: "请输入公司地址", trigger: "blur" }
+        ],
+        role: [{ required: true, message: "请选择用户角色", trigger: "blur" }]
+      },
+      addOrEdit: "",
+      formLabelWidth: "120px",
       active: 0,
       approvalProcessProject: [
         { id: "0", label: "方案制定" },
@@ -76,6 +126,9 @@ export default {
   methods: {
     next() {
       if (this.active++ > 2) this.active = 0;
+    },
+    addNodeItem() {
+      this.addNodeBoxVisible = true;
     }
   }
 };
@@ -112,5 +165,18 @@ export default {
   min-width: 500px;
   margin-bottom: 12px;
   margin-top: 12px;
+}
+</style>
+<style>
+.stepComponent .el-input,
+.stepComponent textarea {
+  width: 300px;
+}
+.stepComponent .el-dialog--small {
+  width: 500px;
+}
+.stepComponent .el-dialog__body {
+  max-height: 500px;
+  overflow: auto;
 }
 </style>
