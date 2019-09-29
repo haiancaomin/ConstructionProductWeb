@@ -70,6 +70,10 @@ export const deleteProject = (params) => {
 export const getSelectUsers = (params) => {
   return http.fetchGet(apis.getSelectUsers, params)
 }
+//项目管理获取下拉选择节点
+export const getSelectNodes = (params) => {
+  return http.fetchGet(apis.getSelectNodes, params)
+}
 //节点管理添加节点
 export const saveStep = (params) => {
   return http.fetchPost(apis.saveStep, params)

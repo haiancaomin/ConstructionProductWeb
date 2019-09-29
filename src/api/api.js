@@ -26,6 +26,7 @@ export const apis = {
   getProjectList:'/jzbppt/jzbp_findProjectList.do',
   deleteProject:'/jzbppt/jzbp_deleteProjectById.do',
   getSelectUsers:'/jzbppt/employee_findUserList.do',
+  getSelectNodes:'/jzbppt/jzbp_getNodeDicList.do',
 
   saveStep:'/jzbppt/jzbp_addNodeDic.do',
   updateStep:'/jzbppt/jzbp_editNodeDic.do',

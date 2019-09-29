@@ -6,6 +6,9 @@
           <my-step></my-step>
 
           <div class="msg-box">
+            <div class="stepsTitle">
+              <div style="float:left;width:2px;height:20px; background:#219AFF;margin-right:5px"></div>沟通留言区
+            </div>
             <div class="submit-comment" v-loading="msgloading" element-loading-text="提交中...">
               <textarea name="content" id rows="10" v-model="content"></textarea>
               <div class="submit-comment-action clearfix">
@@ -122,6 +125,9 @@ export default {
 };
 </script>
 <style lang="css" scoped>
+.stepsTitle {
+  margin: 10px 0px 10px 10px;
+}
 .gray-box {
   width: 1280px;
   margin: 0 auto;
@@ -141,6 +147,7 @@ export default {
   margin-left: 30px;
   background: #fff;
   padding: 20px;
+  padding-top: 10px;
 }
 .submit-comment {
   height: 250px;
@@ -176,7 +183,7 @@ textarea {
   padding: 15px;
   text-align: center;
 }
-.no-info{
+.no-info {
   text-align: center;
   line-height: 50px;
 }
