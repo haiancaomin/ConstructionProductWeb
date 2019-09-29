@@ -74,15 +74,15 @@ export const getSelectUsers = (params) => {
 export const saveStep = (params) => {
   return http.fetchPost(apis.saveStep, params)
 }
-//节点管理添加节点
+//节点管理修改节点
 export const updateStep = (params) => {
   return http.fetchPost(apis.updateStep, params)
 }
-//节点管理添加节点
+//节点管理删除节点
 export const deleteStep = (params) => {
   return http.fetchPost(apis.deleteStep, params)
 }
-//节点管理添加节点
+//节点管理获取节点列表
 export const getStepList = (params) => {
   return http.fetchPost(apis.getStepList, params)
 }
