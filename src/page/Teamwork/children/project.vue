@@ -17,6 +17,7 @@
             <el-table-column prop="contractno" label="合同编号" width="120"></el-table-column>
             <el-table-column prop="userinfo" label="联系人/电话" width="310"></el-table-column>
             <el-table-column prop="introduction" label="项目备注" width="310"></el-table-column>
+            <el-table-column prop="currentNode" label="当前节点" width="120"></el-table-column>
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button @click="toTeamwork(scope.row)" type="text" size="small">工作流</el-button>
@@ -45,7 +46,7 @@
       :title="addOrEdit?'修改项目':'新建项目'"
       :visible.sync="newProjectVisible"
       id="projectForm"
-      @open="_getSelectUsers"
+      @open="_getSelect"
       @close="clearAddOrEdit"
     >
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
@@ -70,6 +71,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="添加节点" :label-width="formLabelWidth">
+          <el-select v-model="ruleForm.nodeids" placeholder="请为项目添加节点" multiple>
+            <el-option
+              v-for="(item,index) in selectNodes"
+              :key="index"
+              :label="item.nodename"
+              :value="item.did"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="项目介绍" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="ruleForm.introduction" placeholder="请输入项目备注"></el-input>
         </el-form-item>
@@ -87,7 +98,8 @@ import {
   updateProject,
   getProjectList,
   deleteProject,
-  getSelectUsers
+  getSelectUsers,
+  getSelectNodes
 } from "/api";
 import YShelf from "/components/shelf";
 import { getStore } from "/utils/storage";
@@ -100,6 +112,7 @@ export default {
         projectname: "",
         contractno: "",
         personids: [],
+        nodeids: [],
         introduction: ""
       },
       rules: {
@@ -115,6 +128,7 @@ export default {
       tableData: [],
       name: "",
       selectUsers: [],
+      selectNodes: [],
       addOrEdit: ""
     };
   },
@@ -143,6 +157,7 @@ export default {
           params.append("projectname", this.ruleForm.projectname);
           params.append("contractno", this.ruleForm.contractno);
           params.append("personids", this.ruleForm.personids);
+          params.append("nodeids", this.ruleForm.nodeids);
           params.append("introduction", this.ruleForm.introduction);
           params.append("userid", this.userid);
 
@@ -192,16 +207,31 @@ export default {
         this.selectUsers = res.data;
       });
     },
+    _getSelectNodes() {
+      getSelectNodes().then(res => {
+        this.selectNodes = res.data;
+      });
+    },
+    _getSelect() {
+      this._getSelectUsers();
+      this._getSelectNodes();
+    },
     _updateProject(row) {
+      console.log(row);
       this.newProjectVisible = true;
       this.addOrEdit = row.pid;
-      var ids = [];
+      var perids = [],
+        nids = [];
       row.plist.forEach(element => {
-        ids.push(element.personid);
+        perids.push(element.personid);
+      });
+      row.nlist.forEach(element => {
+        nids.push(element.nodeid);
       });
       this.ruleForm.projectname = row.projectname;
       this.ruleForm.contractno = row.contractno;
-      this.ruleForm.personids = ids;
+      this.ruleForm.personids = perids;
+      this.ruleForm.nodeids = nids;
       this.ruleForm.introduction = row.introduction;
     },
     _deleteProject(row) {
@@ -246,6 +276,7 @@ export default {
       this.ruleForm.projectname = "";
       this.ruleForm.contractno = "";
       this.ruleForm.personids = [];
+      this.ruleForm.nodeids = [];
       this.ruleForm.introduction = "";
     },
     toTeamwork(row) {
