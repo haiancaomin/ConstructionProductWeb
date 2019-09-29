@@ -1,5 +1,13 @@
 import http from './public'
 import {apis} from './api'
+//登录
+export const userLoginFun = (params) => {
+  return http.fetchPost(apis.userLoginFun, params)
+}
+//获取验证码图片
+export const createCodeFun = (params) => {
+  return http.fetchGet(apis.createCodeFun, params)
+}
 //获取产品详情
 export const getProductDetailFun = (params) => {
   return http.fetchPost(apis.getProductDetailFun, params)

@@ -1,6 +1,6 @@
 
 export const apis = {
-  userLogin: '/user/login',
+  
   loginOut: '/user/loginOut',
   userInfo: '/user/login',
   
@@ -14,6 +14,8 @@ export const apis = {
   productTypeListFun: '/jzbppt/jzbp_getHtTypeList.do',
   productListBySrarchOrTyprFun: '/jzbppt/jzbp_findProductList.do',
   getProductDetailFun: '/jzbppt/jzbp_getProductById.do',
+  createCodeFun:'/jzbppt/login_createCode.do',
+  userLoginFun: '/jzbppt/login_login.do',
 
   saveMember:'/jzbppt/employee_saveUser.do',
   updateMember:'/jzbppt/employee_updateUser.do',

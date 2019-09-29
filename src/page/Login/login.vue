@@ -35,27 +35,29 @@
           <div class="login_zone">
             <div class="dialog_title">账号登录</div>
             <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
-            <div class="username_input_div">
-              <div class="username_input_icon_div">
-                <i class="iconfont_username">&#xe735;</i>
+            <form>
+              <div class="username_input_div">
+                <div class="username_input_icon_div">
+                  <i class="iconfont_username">&#xe735;</i>
+                </div>
+                <input type="text" placeholder="用户名" class="username_input" v-model="userName" />
               </div>
-              <input type="text" placeholder="用户名" class="username_input" v-model="userName" />
-            </div>
-            <div class="user_password_div">
-              <div class="user_password_icon_div">
-                <i class="iconfont_password">&#xe6fc;</i>
+              <div class="user_password_div">
+                <div class="user_password_icon_div">
+                  <i class="iconfont_password">&#xe6fc;</i>
+                </div>
+                <input type="password" placeholder="密码" class="user_password" v-model="userPwd" />
               </div>
-              <input type="password" placeholder="密码" class="user_password" v-model="userPwd" />
-            </div>
-            <div class="code_div">
-              <div class="code_icon_div">
-                <i class="iconfont_code">&#xe63d;</i>
+              <div class="code_div">
+                <div class="code_icon_div">
+                  <i class="iconfont_code">&#xe63d;</i>
+                </div>
+                <input type="text" placeholder="验证码" class="code_input" v-model="captcha" />
+                <img :src="caodeImg" class="code_img" @click="_createCodeFun()" />
               </div>
-              <input type="text" placeholder="验证码" class="code_input" v-model="captcha" />
-              <img src="/static/images/login_bg.jpg" class="code_img" />
-            </div>
 
-            <div class="submit_btn" @click="login()">登&nbsp;录</div>
+              <div class="submit_btn" @click="login()">登&nbsp;录</div>
+            </form>
           </div>
         </div>
       </div>
@@ -124,7 +126,12 @@
 // import YHeader from '/common/header'
 import YFooter from "/common/footer";
 import YButton from "/components/YButton";
-import { userLogin, initKaptcha } from "/api/index.js";
+import {
+  userLogin,
+  initKaptcha,
+  createCodeFun,
+  userLoginFun
+} from "/api/index.js";
 import { addCart } from "/api/goods.js";
 import { setStore, getStore, removeStore } from "/utils/storage.js";
 require("../../../static/geetest/gt.js");
@@ -145,7 +152,8 @@ export default {
       userName: "",
       userPwd: "",
       captcha: "",
-      errMsg: ""
+      errMsg: "",
+      caodeImg: ""
     };
   },
   computed: {
@@ -154,6 +162,11 @@ export default {
     }
   },
   methods: {
+    _createCodeFun() {
+      createCodeFun().then(res => {
+        this.caodeImg = res.data;
+      });
+    },
     open(t, m) {
       this.$notify.info({
         title: t,
@@ -228,38 +241,47 @@ export default {
       } else if (this.captcha.length > 10) {
         this.errMsg = "验证码错误!";
       } else {
-        alert("sss");
-        var params = {
-          userName: this.ruleForm.userName,
-          userPwd: this.ruleForm.userPwd,
-          captcha: this.ruleForm.captcha
-        };
-        userLogin(params).then(res => {
-          if (res.success) {
-            setStore("access_token", res.result.token);
-            setStore("userId", res.result.id);
-            // 登录后添加当前缓存中的购物车
-            if (this.cart.length) {
-              for (var i = 0; i < this.cart.length; i++) {
-                addCart(this.cart[i]).then(res => {
-                  if (res.success === true) {
-                  }
-                });
-              }
-              removeStore("buyCart");
-              this.$router.push({
-                path: "/"
-              });
-            } else {
-              this.$router.push({
-                path: "/"
-              });
-            }
+        let paramLogin = new URLSearchParams();
+        paramLogin.append("userName", this.userName);
+        paramLogin.append("userPwd", this.userPwd);
+        paramLogin.append("code", this.captcha);
+        userLoginFun(paramLogin).then(res => {
+          console.log(res.data);
+          if (res.errMsg == "用户名或密码错误") {
+            this.errMsg = "";
+            this._createCodeFun();
+            this.$message({
+              message: "用户名或密码错误！",
+              type: "error",
+              center: true
+            });
+          } else if (res.errMsg == "用户名或密码不能为空") {
+            this.errMsg = "";
+            this._createCodeFun();
+            this.$message({
+              message: "用户名或密码不能为空！",
+              type: "error",
+              center: true
+            });
+          } else if (res.errMsg == "验证码错误") {
+            this.errMsg = "";
+            this._createCodeFun();
+            this.$message({
+              message: "验证码错误！",
+              type: "error",
+              center: true
+            });
           } else {
-            this.logintxt = "登录";
-            this.message(res.message);
-            this.init_geetest();
-            return false;
+            this.$message({
+              message: "登录成功！",
+              type: "success",
+              center: true
+            });
+            setStore("zjzp_userid", res.data.userid);
+            setStore("zjzp_name", res.data.name);
+            setStore("zjzp_token", res.data.token);
+            
+            this.$router.go(-1);
           }
         });
       }
@@ -271,6 +293,7 @@ export default {
     }
   },
   mounted() {
+    this._createCodeFun();
     // this.getRemembered();
     // this.login_addCart();
     // this.init_geetest();
@@ -312,6 +335,8 @@ export default {
     background-size: cover;
     // background-position:center;
     overflow: hidden;
+    min-height: 750px;
+    min-width: 1280px;
 
     // min-height: 800px;
     // min-width: 630px;
@@ -524,6 +549,7 @@ export default {
 }
 .login_outbody {
   width: 100%;
+  height: 431px;
 }
 .login_body {
   width: 1280px;
@@ -621,8 +647,9 @@ export default {
   cursor: pointer;
 }
 .foot_outbody_div {
+  position: absolute;
   width: 100%;
-  margin-top: 300px;
+  bottom: 50px;
 }
 .foot_div {
   width: 1280px;
@@ -639,9 +666,9 @@ export default {
   margin: 30px auto 0;
   padding-left: 10px;
   font-size: 12px;
-  color:#4D4D4D;
-  width:284px;
-  height:28px;
+  color: #4d4d4d;
+  width: 284px;
+  height: 28px;
   line-height: 28px;
   background: #fdeee9;
   border: 1px solid #fadcd3;

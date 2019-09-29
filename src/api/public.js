@@ -1,6 +1,7 @@
 import axios from 'axios'
-axios.defaults.timeout = 10000
+axios.defaults.timeout = 10000;
 axios.defaults.baseURL = "http://192.168.1.188:8080";
+axios.defaults.withCredentials = true;
 export default {
   fetchGet(url, params = {}) {
     return new Promise((resolve, reject) => {

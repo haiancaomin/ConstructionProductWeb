@@ -88,28 +88,17 @@
               @keydown.enter.native="handleIconClick"
             ></el-input>
           </div>
-          <div class="right-box" @click="gotoLogin()">
+          <div class="right-box" @click="gotoLogin()" v-if="username == ''">
             用户登录
             <i class="iconfont_user">&#xe6fd;</i>
-            <!-- <i
-                    class="num"
-                    :class="{no:totalNum <= 0,move_in_cart:receiveInCart}"
-            >{{totalNum}}</i>-->
-
-            <!--购物车显示块-->
-            <!-- <div class="nav-user-wrapper pa active" v-show="showCart">
-                  <div class="nav-user-list">
-                    <div class="full" v-show="totalNum"></div>
-                    <div
-                      v-show="!totalNum"
-                      style="height: 313px;text-align: center"
-                      class="cart-con"
-                    >
-                      <p>您的购物车竟然是空的!</p>
-                    </div>
-                  </div>
-            </div>-->
           </div>
+          <el-dropdown :show-timeout="0" :hide-timeout="500" @command="handleCommand" v-else>
+            <div class="hava_user">欢迎回来，{{username}}</div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+              <el-dropdown-item command="logOut">注销</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </header>
       <slot name="nav">
@@ -146,10 +135,22 @@
                   @keydown.enter.native="handleIconClick"
                 ></el-input>
               </div>
-              <div class="shpping_cart" v-if="st" @click="gotoLogin()">
+              <div class="shpping_cart" v-if="st&&username == ''" @click="gotoLogin()">
                 用户登录
                 <i class="iconfont_user" :class="{white_bg:st}">&#xe6fd;</i>
               </div>
+              <el-dropdown
+                :show-timeout="0"
+                :hide-timeout="500"
+                @command="handleCommand"
+                v-if="st&&username != ''"
+              >
+                <div class="shpping_cart_hava_user">{{username}}</div>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+                  <el-dropdown-item command="logOut">注销</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
               <div _ngcontent-c1 class="container" v-if="!st">
                 <ul _ngcontent-c1 class="nav-list">
                   <!---->
@@ -257,7 +258,8 @@ export default {
       showAttentionHover: false,
       messageBoardFlag: false,
       messageBoardDesc: "",
-      userPhone: ""
+      userPhone: "",
+      username: ""
     };
   },
   watch: {
@@ -305,10 +307,25 @@ export default {
       "RECORD_USERINFO",
       "EDIT_CART"
     ]),
+    handleCommand(command) {
+      if (command == "logOut") {
+        this.logOut();
+      } else if (command == "teamWork") {
+        this.$router.push({ path: `/admin/member` });
+      }
+    },
+    logOut() {
+      removeStore("zjzp_userid");
+      removeStore("zjzp_name");
+      removeStore("zjzp_token");
+      this.username = "";
+      this.$router.push({ path: "/home" });
+      // location.reload();
+    },
     gotoLogin() {
       this.$router.push({
-          path: "/login",
-        });
+        path: "/login"
+      });
     },
     _messageBoardFun() {
       let paramz = new URLSearchParams();
@@ -649,6 +666,10 @@ export default {
     this.bus.$on("clearKeyWord", function(val) {
       that.input = val.keyWord;
     });
+    if (getStore("zjzp_name")) {
+      this.username = getStore("zjzp_name");
+    }
+
     window.addEventListener("scroll", this.navFixed);
     window.addEventListener("resize", this.navFixed);
     this.$route.query.keyWord = "";
@@ -1317,6 +1338,23 @@ header {
       .shpping_cart:hover .iconfont_user {
         color: #39cf41;
       }
+      .shpping_cart_hava_user {     
+        width: 90px;
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+        margin-left: 30px;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-decoration:underline;
+        transition: all 0.3s;
+      }
+      .shpping_cart_hava_user:hover {
+        color: #39cf41;
+      }
+      
     }
     .logo_zhuangpei_sub_div {
       height: 60px;
@@ -1345,7 +1383,7 @@ header {
   }
   .w {
     display: flex;
-  
+
     position: relative;
   }
 }
@@ -1708,12 +1746,21 @@ header {
   margin-right: 4px;
 }
 .form_body {
-  margin-top:20px;
+  margin-top: 20px;
 }
 .el-button {
-  width:100%;
-  height:42px;
+  width: 100%;
+  height: 42px;
   border-radius: 0px;
+}
+.hava_user {
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: "Microsoft YaHei";
+  transition: all 0.3s;
+}
+.hava_user:hover {
+  color: #cf1132;
 }
 </style>
 <style>
@@ -1745,8 +1792,8 @@ header {
   padding: 0 20px 20px 20px;
   overflow: auto;
 }
-#loginRuleForm .el-input__inner{
-  height:42px;
+#loginRuleForm .el-input__inner {
+  height: 42px;
   border-radius: 0px;
 }
 </style>

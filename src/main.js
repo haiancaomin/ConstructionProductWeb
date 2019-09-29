@@ -34,7 +34,10 @@ import {
   TabPane,
   Form,
   FormItem,
-  DatePicker
+  DatePicker,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
 } from 'element-ui'
 // import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
@@ -64,6 +67,9 @@ Vue.use(TabPane)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(DatePicker)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
