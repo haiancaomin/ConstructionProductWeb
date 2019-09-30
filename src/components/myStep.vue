@@ -3,7 +3,7 @@
     <div class="stepsTitle">
       <div style="float:left;width:2px;height:20px; background:#219AFF;margin-right:5px"></div>项目节点要素
     </div>
-    <div class="approvalProcess">
+    <div>
       <el-steps :active="active" finish-status="success" direction="vertical">
         <el-step :title="item.nodename" v-for="(item,index) in nodesList" :key="index">
           <template slot="description">
@@ -17,7 +17,7 @@
                 class="processing_content"
               >
                 <tr>
-                  <td style="color:#98A6BE">
+                  <td style="color:#98A6BE;padding:8px 12px" v-if="item.content!=''">
                     <div class="processing_content_detail" style="float:left;width:70%">
                       <span>{{item.content}}</span>
                     </div>
@@ -30,7 +30,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td v-if="item.volist.length" style="padding:8px 12px">
                     <div
                       class="processing_content_detail"
                       style="float:left;width:70%"
@@ -38,12 +38,18 @@
                       :key="k"
                     >
                       <div
-                        style="float:left;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
+                        style="display:inline-block;vertical-align:middle;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
                       ></div>
                       <a style="color:#919FB8" :href="v.fileurl">
                         附件：
                         <span style="color:#4db3ff">{{v.filename}}</span>
                       </a>
+                    </div>
+                    <div class="processing_content_detail" style="float:right;color:#98A6BE">
+                      <span>
+                        <i class="el-icon-time"></i>
+                        &nbsp;&nbsp;{{item.createdate}}
+                      </span>
                     </div>
                   </td>
                 </tr>
@@ -156,7 +162,16 @@ export default {
       params.append("fileids", this.ruleForm.fileids);
       console.log(this.ruleForm.fileids);
       saveNodeInfo(params).then(res => {
-        console.log(res);
+        if (res.data == 0) {
+          this.$message({
+            type: "success",
+            message: "添加成功!"
+          });
+          this.addNodeBoxVisible = false;
+          this._getStepInfo();
+        } else {
+          this.$message.error("添加失败！");
+        }
       });
     }
   }
@@ -164,30 +179,17 @@ export default {
 </script>
 <style scoped>
 .stepComponent {
-  background-color: #fff;
   width: 600px;
   padding: 10px;
 }
 .stepsTitle {
   margin: 10px 0px 10px 10px;
 }
-.approvalProcess {
-  color: #9eadc4;
-  font-size: 14px;
-  /* width: 100%; */
-  background: #fff;
-  margin-left: 20px;
-  margin-right: 0px;
-  margin-top: 10px;
-}
 .processing_content {
   background-color: #d9e5f9;
 }
 .processing_content_detail {
-  margin-left: 10px;
-  margin-top: 3.5px;
-  margin-bottom: 3.5px;
-  width: 150px;
+  width: fit-content;
   display: inline-block;
 }
 .step-row {
@@ -207,5 +209,8 @@ export default {
 .stepComponent .el-dialog__body {
   max-height: 500px;
   overflow: auto;
+}
+.stepComponent .el-step__main {
+  width: calc(100% - 28px);
 }
 </style>
