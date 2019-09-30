@@ -30,7 +30,7 @@
                         <div
                           style="display:inline-block;vertical-align:middle;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
                         ></div>
-                        <a style="color:#919FB8" :href="v.fileurl">
+                        <a style="color:#919FB8" :href="v.fileurl" target="_blank">
                           附件：
                           <span style="color:#4db3ff">{{v.filename}}</span>
                         </a>
