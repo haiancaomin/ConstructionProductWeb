@@ -21,12 +21,6 @@
                     <div style="width:70%">
                       <span>{{item.content}}</span>
                     </div>
-                    <div>
-                      <span>
-                        <i class="el-icon-time"></i>
-                        &nbsp;&nbsp;{{item.createdate}}
-                      </span>
-                    </div>
                   </td>
                 </tr>
                 <tr>
@@ -42,16 +36,15 @@
                         </a>
                       </div>
                     </div>
-
-                    <div style="color:#98A6BE">
-                      <span>
-                        <i class="el-icon-time"></i>
-                        &nbsp;&nbsp;{{item.createdate}}
-                      </span>
-                    </div>
                   </td>
                 </tr>
               </table>
+              <div class="time">
+                <span>
+                  <i class="el-icon-time"></i>
+                  &nbsp;&nbsp;{{item.createdate}}
+                </span>
+              </div>
             </div>
           </template>
         </el-step>
@@ -176,6 +169,12 @@ export default {
 };
 </script>
 <style scoped>
+.time {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  color: #98a6be;
+}
 .stepComponent {
   width: 600px;
   padding: 10px;
@@ -190,6 +189,7 @@ export default {
   min-width: 500px;
   margin-bottom: 12px;
   margin-top: 12px;
+  position: relative;
 }
 .processing_content td {
   display: flex;
