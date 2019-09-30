@@ -18,10 +18,10 @@
               >
                 <tr>
                   <td style="color:#98A6BE;padding:8px 12px" v-if="item.content!=''">
-                    <div style="float:left;width:70%">
+                    <div style="width:70%">
                       <span>{{item.content}}</span>
                     </div>
-                    <div style="float:right;">
+                    <div>
                       <span>
                         <i class="el-icon-time"></i>
                         &nbsp;&nbsp;{{item.createdate}}
@@ -32,7 +32,7 @@
                 <tr>
                   <td v-if="item.volist.length" style="padding:8px 12px">
                     <div style="width:70%">
-                      <div style="float:left;width:70%" v-for="(v,k) in item.volist" :key="k">
+                      <div style="width:70%" v-for="(v,k) in item.volist" :key="k">
                         <div
                           style="display:inline-block;vertical-align:middle;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
                         ></div>
@@ -43,7 +43,7 @@
                       </div>
                     </div>
 
-                    <div style="float:right;color:#98A6BE">
+                    <div style="color:#98A6BE">
                       <span>
                         <i class="el-icon-time"></i>
                         &nbsp;&nbsp;{{item.createdate}}
