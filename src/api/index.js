@@ -1,5 +1,7 @@
 import http from './public'
-import {apis} from './api'
+import {
+  apis
+} from './api'
 //登录
 export const userLoginFun = (params) => {
   return http.fetchPost(apis.userLoginFun, params)
@@ -96,6 +98,15 @@ export const deleteStep = (params) => {
 export const getStepList = (params) => {
   return http.fetchPost(apis.getStepList, params)
 }
+//获取工作流
+export const getStepInfo = (params) => {
+  return http.fetchPost(apis.getStepInfo, params)
+}
+//添加节点信息
+export const saveNodeInfo = (params) => {
+  return http.fetchPost(apis.saveNodeInfo, params)
+}
+
 //沟通页面获取留言列表
 export const getMsgList = (params) => {
   return http.fetchPost(apis.getMsgList, params)

@@ -5,15 +5,10 @@
     </div>
     <div class="approvalProcess">
       <el-steps :active="active" finish-status="success" direction="vertical">
-        <el-step
-          :title="item.label"
-          v-for="(item,index) in approvalProcessProject"
-          :id="item.id"
-          :key="index"
-        >
+        <el-step :title="item.nodename" v-for="(item,index) in nodesList" :key="index">
           <template slot="description">
-            <el-button size="small" type="text" @click="addNodeItem">添加节点信息</el-button>
-            <div class="step-row" v-for="(item,index) in approvalProcessProject" :key="index">
+            <el-button size="small" type="text" @click="addNodeItem($event)" :id="item.nid">添加节点信息</el-button>
+            <div class="step-row" v-for="(item,index) in item.infolist" :key="index">
               <table
                 width="100%"
                 border="0"
@@ -24,25 +19,31 @@
                 <tr>
                   <td style="color:#98A6BE">
                     <div class="processing_content_detail" style="float:left;width:70%">
-                      <span>
-                        申请人&nbsp;&nbsp;
-                        <span style="color:#219AFF">圆领{{}}</span>&nbsp;&nbsp;提交了割接方案
-                      </span>
+                      <span>{{item.content}}</span>
                     </div>
                     <div class="processing_content_detail" style="float:right;">
                       <span>
-                        <i class="el-icon-time"></i>&nbsp;&nbsp;昨天12:24
+                        <i class="el-icon-time"></i>
+                        &nbsp;&nbsp;{{item.createdate}}
                       </span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class="processing_content_detail" style="float:left;width:70%">
+                    <div
+                      class="processing_content_detail"
+                      style="float:left;width:70%"
+                      v-for="(v,k) in item.volist"
+                      :key="k"
+                    >
                       <div
                         style="float:left;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
                       ></div>
-                      <span style="color:#919FB8">同意，建议通过</span>
+                      <a style="color:#919FB8" :href="v.fileurl">
+                        附件：
+                        <span style="color:#4db3ff">{{v.filename}}</span>
+                      </a>
                     </div>
                   </td>
                 </tr>
@@ -53,82 +54,110 @@
       </el-steps>
       <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
     </div>
-    <el-dialog :title="addOrEdit?'修改人员':'新增人员'" :visible.sync="addNodeBoxVisible" id="memberForm">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="ruleForm.name" auto-complete="off" placeholder="请输入联系人姓名"></el-input>
+    <el-dialog :title="addOrEdit?'修改节点信息':'添加节点信息'" :visible.sync="addNodeBoxVisible">
+      <el-form :model="ruleForm" ref="ruleForm">
+        <el-form-item label="节点备注信息" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="ruleForm.content" placeholder="请输入节点备注"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="phone">
-          <el-input v-model="ruleForm.phone" auto-complete="off" placeholder="请输入联系人电话"></el-input>
-        </el-form-item>
-        <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyname">
-          <el-input v-model="ruleForm.companyname" auto-complete="off" placeholder="请输入公司名称"></el-input>
-        </el-form-item>
-        <el-form-item label="公司地址" :label-width="formLabelWidth" prop="companyaddress">
-          <el-input v-model="ruleForm.companyaddress" auto-complete="off" placeholder="请输入公司地址"></el-input>
+        <el-form-item label="附件上传" :label-width="formLabelWidth">
+          <el-upload
+            action="http://192.168.1.188:8080/jzbppt/attachment_uploadNodeFile.do"
+            :on-remove="handleRemove"
+            :on-success="uploadCallBack"
+            :before-remove="beforeRemove"
+            :before-upload="beforeUpload"
+            :file-list="fileList"
+            :data="extraData"
+            accept=".jpg, .jpeg, .png, .pdf"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/jpeg/png/pdf格式</div>
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addNodeBoxVisible = false">取 消</el-button>
-        <el-button type="primary" @click="_saveMember('ruleForm')">提 交</el-button>
+        <el-button type="primary" @click="_save('ruleForm')">提 交</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
+import { getStepInfo, saveNodeInfo } from "/api";
 export default {
-  components: {},
   props: ["data", "defaultActive"],
   data() {
     return {
+      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
+      projectid: "",
+      nodesList: [],
       addNodeBoxVisible: false,
+      fileList: [],
       ruleForm: {
-        name: "",
-        phone: "",
-        companyname: "",
-        companyaddress: "",
-        role: ""
+        content: "",
+        fileids: []
       },
-      rules: {
-        name: [
-          { required: true, message: "请输入联系人姓名", trigger: "blur" }
-        ],
-        phone: [
-          { required: true, message: "请输入联系人电话", trigger: "blur" },
-          {
-            pattern: /^1[3456789]\d{9}$/,
-            message: "手机号码格式不正确",
-            trigger: "blur"
-          }
-        ],
-        companyname: [
-          { required: true, message: "请输入公司名称", trigger: "blur" }
-        ],
-        companyaddress: [
-          { required: true, message: "请输入公司地址", trigger: "blur" }
-        ],
-        role: [{ required: true, message: "请选择用户角色", trigger: "blur" }]
-      },
+      extraData: {},
+      currentNid: "",
       addOrEdit: "",
       formLabelWidth: "120px",
-      active: 0,
-      approvalProcessProject: [
-        { id: "0", label: "方案制定" },
-        { id: "1", label: "割接方案会审" },
-        { id: "2", label: "割接审批" },
-        { id: "3", label: "审批成功" }
-      ]
+      active: 0
     };
   },
-  watch: {},
-  mounted() {},
-  computed: {},
+  created() {
+    this.projectid = this.$route.query.pid;
+    this._getStepInfo();
+  },
   methods: {
     next() {
       if (this.active++ > 2) this.active = 0;
     },
-    addNodeItem() {
+    addNodeItem(e) {
       this.addNodeBoxVisible = true;
+      this.currentNid = e.target.parentNode.id;
+    },
+    _getStepInfo() {
+      let params = new URLSearchParams();
+      params.append("projectid", this.projectid);
+      getStepInfo(params).then(res => {
+        this.nodesList = res.data;
+      });
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
+      const isPDF = file.type === "application/pdf";
+      if (!isJPG && !isPNG && !isPDF) {
+        this.$message.error("只能上传jpg/jpeg/png/pdf格式!");
+        return;
+      }
+      this.extraData["userid"] = this.userid;
+      this.extraData["names"] = file.name;
+    },
+    uploadCallBack(val) {
+      console.log(val);
+      this.ruleForm.fileids.push(val.data[0].fileid);
+    },
+    _save() {
+      if (this.ruleForm.content == "" && this.ruleForm.fileids.length == 0) {
+        this.$message.error("不允许提交空表单！");
+        return false;
+      }
+      let params = new URLSearchParams();
+      params.append("userid", this.userid);
+      params.append("nid", this.currentNid);
+      params.append("content", this.ruleForm.content);
+      params.append("fileids", this.ruleForm.fileids);
+      console.log(this.ruleForm.fileids);
+      saveNodeInfo(params).then(res => {
+        console.log(res);
+      });
     }
   }
 };
