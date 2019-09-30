@@ -31,15 +31,18 @@
                 </tr>
                 <tr>
                   <td v-if="item.volist.length" style="padding:8px 12px">
-                    <div style="float:left;width:70%" v-for="(v,k) in item.volist" :key="k">
-                      <div
-                        style="display:inline-block;vertical-align:middle;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
-                      ></div>
-                      <a style="color:#919FB8" :href="v.fileurl">
-                        附件：
-                        <span style="color:#4db3ff">{{v.filename}}</span>
-                      </a>
+                    <div style="width:70%">
+                      <div style="float:left;width:70%" v-for="(v,k) in item.volist" :key="k">
+                        <div
+                          style="display:inline-block;vertical-align:middle;width: 2px;height: 20px; background:#C7D4E9;margin-left:10px;margin-right:10px"
+                        ></div>
+                        <a style="color:#919FB8" :href="v.fileurl">
+                          附件：
+                          <span style="color:#4db3ff">{{v.filename}}</span>
+                        </a>
+                      </div>
                     </div>
+
                     <div style="float:right;color:#98A6BE">
                       <span>
                         <i class="el-icon-time"></i>
