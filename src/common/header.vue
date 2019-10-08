@@ -689,6 +689,10 @@ export default {
       this.$router.history.current.path.toString().indexOf("/product") >= 0
     ) {
       this.changePage(2);
+    } else if (
+      this.$router.history.current.path.toString().indexOf("/teamwork") >= 0
+    ) {
+      this.changePage(3);
     }
 
     // if (typeof this.$route.query.key !== undefined) {
