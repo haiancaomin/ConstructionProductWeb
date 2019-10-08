@@ -110,6 +110,10 @@ export const saveNodeInfo = (params) => {
 export const next = (params) => {
   return http.fetchPost(apis.next, params)
 }
+//删除数据库对应附件
+export const deleteAttachment = (params) => {
+  return http.fetchPost(apis.deleteAttachment, params)
+}
 
 //沟通页面获取留言列表
 export const getMsgList = (params) => {

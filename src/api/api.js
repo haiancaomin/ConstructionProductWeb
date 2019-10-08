@@ -38,6 +38,7 @@ export const apis = {
   getStepInfo:'/jzbppt/jzbp_findProjectWorkFlowByProjectid.do',
   saveNodeInfo:'/jzbppt/jzbp_addNodeInfo.do',
   next:'/jzbppt/jzbp_updateNodeStatus.do',
+  deleteAttachment:'/jzbppt/jzbp_deleteNodefile.do',
 
   getMsgList:'/jzbppt/jzbp_findMessageListByProjectId.do',
   sendMsg:'/jzbppt/jzbp_addMessage.do'
