@@ -115,6 +115,17 @@ const whiteList = ['/home', '/goods', '/login', '/register', '/product', '/thank
 //   })
 // })
 /* eslint-disable no-new */
+router.beforeEach((to, from, next) => {
+  var userAgent = navigator.userAgent;
+  // if (!!window.ActiveXObject || "ActiveXObject" in window) {
+  //   alert("访问本网站请勿使用IE浏览器，或将浏览器切换为极速模式！");
+  // } else 
+  if(userAgent.indexOf("Edge") > -1) {
+    alert("抱歉！本网站暂不支持edge浏览器访问，请使用其他浏览器尝试，我们正在努力解决中");
+  } else {
+    next()
+  }
+})
 new Vue({
   el: '#app',
   store,

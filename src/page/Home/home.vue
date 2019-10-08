@@ -208,7 +208,6 @@ export default {
     _homeHotList() {
       homeHotList("").then(res => {
         console.log(res.data);
-        // this.loading = false;
         this.hotList = res.data;
       });
     },
@@ -760,7 +759,7 @@ ul.box {
   font-family: "Micosoft YaHei";
   color: #9f9f9f;
   font-size: 12px;
-  margin-left: 151px;
+  margin-left: 144px;
   cursor: pointer;
   transition: all 0.3s;
 }

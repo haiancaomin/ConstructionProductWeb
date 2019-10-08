@@ -452,7 +452,8 @@ export default {
       this.choosePage = v;
     },
     changGoods(v, item) {
-      this.st = false;
+      // this.st = false;
+      // alert(this.st);
       this.changePage(v);
       // if (v === -1) {
       //   this.$router.push({
@@ -550,19 +551,20 @@ export default {
     // },
 
     navFixed() {
-      const fixedPages = ["goods/*", "/home", "product/*"];
-      let path = this.$route.path;
-      let rs = false;
-      fixedPages.forEach(function(val, index, fixedPages) {
-        let exp = new RegExp(val);
-        if (path.match(exp)) {
-          rs = true;
-          return;
-        } else {
-          return;
-        }
-      });
-      if (rs) {
+      // alert("zz");
+      // const fixedPages = ["goods/*", "/home", "product/*"];
+      // let path = this.$route.path;
+      // let rs = false;
+      // fixedPages.forEach(function(val, index, fixedPages) {
+      //   let exp = new RegExp(val);
+      //   if (path.match(exp)) {
+      //     rs = true;
+      //     return;
+      //   } else {
+      //     return;
+      //   }
+      // });
+      // if (rs) {
         var st = document.documentElement.scrollTop || document.body.scrollTop;
         st >= 100 ? (this.st = true) : (this.st = false);
         // 计算小圆当前位置
@@ -573,7 +575,7 @@ export default {
         //   cartPositionL: this.positionL,
         //   cartPositionT: this.positionT
         // });
-      }
+      // }
     }
 
     // _loginOut() {
@@ -1194,7 +1196,7 @@ header {
   // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   &.fixed {
     position: fixed;
-    z-index: 21;
+    z-index: 9999999;
     height: 60px;
     top: 0;
     left: 0;

@@ -523,7 +523,7 @@ export default {
   font-family: "Micosoft YaHei";
   color: #9f9f9f;
   font-size: 12px;
-  margin-left: 151px;
+  margin-left: 144px;
   cursor: pointer;
   transition: all 0.3s;
 }
