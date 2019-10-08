@@ -452,6 +452,7 @@ export default {
       this.choosePage = v;
     },
     changGoods(v, item) {
+      this.st = false;
       this.changePage(v);
       // if (v === -1) {
       //   this.$router.push({
