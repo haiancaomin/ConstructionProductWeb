@@ -1,6 +1,7 @@
 import axios from 'axios'
 axios.defaults.timeout = 10000;
 axios.defaults.baseURL = "http://192.168.1.188:8080";
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 export default {
   fetchGet(url, params = {}) {
@@ -14,13 +15,13 @@ export default {
     })
   },
   fetchPost(url, params = {}) {
-    let config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-    };
+    // let config = {
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    //   },
+    // };
     return new Promise((resolve, reject) => {
-      axios.post(url, params, config).then(res => {
+      axios.post(url, params).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)
