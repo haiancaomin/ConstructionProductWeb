@@ -179,9 +179,8 @@ export default {
       });
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
       let params = new URLSearchParams();
-      params.append("fileid", this.ruleForm.fileids[0]);
+      params.append("fileid", file.response.data[0].fileid);
       deleteAttachment(params).then(res => {
         if (res.data) {
           this.$message({
