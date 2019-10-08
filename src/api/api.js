@@ -35,6 +35,9 @@ export const apis = {
   deleteStep:'/jzbppt/jzbp_deleteNodeDicById.do',
   getStepList:'/jzbppt/jzbp_findNodeDicList.do',
 
+  getStepInfo:'/jzbppt/jzbp_findProjectWorkFlowByProjectid.do',
+  saveNodeInfo:'/jzbppt/jzbp_addNodeInfo.do',
+
   getMsgList:'/jzbppt/jzbp_findMessageListByProjectId.do',
   sendMsg:'/jzbppt/jzbp_addMessage.do'
 }

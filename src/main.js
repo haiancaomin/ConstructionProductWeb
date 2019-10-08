@@ -38,6 +38,7 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Upload
 } from 'element-ui'
 // import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
@@ -70,6 +71,7 @@ Vue.use(DatePicker)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
+Vue.use(Upload)
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
