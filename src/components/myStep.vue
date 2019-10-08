@@ -61,7 +61,11 @@
         :disabled="active==nodesList.length?true:false"
       >下一步</el-button>
     </div>
-    <el-dialog :title="addOrEdit?'修改节点信息':'添加节点信息'" :visible.sync="addNodeBoxVisible">
+    <el-dialog
+      :title="addOrEdit?'修改节点信息':'添加节点信息'"
+      :visible.sync="addNodeBoxVisible"
+      @open="clearInfoForm"
+    >
       <el-form :model="ruleForm" ref="ruleForm">
         <el-form-item label="节点备注信息" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="ruleForm.content" placeholder="请输入节点备注"></el-input>
@@ -90,7 +94,7 @@
   </div>
 </template>
 <script>
-import { getStepInfo, saveNodeInfo, next } from "/api";
+import { getStepInfo, saveNodeInfo, next, deleteAttachment } from "/api";
 export default {
   props: ["data", "defaultActive"],
   data() {
@@ -176,6 +180,19 @@ export default {
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      let params = new URLSearchParams();
+      params.append("fileid", this.ruleForm.fileids[0]);
+      deleteAttachment(params).then(res => {
+        if (res.data) {
+          this.$message({
+            type: "success",
+            message: "附件删除成功!"
+          });
+          this.ruleForm.fileids.pop(); //删除附件id
+        } else {
+          this.$message.error("附件删除失败！");
+        }
+      });
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
@@ -193,6 +210,11 @@ export default {
     },
     uploadCallBack(val) {
       this.ruleForm.fileids.push(val.data[0].fileid);
+    },
+    clearInfoForm() {
+      this.ruleForm.content = "";
+      this.ruleForm.fileids = [];
+      this.fileList = [];
     },
     _save() {
       if (this.ruleForm.content == "" && this.ruleForm.fileids.length == 0) {
