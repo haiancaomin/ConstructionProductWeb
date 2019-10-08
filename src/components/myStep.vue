@@ -7,7 +7,13 @@
       <el-steps :active="active" finish-status="success" direction="vertical">
         <el-step :title="item.nodename" v-for="(item,index) in nodesList" :key="index">
           <template slot="description">
-            <el-button size="small" type="text" @click="addNodeItem($event)" :id="item.nid">添加节点信息</el-button>
+            <el-button
+              size="small"
+              type="text"
+              @click="addNodeItem($event)"
+              :id="item.nid"
+              v-if="item.status==1"
+            >添加节点信息</el-button>
             <div class="step-row" v-for="(item,index) in item.infolist" :key="index">
               <table
                 width="100%"
@@ -49,7 +55,11 @@
           </template>
         </el-step>
       </el-steps>
-      <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+      <el-button
+        style="margin-top: 12px;"
+        @click="_next"
+        :disabled="active==nodesList.length?true:false"
+      >下一步</el-button>
     </div>
     <el-dialog :title="addOrEdit?'修改节点信息':'添加节点信息'" :visible.sync="addNodeBoxVisible">
       <el-form :model="ruleForm" ref="ruleForm">
@@ -80,7 +90,7 @@
   </div>
 </template>
 <script>
-import { getStepInfo, saveNodeInfo } from "/api";
+import { getStepInfo, saveNodeInfo, next } from "/api";
 export default {
   props: ["data", "defaultActive"],
   data() {
@@ -106,8 +116,40 @@ export default {
     this._getStepInfo();
   },
   methods: {
-    next() {
-      if (this.active++ > 2) this.active = 0;
+    _next() {
+      this.$confirm("确认跳至下一步？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          //下一步的xh
+          var xh =
+            this.active >= this.nodesList.length - 1
+              ? ""
+              : this.nodesList[Number(this.active) + 1].xh;
+          let params = new URLSearchParams();
+          params.append("projectid", this.projectid);
+          params.append("xh", xh);
+          next(params).then(res => {
+            if (res.data) {
+              this.$message({
+                type: "success",
+                message: "已为您保存节点!"
+              });
+              this._getStepInfo();
+            } else {
+              this.$message.error("切换步骤失败！");
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消跳至下一步"
+          });
+        });
     },
     addNodeItem(e) {
       this.addNodeBoxVisible = true;
@@ -118,6 +160,18 @@ export default {
       params.append("projectid", this.projectid);
       getStepInfo(params).then(res => {
         this.nodesList = res.data;
+        var that = this;
+        if (this.nodesList[this.nodesList.length - 1].status == 2) {
+          this.active = this.nodesList.length;
+          console.log(this.active);
+        } else {
+          this.nodesList.forEach(function(item, idx) {
+            if (item.status == 1 && item.xh != 1) {
+              that.active = idx;
+              console.log(idx);
+            }
+          });
+        }
       });
     },
     handleRemove(file, fileList) {
@@ -138,7 +192,6 @@ export default {
       this.extraData["names"] = file.name;
     },
     uploadCallBack(val) {
-      console.log(val);
       this.ruleForm.fileids.push(val.data[0].fileid);
     },
     _save() {
@@ -151,7 +204,6 @@ export default {
       params.append("nid", this.currentNid);
       params.append("content", this.ruleForm.content);
       params.append("fileids", this.ruleForm.fileids);
-      console.log(this.ruleForm.fileids);
       saveNodeInfo(params).then(res => {
         if (res.data == 0) {
           this.$message({
