@@ -726,6 +726,7 @@ export default {
 }
 .bottom_product_introduction_img {
   width: 800px;
+  vertical-align: middle
 }
 .detail_page_head {
   width: 100%;
