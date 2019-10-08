@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     next() {
-      if (this.active++ > 2) this.active = 0;
+      if (this.active++ > 3) this.active = 0;
     },
     addNodeItem(e) {
       this.addNodeBoxVisible = true;
@@ -118,6 +118,12 @@ export default {
       params.append("projectid", this.projectid);
       getStepInfo(params).then(res => {
         this.nodesList = res.data;
+        var that = this;
+        this.nodesList.forEach(function(item, idx) {
+          if (item.status == 1 && item.xh != 1) {
+            that.active = idx;
+          }
+        });
       });
     },
     handleRemove(file, fileList) {
