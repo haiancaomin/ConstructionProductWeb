@@ -117,25 +117,39 @@ export default {
   },
   methods: {
     _next() {
-      //下一步的xh
-      var xh =
-        this.active >= this.nodesList.length - 1
-          ? ""
-          : this.nodesList[Number(this.active) + 1].xh;
-      let params = new URLSearchParams();
-      params.append("projectid", this.projectid);
-      params.append("xh", xh);
-      next(params).then(res => {
-        if (res.data) {
-          this.$message({
-            type: "success",
-            message: "已为您保存节点!"
+      this.$confirm("确认跳至下一步？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          //下一步的xh
+          var xh =
+            this.active >= this.nodesList.length - 1
+              ? ""
+              : this.nodesList[Number(this.active) + 1].xh;
+          let params = new URLSearchParams();
+          params.append("projectid", this.projectid);
+          params.append("xh", xh);
+          next(params).then(res => {
+            if (res.data) {
+              this.$message({
+                type: "success",
+                message: "已为您保存节点!"
+              });
+              this._getStepInfo();
+            } else {
+              this.$message.error("切换步骤失败！");
+            }
           });
-          this._getStepInfo();
-        } else {
-          this.$message.error("切换步骤失败！");
-        }
-      });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消跳至下一步"
+          });
+        });
     },
     addNodeItem(e) {
       this.addNodeBoxVisible = true;
