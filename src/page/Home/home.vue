@@ -653,7 +653,7 @@ ul.box {
   margin-bottom: 30px;
 }
 .hot_product_body {
-  margin: 0 20px 20px 0;
+  margin: 0 20px 24px 0;
   background: #fff;
 }
 .hot_product_img_div {
