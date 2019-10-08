@@ -106,6 +106,10 @@ export const getStepInfo = (params) => {
 export const saveNodeInfo = (params) => {
   return http.fetchPost(apis.saveNodeInfo, params)
 }
+//下一步
+export const next = (params) => {
+  return http.fetchPost(apis.next, params)
+}
 
 //沟通页面获取留言列表
 export const getMsgList = (params) => {
