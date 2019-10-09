@@ -28,9 +28,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/jzbppt/*': {
-      //   target: 'http://192.168.1.188:8080'
-      // }
+      '/jzbppt/*': {
+        target: 'http://192.168.1.188:8080',
+        changeOrigin: true
+      }
       // ,
       // '/shopping/**': {
       //   target: 'http://127.0.0.1:8081'  // 请求本地 需要咕泡商城后台项目 默认127.0.0.1:8081
