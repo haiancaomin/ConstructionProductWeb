@@ -92,6 +92,8 @@ Vue.use(VueLazyload, {
 // Mock.bootstrap()
 
 Vue.config.productionTip = false
+
+
 const whiteList = ['/home', '/goods', '/login', '/register', '/product', '/thanks', '/search', '/refreshsearch', '/refreshgoods'] // 不需要登陆的页面
 // router.beforeEach(function (to, from, next) {
 //   // let params = {
