@@ -37,6 +37,7 @@
             <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
               <div class="hot_product_img_div">
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
+                <!-- <img src="http://192.168.1.188:8080/jzbppt/att/2019/09/18/1568795856986.jpg" class="hot_product_img" /> -->
                 <div class="hot_product_hover"></div>
                 <div class="hot_hover_product_name" @click="gotoDetail(iitem.pid)">
                   查看详情
@@ -174,7 +175,7 @@ export default {
         px: 0,
         py: 0,
         w: 0,
-        h: 0
+        h: 0,
       },
       home: [],
       loading: true,
