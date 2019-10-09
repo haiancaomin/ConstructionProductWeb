@@ -84,7 +84,7 @@ Vue.use(VueCookie)
 Vue.use(VueLazyload, {
   // preLoad: 1.3,
   // error: 'dist/error.png',
-  loading: '/static/images/loading_gif.gif'
+  loading: '/static/images/timg.gif'
   // attempt: 1
 })
 //开发过程中假数据
