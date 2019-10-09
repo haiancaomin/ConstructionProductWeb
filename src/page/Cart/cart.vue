@@ -347,7 +347,7 @@
           font-size: 12px;
           line-height: 24px;
           .items-delete-btn {
-            background-image: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
+            // background-image: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
             &:hover {
               background-position: 0 -36px;
             }
@@ -358,7 +358,7 @@
             height: 24px;
             margin: 0 auto;
             color: #C2C2C2;
-            background: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
+            // background: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
             -webkit-background-size: 100% auto;
             background-size: 100% auto;
             -moz-transition: none;
@@ -485,7 +485,7 @@
       position: relative;
       width: 20px;
       height: 20px;
-      background: url(../../../static/images/checkbox-new_631a56a4f6.png) no-repeat 0 -20px;
+      // background: url(../../../static/images/checkbox-new_631a56a4f6.png) no-repeat 0 -20px;
       cursor: pointer;
       -moz-user-select: none;
       -webkit-user-select: none;
@@ -495,7 +495,7 @@
     }
 
     .blue-checkbox-new.checkbox-on, .choose-checkbox-on .blue-checkbox-new {
-      background: url(../../../static/images/checkbox-new_631a56a4f6.png) no-repeat 0 0;
+      // background: url(../../../static/images/checkbox-new_631a56a4f6.png) no-repeat 0 0;
     }
     .delete-choose-goods {
       position: relative;

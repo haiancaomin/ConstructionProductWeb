@@ -36,6 +36,7 @@
           <div class="hot_list_body">
             <div class="hot_product_body" v-for="(iitem,j) in hotList" :key="j">
               <div class="hot_product_img_div">
+                <!-- <img v-lazy="ss" class="hot_product_img" /> -->
                 <img v-lazy="iitem.picurl" class="hot_product_img" />
                 <!-- <img src="http://192.168.1.188:8080/jzbppt/att/2019/09/18/1568795856986.jpg" class="hot_product_img" /> -->
                 <div class="hot_product_hover"></div>
@@ -169,6 +170,7 @@ import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
+      
       banner: [],
       mark: 0,
       bgOpt: {
