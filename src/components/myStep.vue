@@ -72,7 +72,7 @@
         </el-form-item>
         <el-form-item label="附件上传" :label-width="formLabelWidth">
           <el-upload
-            action="http://192.168.1.12:8080/jzbppt/attachment_uploadNodeFile.do"
+            action="http://192.168.1.12/jzbppt/attachment_uploadNodeFile.do"
             :on-remove="handleRemove"
             :on-success="uploadCallBack"
             :on-error="fuck"
