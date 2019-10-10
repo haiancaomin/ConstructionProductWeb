@@ -1,6 +1,6 @@
 import axios from 'axios'
 axios.defaults.timeout = 10000;
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'http://192.168.1.188:8080' : 'http://localhost:8080';
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'http://192.168.1.12:8080' : 'http://localhost:8080';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 export default {
