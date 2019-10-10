@@ -75,6 +75,7 @@
             action="http://192.168.1.188:8080/jzbppt/attachment_uploadNodeFile.do"
             :on-remove="handleRemove"
             :on-success="uploadCallBack"
+            :on-error="fuck"
             :before-remove="beforeRemove"
             :before-upload="beforeUpload"
             :file-list="fileList"
@@ -206,6 +207,11 @@ export default {
       }
       this.extraData["userid"] = this.userid;
       this.extraData["names"] = file.name;
+    },
+    fuck(err, file, fileList) {
+      console.log(err);
+      console.log(file);
+      console.log(fileList);
     },
     uploadCallBack(val) {
       this.ruleForm.fileids.push(val.data[0].fileid);

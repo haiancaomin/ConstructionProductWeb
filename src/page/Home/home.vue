@@ -170,14 +170,13 @@ import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
-      
       banner: [],
       mark: 0,
       bgOpt: {
         px: 0,
         py: 0,
         w: 0,
-        h: 0,
+        h: 0
       },
       home: [],
       loading: true,
@@ -192,7 +191,7 @@ export default {
   methods: {
     ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
     addIntoCart(pid) {
-      this.ADD_CART({productId: pid})
+      this.ADD_CART({ productId: pid });
     },
     gotoDetail(pid) {
       this.$router.push({
@@ -876,13 +875,14 @@ ul.box {
 }
 
 @font-face {
-  font-family: 'iconfont';  /* project id 1414486 */
-  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot');
-  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.svg#iconfont') format('svg');
+  font-family: "iconfont"; /* project id 1414486 */
+  src: url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot");
+  src: url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot?#iefix")
+      format("embedded-opentype"),
+    url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff") format("woff"),
+    url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_1414486_pejfj5kvmv.svg#iconfont") format("svg");
 }
 .iconfont {
   font-family: "iconfont" !important;
