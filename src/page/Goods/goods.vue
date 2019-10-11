@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="search_notice" v-if="keyWord != ''&&keyWord != undefined">当前搜索条件："{{keyWord}}"</div>
+    <div class="search_notice" v-if="keyWord != ''&&keyWord != undefined">当前搜索条件：<div class="keyword_div">{{keyWord}}<span class="clearicon" @click="getAllProduct()">&#xe62d;</span></div></div>
     <div class="type_choose_div">
       <div class="choose_zone">
         <div class="type_btn" @click="getAllProduct()" :class="{'btn_active':productType==''}">全部商品</div>
@@ -353,6 +353,21 @@ export default {
   width: 1280px;
   margin: 0 auto;
   margin-top: 20px;
+  height:30px;
+  line-height:30px;
+  display: flex;
+}
+.keyword_div {
+  height:30px;
+  line-height:30px;
+  padding:0 20px;
+  background: #cf1132;
+  color:#fff;
+  text-align: center;
+  border-radius: 15px;
+}
+.keyword_div span{
+  cursor: pointer;
 }
 .no_data_notice {
   width: 100%;
@@ -375,12 +390,12 @@ export default {
 
 @font-face {
   font-family: 'iconfont';  /* project id 1414486 */
-  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot');
-  src: url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1414486_pejfj5kvmv.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_1414486_skafd0j6soi.eot');
+  src: url('//at.alicdn.com/t/font_1414486_skafd0j6soi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1414486_skafd0j6soi.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1414486_skafd0j6soi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1414486_skafd0j6soi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1414486_skafd0j6soi.svg#iconfont') format('svg');
 }
 
 .iconfont_cart {
@@ -400,5 +415,14 @@ export default {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   margin-left: 4px;
+}
+.clearicon {
+  font-family: "iconfont" !important;
+  font-size: 12px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  margin-left: 5px;
 }
 </style>

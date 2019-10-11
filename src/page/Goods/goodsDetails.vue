@@ -11,7 +11,6 @@
     <el-dialog title="联系我们" :visible.sync="connectFlag" id="connectDialog">
       <div class="connection_info_detail">电话：0513-81055866</div>
       <div class="connection_info_detail">邮箱：MKT_Dept@zhjcx.cn</div>
-
     </el-dialog>
     <div class="detail_page_head">
       <div class="head_con">
@@ -57,18 +56,6 @@
               <div class="product_info_param">{{item.split(':')[0]}}</div>
               <div class="product_info_param_value">{{item.split(':')[1]}}</div>
             </div>
-            <!-- <div class="product_info_detail">
-              <div class="product_info_param">产品尺寸（宽）mm</div>
-              <div class="product_info_param_value">836mm</div>
-            </div>
-            <div class="product_info_detail">
-              <div class="product_info_param">产品尺寸（高）mm</div>
-              <div class="product_info_param_value">1780mm</div>
-            </div>
-            <div class="product_info_detail">
-              <div class="product_info_param">材质</div>
-              <div class="product_info_param_value">钛合金</div>
-            </div>-->
           </div>
         </div>
         <div class="product_price">
@@ -77,13 +64,6 @@
           <span class="price">{{productPrice}}</span>
         </div>
         <div class="add_cart">
-          <!-- <el-input-number
-            v-model="num"
-            @change="handleChange"
-            :min="1"
-            :max="10"
-            id="add_cart_input"
-          ></el-input-number> -->
           <div class="leave_message_btn" @click="messageBoardFlag=true">给我们留言</div>
           <div class="add_btn" @click="connectFlag=true">联系我们</div>
         </div>
@@ -138,39 +118,11 @@
   </div>
 </template>
 <script>
-import {
-  productDet,
-  addCart,
-  getAllComments,
-  getAllCommentsCount
-} from "/api/goods";
-import { mapMutations, mapState } from "vuex";
-import YShelf from "/components/shelf";
-import BuyNum from "/components/buynum";
-import YButton from "/components/YButton";
-import { getStore } from "/utils/storage";
+
 import { getProductDetailFun, productListBySrarchOrTyprFun,messageBoardFun } from "/api/index";
 export default {
   data() {
     return {
-      num: 1,
-      productMsg: {},
-      small: [],
-      big: "",
-      product: {
-        salePrice: 0
-      },
-      productNum: 1,
-      userId: "",
-      pageForm: {
-        page: 0,
-        size: 10
-      },
-      activeTab: "itemInfo",
-      totalCommentCount: 0,
-      commentList: [],
-      commentType: null,
-
       productName: "",
       specification: [],
       productPrice: "",
@@ -196,12 +148,8 @@ export default {
       connectFlag: false,
     };
   },
-  computed: {
-    ...mapState(["login", "showMoveImg", "showCart"])
-  },
+
   methods: {
-    ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
-    handleChange() {},
     _messageBoardFun() {
       let paramz = new URLSearchParams();
       if (this.messageBoardDesc.trim() == "") {
@@ -242,9 +190,6 @@ export default {
       }
     },
     gotoDetail(pid) {
-      // this.$router.push({ name: 'product', params: { productId: pid }});
-      // this.$router.push({ path: `/product/${pid}`});
-      console.log("click1");
       this.$router.push({
         path: "/product",
         query: {
@@ -367,124 +312,11 @@ export default {
           }
         });
       });
-    },
-    _productDet(productId) {
-      productDet({ params: { productId } }).then(res => {
-        let result = res.result;
-        this.product = result;
-        this.productMsg = result.detail || "";
-        this.small = result.productImageSmall;
-        this.big = this.small[0];
-      });
-    },
-    _productCommentCount(productId) {
-      let params = {
-        productId,
-        type: this.commentType
-      };
-      getAllCommentsCount({ params: params }).then(res => {
-        let result = res.result;
-        console.log("%c[goodsDetails-res]", "color: #63ADD1", result);
-      });
-    },
-    _productCommentList(productId) {
-      let params = {
-        productId,
-        type: this.commentType,
-        page: this.pageForm.page,
-        size: this.pageForm.size
-      };
-      getAllComments({ params: params }).then(res => {
-        let result = res.result;
-        console.log("%c[goodsDetails-res]", "color: #63ADD1", result);
-      });
-    },
-    _handleTabClick(tabComponent) {
-      let { name } = tabComponent;
-      if (name === "comment") {
-        if (this.totalCommentCount !== 0) {
-          this.pageForm.page = 0;
-          this._productCommentList(this.$route.params.productId);
-        }
-      }
-    },
-
-    addCart(id, price, name, img) {
-      if (!this.showMoveImg) {
-        // 动画是否在运动
-        if (this.login) {
-          // 登录了 直接存在用户名下
-          addCart({
-            userId: this.userId,
-            productId: id,
-            productNum: this.productNum
-          }).then(res => {
-            // 并不重新请求数据
-            this.ADD_CART({
-              productId: id,
-              salePrice: price,
-              productName: name,
-              productImg: img,
-              productNum: this.productNum
-            });
-          });
-        } else {
-          // 未登录 vuex
-          this.ADD_CART({
-            productId: id,
-            salePrice: price,
-            productName: name,
-            productImg: img,
-            productNum: this.productNum
-          });
-        }
-        // 加入购物车动画
-        var dom = event.target;
-        // 获取点击的坐标
-        let elLeft = dom.getBoundingClientRect().left + dom.offsetWidth / 2;
-        let elTop = dom.getBoundingClientRect().top + dom.offsetHeight / 2;
-        // 需要触发
-        this.ADD_ANIMATION({
-          moveShow: true,
-          elLeft: elLeft,
-          elTop: elTop,
-          img: img
-        });
-        if (!this.showCart) {
-          this.SHOW_CART({ showCart: true });
-        }
-      }
-    },
-    checkout(productId) {
-      this.$router.push({
-        path: "/checkout/" + productId + "/" + this.productNum
-      });
-    },
-    editNum(num) {
-      this.productNum = num;
-    }
-  },
-  components: {
-    YShelf,
-    BuyNum,
-    YButton
-  },
-  watch: {
-    $route(to, from) {
-      if (to.fullPath.includes("/product/")) {
-        let id = this.$route.params.productId;
-        this._productDet(id);
-        this.userId = getStore("userId");
-      }
     }
   },
   created() {
     let id = this.$route.query.productId;
-    // let id = this.$route.params.productId;
     this._getProductDetailFun(id);
-    // this._productDet(id);
-    // this._productCommentCount(id);
-    // this.userId = getStore("userId");
   },
   mounted() {}
 };
@@ -567,8 +399,6 @@ export default {
   line-height: 28px;
   margin-top: 20px;
   overflow: hidden;
-  /* background: #e6e6e6; */
-  /* padding-left:10px; */
 }
 .product_price {
   font-family: "microsoft yahei";
@@ -576,7 +406,6 @@ export default {
   width: 100%;
   text-align: center;
   padding-left: 470px;
-   /* background: #e6e6e6; */
 }
 .symbol {
   font-size: 16px;
@@ -731,7 +560,6 @@ export default {
 .detail_page_head {
   width: 100%;
   margin: 20px 0 0 28px;
-  /* background: #ddd; */
 }
 .head_con {
   width: 1280px;
@@ -849,21 +677,6 @@ export default {
 }
 </style>
 <style>
-#add_cart_input {
-  width: 150px;
-  margin: 0 10px 0 280px;
-}
-#add_cart_input .el-input .el-input__inner {
-  height: 46px;
-}
-#add_cart_input .el-input-number__decrease {
-  height: 44px;
-  line-height: 44px;
-}
-#add_cart_input .el-input-number__increase {
-  height: 44px;
-  line-height: 44px;
-}
 #messageBoard .el-dialog__header {
   text-align: center;
 }
