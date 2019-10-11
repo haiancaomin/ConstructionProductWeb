@@ -7,13 +7,7 @@
       <el-steps :active="active" finish-status="success" direction="vertical">
         <el-step :title="item.nodename" v-for="(item,index) in nodesList" :key="index">
           <template slot="description">
-            <el-button
-              size="small"
-              type="text"
-              @click="addNodeItem($event)"
-              :id="item.nid"
-              v-if="item.status==1"
-            >添加节点信息</el-button>
+            <button @click="addNodeItem($event)" :id="item.nid" v-if="item.status==1" class="add-node-info">添加节点信息</button>
             <div class="step-row" v-for="(item,index) in item.infolist" :key="index">
               <table
                 width="100%"
@@ -158,7 +152,7 @@ export default {
     },
     addNodeItem(e) {
       this.addNodeBoxVisible = true;
-      this.currentNid = e.target.parentNode.id;
+      this.currentNid = e.target.id;
     },
     _getStepInfo() {
       let params = new URLSearchParams();
@@ -248,6 +242,13 @@ export default {
 };
 </script>
 <style scoped>
+.add-node-info{
+  background: transparent;
+  font-size: 12px;
+  padding: 5px 0;
+  color: rgb(77, 179, 255);
+  cursor: pointer;
+}
 .time {
   position: absolute;
   bottom: 8px;
