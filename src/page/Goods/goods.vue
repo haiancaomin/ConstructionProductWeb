@@ -1,18 +1,5 @@
 <template>
   <div class="goods">
-    <!-- <div class="nav">
-      <div class="w">
-        <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
-        <a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>
-        <a href="javascript:;" @click="sortByPrice(-1)" :class="{active:sortType===3}">价格从高到低</a>
-        <div class="price-interval">
-          <input type="number" class="input" placeholder="价格" v-model="min" />
-          <span style="margin: 0 5px">-</span>
-          <input type="number" placeholder="价格" v-model="max" />
-          <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
-        </div>
-      </div>
-    </div>-->
     <div class="search_notice" v-if="keyWord != ''&&keyWord != undefined">当前搜索条件："{{keyWord}}"</div>
     <div class="type_choose_div">
       <div class="choose_zone">
@@ -26,13 +13,9 @@
         >{{item.type}}</div>
       </div>
     </div>
-    <!-- <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;"> -->
+    
     <div>
-      <div class="img-item" v-if="!noResult">
-        <!--商品-->
-        <!-- <div class="goods-box w">
-          <mall-goods v-for="(item,i) in goods" :key="i" :msg="item"></mall-goods>
-        </div>-->
+      <div class="img-item">
         <div class="hot_list_outbody">
           <div class="hot_list_body">
             <div
@@ -51,9 +34,7 @@
               </div>
               <div class="hot_product_info_div">
                 <div class="hot_product_name" @click="gotoDetail(iitem.pid)">{{iitem.name}}</div>
-                <!-- <div class="hot_product_name">这是部件名称</div> -->
                 <div class="hot_product_description">{{iitem.description}}</div>
-                <!-- <div class="hot_product_description">这是描述这是描述这是描述这是描述这是描述这是描述这是描述这是描</div> -->
                 <div class="hot_split_line_div">
                   <div class="hot_split_line"></div>
                 </div>
@@ -86,61 +67,17 @@
           ></el-pagination>
         </div>
       </div>
-      <div class="no-info" v-if="noResult">
-        <div class="no-data">
-          <img src="/static/images/no-search.png" />
-          <br />抱歉！暂时还没有商品
-        </div>
-        <section class="section">
-          <y-shelf :show="!isEmpty(recommendPanel.panelContentItems)" :title="recommendPanel.name">
-            <div slot="content" class="recommend">
-              <mall-goods :msg="item" v-for="(item,i) in recommendPanel.panelContentItems" :key="i"></mall-goods>
-            </div>
-          </y-shelf>
-        </section>
-      </div>
-      <div class="no-info" v-if="error">
-        <div class="no-data">
-          <img src="/static/images/error.png" />
-          <br />抱歉！出错了...
-        </div>
-        <section class="section">
-          <y-shelf :title="recommendPanel.name">
-            <div slot="content" class="recommend">
-              <mall-goods :msg="item" v-for="(item,i) in recommendPanel.panelContents" :key="i"></mall-goods>
-            </div>
-          </y-shelf>
-        </section>
-      </div>
     </div>
   </div>
 </template>
 <script>
 import { getAllGoods } from "/api/goods.js";
-import { recommend } from "/api/index.js";
-import mallGoods from "/components/mallGoods";
-import YButton from "/components/YButton";
-import YShelf from "/components/shelf";
-import Utils from "/utils";
 import { productTypeListFun, productListBySrarchOrTyprFun } from "/api/index";
 export default {
   data() {
     return {
-      goods: [],
-      noResult: false,
-      error: false,
-      min: "",
-      max: "",
-      loading: true,
-      timer: null,
-      sortType: 1,
-      windowHeight: null,
-      windowWidth: null,
-      recommendPanel: [],
-      sort: "",
       currentPage: 1,
       total: 0,
-      pageSize: 20,
       hotList: [],
       productTypeList: [],
       productList: [],
@@ -150,9 +87,7 @@ export default {
     };
   },
   methods: {
-    isEmpty: Utils.isEmpty,
     gotoDetail(pid) {
-      // this.$router.push({ name: 'product', params: { productId: pid }})
       this.$router.push({
         path: "/product",
         query: {
@@ -185,7 +120,6 @@ export default {
       paramProduct.append("selectIndex", this.currentPage);
       paramProduct.append("pageIndex", (this.currentPage - 1) * 8);
       productListBySrarchOrTyprFun(paramProduct).then(res => {
-        // this.$route.query.keyWord = "";
         this.productList = res.data;
         console.log(this.productList);
         this.productCount = res.count;
@@ -205,62 +139,6 @@ export default {
       this.currentPage = val;
       this._productListBySrarchOrTyprFun();
     },
-    _getAllGoods() {
-      let cid;
-
-      if (this.$route.path.includes("goods/cate")) {
-        cid = this.$route.params.cateId;
-      } else {
-        cid = this.$route.query.cid;
-      }
-
-      if (this.min !== "") {
-        this.min = Math.floor(this.min);
-      }
-      if (this.max !== "") {
-        this.max = Math.floor(this.max);
-      }
-      let params = {
-        params: {
-          page: this.currentPage,
-          size: this.pageSize,
-          sort: this.sort,
-          priceGt: this.min,
-          priceLte: this.max,
-          cid: cid
-        }
-      };
-      getAllGoods(params).then(res => {
-        if (res.success) {
-          this.total = res.result.total;
-          this.goods = res.result.data;
-          this.noResult = false;
-          if (this.total === 0) {
-            this.noResult = true;
-          }
-          this.error = false;
-        } else {
-          this.error = true;
-        }
-        this.loading = false;
-      });
-    },
-    // 默认排序
-    reset() {
-      this.sortType = 1;
-      this.sort = "";
-      this.currentPage = 1;
-      this.loading = true;
-      this._getAllGoods();
-    },
-    // 价格排序
-    sortByPrice(v) {
-      v === 1 ? (this.sortType = 2) : (this.sortType = 3);
-      this.sort = v;
-      this.currentPage = 1;
-      this.loading = true;
-      this._getAllGoods();
-    }
   },
   watch: {
     $route(to, from) {
@@ -278,12 +156,8 @@ export default {
           this._productListBySrarchOrTyprFun();
         }
       }
-      // if (to.fullPath.includes("/goods/cate")) {
-      //   this._getAllGoods();
-      // }
     }
   },
-  created() {},
   mounted() {
     this.keyWord = this.$route.query.keyWord;
     this._productTypeListFun();
@@ -294,106 +168,14 @@ export default {
       this.keyWord = this.keyWord.toString().trim();
       this._productListBySrarchOrTyprFun();
     }
-
-    // this.windowHeight = window.innerHeight;
-    // this.windowWidth = window.innerWidth;
-    // this._getAllGoods();
-    // recommend().then(res => {
-    //   let data = res.result;
-    //   this.recommendPanel = data[0];
-    // });
   },
-  components: {
-    mallGoods,
-    YButton,
-    YShelf
-  }
 };
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "../../assets/style/mixin";
-@import "../../assets/style/theme";
-
-.nav {
-  height: 60px;
-  line-height: 60px;
-  > div {
-    display: flex;
-    align-items: center;
-    a {
-      padding: 0 15px;
-      height: 100%;
-      @extend %block-center;
-      font-size: 12px;
-      color: #999;
-      &.active {
-        color: #5683ea;
-      }
-      &:hover {
-        color: #5683ea;
-      }
-    }
-    input {
-      @include wh(80px, 30px);
-      border: 1px solid #ccc;
-    }
-    input + input {
-      margin-left: 10px;
-    }
-  }
-  .price-interval {
-    padding: 0 15px;
-    @extend %block-center;
-    input[type="number"] {
-      border: 1px solid #ccc;
-      text-align: center;
-      background: none;
-      border-radius: 5px;
-    }
-  }
-}
-
-.goods-box {
-  > div {
-    float: left;
-    border: 1px solid #efefef;
-  }
-}
-
-.no-info {
-  padding: 100px 0;
-  text-align: center;
-  font-size: 30px;
-  display: flex;
-  flex-direction: column;
-  .no-data {
-    align-self: center;
-  }
-}
-
-.img-item {
-  display: flex;
-  flex-direction: column;
-}
-
 .el-pagination {
   align-self: flex-end;
-  margin: 3vw 10vw 2vw;
-}
-
-.section {
-  padding-top: 8vw;
-  margin-bottom: -5vw;
-  width: 1218px;
-  align-self: center;
-}
-
-.recommend {
-  display: flex;
-  > div {
-    flex: 1;
-    width: 25%;
-  }
+  margin: 20px 0 35px;;
+  text-align: center;
 }
 .hot_list_body {
   width: 1280px;
@@ -401,9 +183,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
-}
-.new_list_outbody {
-  width: 300px;
 }
 .hot_title {
   line-height: 22px;
@@ -536,10 +315,6 @@ export default {
 .pagination_div {
   width: 1280px;
   margin: 0 auto;
-}
-#product_list_pagination {
-  text-align: center;
-  margin-top: 20px;
 }
 .type_choose_div {
   width: 1280px;
