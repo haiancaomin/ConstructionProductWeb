@@ -7,7 +7,12 @@
       <el-steps :active="active" finish-status="success" direction="vertical">
         <el-step :title="item.nodename" v-for="(item,index) in nodesList" :key="index">
           <template slot="description">
-            <button @click="addNodeItem($event)" :id="item.nid" v-if="item.status==1" class="add-node-info">添加节点信息</button>
+            <button
+              @click="addNodeItem($event)"
+              :id="item.nid"
+              v-if="item.status==1"
+              class="add-node-info"
+            >添加节点信息</button>
             <div class="step-row" v-for="(item,index) in item.infolist" :key="index">
               <table
                 width="100%"
@@ -160,16 +165,18 @@ export default {
       getStepInfo(params).then(res => {
         this.nodesList = res.data;
         var that = this;
-        if (this.nodesList[this.nodesList.length - 1].status == 2) {
-          this.active = this.nodesList.length;
-          console.log(this.active);
-        } else {
-          this.nodesList.forEach(function(item, idx) {
-            if (item.status == 1 && item.xh != 1) {
-              that.active = idx;
-              console.log(idx);
-            }
-          });
+        if (this.nodesList.length) {
+          if (this.nodesList[this.nodesList.length - 1].status == 2) {
+            this.active = this.nodesList.length;
+            console.log(this.active);
+          } else {
+            this.nodesList.forEach(function(item, idx) {
+              if (item.status == 1 && item.xh != 1) {
+                that.active = idx;
+                console.log(idx);
+              }
+            });
+          }
         }
       });
     },
@@ -242,7 +249,7 @@ export default {
 };
 </script>
 <style scoped>
-.add-node-info{
+.add-node-info {
   background: transparent;
   font-size: 12px;
   padding: 5px 0;
