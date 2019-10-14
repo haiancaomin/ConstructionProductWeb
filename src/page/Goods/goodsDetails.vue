@@ -232,7 +232,7 @@ export default {
         this.productImgList = res.data.polist;
         this.productIntroductionImgList = res.data.volist;
         this.testPid = res.data.pid;
-        this.activeURL = this.productImgList[0].atturl;
+        this.activeURL = this.productIntroductionImgList[0].atturl;
         console.log(this.productType);
         let paramProduct = new URLSearchParams();
         paramProduct.append("type", this.productType);
