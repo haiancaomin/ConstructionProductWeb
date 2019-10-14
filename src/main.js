@@ -118,6 +118,24 @@ const whiteList = ['/home', '/goods', '/login', '/register', '/product', '/thank
 //   })
 // })
 /* eslint-disable no-new */
+
+router.beforeEach((to, from, next) => {
+  // alert(to.path.toString().indexOf("/teamwork") >= 0);
+  if (to.matched.some(m => m.meta.requiresAuth)) {
+    if (window.localStorage.getItem("zjzp_userid") != undefined) {
+      next()
+    } else if (to.path == '/admin/member'||to.path == '/admin/project'||to.path == '/admin/step'||to.path.toString().indexOf("/teamwork") >= 0) {
+      next("/login")
+      Vue.prototype.$message({
+        message: '检测到您还未登录,请登录后操作！',
+        type: 'error',
+        center: true,
+      })
+    }
+  } else {
+    next()
+  }
+})
 new Vue({
   el: '#app',
   store,

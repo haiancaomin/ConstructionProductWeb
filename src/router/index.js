@@ -64,6 +64,7 @@ export default new Router({
           path: 'admin',
           name: 'admin',
           component: admin,
+          meta: { requiresAuth: true },
           redirect: 'admin/member',
           children: [{
               path: 'project',
@@ -85,7 +86,8 @@ export default new Router({
         {
           path: 'teamwork',
           name: 'teamwork',
-          component: teamwork
+          component: teamwork,
+          meta: { requiresAuth: true },
         }
       ]
     },
