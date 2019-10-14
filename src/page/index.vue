@@ -64,7 +64,7 @@
   @import "../assets/style/mixin";
 
   .main {
-    min-height: calc(100vh - 454px);
+    min-height: calc(100vh - 295px);
     background: #ededed;
     overflow: hidden;
     width: 100%;
