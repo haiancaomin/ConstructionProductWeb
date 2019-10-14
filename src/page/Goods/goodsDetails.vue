@@ -211,7 +211,7 @@ export default {
       this.activeURL = url;
     },
     plusPage() {
-      if (this.productImgList.length / 5 - 1 > this.pageFlag) {
+      if (this.productIntroductionImgList.length / 5 - 1 > this.pageFlag) {
         console.log("add success");
         this.pageFlag++;
       }
