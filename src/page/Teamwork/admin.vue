@@ -6,9 +6,9 @@
           <div class="avatar gray-box">
             <div>
               <img
-                src="https://gper.club/server-img/avatars/000/00/00/user_origin_30.jpg?time1565591384242"
+                src="http://zhjcx.cn/uploads/image/20180613/20180613181358_62940.jpg"
               />
-              <h5>userInfo</h5>
+              <h5>扫码关注我们</h5>
             </div>
             <div class="box-inner">
               <ul class="account-nav">
@@ -102,7 +102,7 @@ export default {
     h5 {
       font-size: 18px;
       line-height: 48px;
-      font-weight: 700;
+      // font-weight: 700;
     }
   }
   .account-nav {
