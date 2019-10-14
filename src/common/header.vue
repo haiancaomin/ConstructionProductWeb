@@ -226,6 +226,13 @@ export default {
       } else if (to.fullPath.indexOf("/admin") >= 0) {
         this.changePage(3);
       }
+    },
+
+    messageBoardFlag: function(val) {
+      if (!val) {
+        this.messageBoardDesc = "";
+        this.userPhone = "";
+      }
     }
   },
   methods: {

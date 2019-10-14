@@ -148,7 +148,14 @@ export default {
       connectFlag: false,
     };
   },
-
+  watch: {
+    messageBoardFlag: function(val) {
+      if (!val) {
+        this.messageBoardDesc = "";
+        this.userPhone = "";
+      }
+    }
+  },
   methods: {
     _messageBoardFun() {
       let paramz = new URLSearchParams();
