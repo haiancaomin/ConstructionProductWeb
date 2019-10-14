@@ -330,7 +330,7 @@ export default {
     }
   }
   .wrapper {
-    background: url(/static/images/login_bg.jpg) no-repeat;
+    background: url("http://192.168.1.12/jzbppt/login/login.jpg") no-repeat;
     // background-size: 100%;
     background-size: cover;
     // background-position:center;
