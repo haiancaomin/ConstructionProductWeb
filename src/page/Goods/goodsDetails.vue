@@ -30,7 +30,7 @@
           </div>
           <div
             class="product_small_img_div"
-            v-for="(item,i) in productImgList"
+            v-for="(item,i) in productIntroductionImgList"
             :key="i"
             v-show="i>=5*pageFlag&&i<=5*(pageFlag+1)-1"
             @mouseenter="activeImg(item.atturl)"
@@ -42,7 +42,7 @@
           <div class="right_arrow_div" @click="plusPage()">
             <i
               class="iconfont_right_arrow"
-              :class="{'right_arrow_active':productImgList.length/5-1 >pageFlag}"
+              :class="{'right_arrow_active':productIntroductionImgList.length/5-1 >pageFlag}"
             >&#xe699;</i>
           </div>
         </div>
@@ -110,7 +110,7 @@
         <img
           :src="item.atturl"
           class="bottom_product_introduction_img"
-          v-for="(item,i) in productIntroductionImgList"
+          v-for="(item,i) in productImgList"
           :key="i"
         />
       </div>
