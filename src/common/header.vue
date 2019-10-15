@@ -96,6 +96,7 @@
             <div class="hava_user">欢迎回来，{{username}}</div>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+              <el-dropdown-item command="changePw">修改密码</el-dropdown-item>
               <el-dropdown-item command="logOut">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -147,6 +148,7 @@
                 <div class="shpping_cart_hava_user">{{username}}</div>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+                  <el-dropdown-item command="changePw">修改密码</el-dropdown-item>
                   <el-dropdown-item command="logOut">注销</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -227,7 +229,6 @@ export default {
         this.changePage(3);
       }
     },
-
     messageBoardFlag: function(val) {
       if (!val) {
         this.messageBoardDesc = "";
@@ -241,6 +242,8 @@ export default {
         this.logOut();
       } else if (command == "teamWork") {
         this.$router.push({ path: `/admin/member` });
+      } else if (command == "changePw") {
+        alert("修改密码");
       }
     },
     logOut() {

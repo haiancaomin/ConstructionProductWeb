@@ -32,7 +32,7 @@
 
       <div class="login_outbody">
         <div class="login_body">
-          <div class="login_zone">
+          <div class="login_zone" v-if="loginFlag">
             <div class="dialog_title">账号登录</div>
             <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
             <form>
@@ -40,7 +40,7 @@
                 <div class="username_input_icon_div">
                   <i class="iconfont_username">&#xe735;</i>
                 </div>
-                <input type="text" placeholder="用户名" class="username_input" v-model="userName" />
+                <input type="text" placeholder="用户名/手机号" class="username_input" v-model="userName" />
               </div>
               <div class="user_password_div">
                 <div class="user_password_icon_div">
@@ -55,9 +55,48 @@
                 <input type="text" placeholder="验证码" class="code_input" v-model="captcha" />
                 <img :src="caodeImg" class="code_img" @click="_createCodeFun()" />
               </div>
-
               <div class="submit_btn" @click="login()">登&nbsp;录</div>
             </form>
+            <div class="forget_password_div">
+              <span @click="loginFlag=false">忘记密码？</span>
+            </div>
+          </div>
+
+          <div class="login_zone" v-if="!loginFlag">
+            <div class="dialog_title_f">忘记密码</div>
+            <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
+            <form>
+              <div class="username_input_div">
+                <div class="username_input_icon_div">
+                  <i class="iconfont_username">&#xe735;</i>
+                </div>
+                <input type="text" placeholder="请输入您的登录手机号" class="username_input" v-model="f_phone" />
+              </div>
+              <div class="user_password_div">
+                <div class="user_password_icon_div">
+                  <i class="iconfont_password">&#xe6fc;</i>
+                </div>
+                <input
+                  type="password"
+                  placeholder="请输入新密码"
+                  class="user_password"
+                  v-model="f_password"
+                />
+              </div>
+              <div class="code_div">
+                <div class="code_icon_div">
+                  <i class="iconfont_code">&#xe63d;</i>
+                </div>
+                <input type="text" placeholder="手机验证码" class="code_input" v-model="f_code" />
+                <div class="get_code_btn" v-if="show" @click="getCode()">获取验证码</div>
+                <div class="hava_submit_code_btn" v-if="!show">{{count}} 秒后重发</div>
+              </div>
+              <div class="code_notice">温馨提示：每个手机号每天最多能接收5次验证码</div>
+              <div class="submit_btn_f" @click="submintNewPassword()">确&nbsp;认</div>
+            </form>
+            <div class="forget_password_div_f">
+              <span @click="loginFlag=true">去登录</span>
+            </div>
           </div>
         </div>
       </div>
@@ -130,7 +169,9 @@ import {
   userLogin,
   initKaptcha,
   createCodeFun,
-  userLoginFun
+  userLoginFun,
+  getPhoneCodeFun,
+  submintNewPasswordFun
 } from "/api/index.js";
 import { addCart } from "/api/goods.js";
 import { setStore, getStore, removeStore } from "/utils/storage.js";
@@ -153,15 +194,105 @@ export default {
       userPwd: "",
       captcha: "",
       errMsg: "",
-      caodeImg: ""
+      caodeImg: "",
+      loginFlag: true,
+      f_phone: "",
+      f_password: "",
+      f_code: "",
+      show: true,
+      count: "",
+      timer: null
     };
   },
-  computed: {
-    count() {
-      return this.$store.state.login;
+  // computed: {
+  //   count() {
+  //     return this.$store.state.login;
+  //   }
+  // },
+  watch: {
+    loginFlag: function(val) {
+      this.errMsg = "";
     }
   },
   methods: {
+    submintNewPassword() {
+      if (this.f_phone == "") {
+        this.errMsg = "手机号不能为空!";
+      } else if (this.f_password == "") {
+        this.errMsg = "新密码不能为空!";
+      } else if (this.f_phone.length != 11) {
+        this.errMsg = "请输入正确的手机号!";
+      } else if (this.f_password.length < 6) {
+        this.errMsg = "密码不能少于6个字符!";
+      } else if (this.f_password.length > 12) {
+        this.errMsg = "密码不能超过12个字符!";
+      } else if (this.f_code == "") {
+        this.errMsg = "验证码不能为空!";
+      } else if (this.f_code.length > 10) {
+        this.errMsg = "验证码错误!";
+      } else {
+        let paramSubmit = new URLSearchParams();
+        paramSubmit.append("newpassword", this.f_password);
+        paramSubmit.append("phone", this.f_phone);
+        paramSubmit.append("code", this.f_code);
+        submintNewPasswordFun(paramSubmit).then(res => {
+          if (res.data == 0) {
+            this.loginFlag = true;
+            this.$message({
+              message: "修改成功",
+              type: "success",
+              center: true
+            });
+          } else if (res.data == 1) {
+            this.$message({
+              message: "验证码错误！",
+              type: "error",
+              center: true
+            });
+          } else if (res.data == 2) {
+            this.$message({
+              message: "该手机号不能访问本平台，请仔细确认您的登陆手机号！",
+              type: "error",
+              center: true
+            });
+          }
+        });
+      }
+    },
+    getCode() {
+      if (this.f_phone.trim() == "") {
+        this.$message({
+          message: "请先输入手机号！",
+          type: "error",
+          center: true
+        });
+      } else if (this.f_phone.trim().length != 11) {
+        this.$message({
+          message: "请输入正确的手机号！",
+          type: "error",
+          center: true
+        });
+      } else {
+        let paramCode = new URLSearchParams();
+        paramCode.append("phone", this.f_phone);
+        getPhoneCodeFun(paramCode).then(res => {
+          const TIME_COUNT = 60;
+          if (!this.timer) {
+            this.count = TIME_COUNT;
+            this.show = false;
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--;
+              } else {
+                this.show = true;
+                clearInterval(this.timer);
+                this.timer = null;
+              }
+            }, 1000);
+          }
+        });
+      }
+    },
     _createCodeFun() {
       createCodeFun().then(res => {
         this.caodeImg = res.data;
@@ -280,7 +411,7 @@ export default {
             setStore("zjzp_userid", res.data.userid);
             setStore("zjzp_name", res.data.name);
             setStore("zjzp_token", res.data.token);
-            
+
             this.$router.go(-1);
           }
         });
@@ -549,7 +680,7 @@ export default {
 }
 .login_outbody {
   width: 100%;
-  height: 431px;
+  height: 457px;
 }
 .login_body {
   width: 1280px;
@@ -558,8 +689,8 @@ export default {
 .login_zone {
   width: 350px;
   background: rgba(0, 0, 0, 0.6);
-  margin: 150px 0 0 850px;
-  padding-bottom: 40px;
+  margin: 110px 0 0 850px;
+  padding-bottom: 30px;
 }
 .dialog_title {
   width: 100%;
@@ -569,6 +700,15 @@ export default {
   font-size: 16px;
   border-bottom: 2px #cf1132 solid;
   color: #cf1132;
+}
+.dialog_title_f {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: 2px #39cf41 solid;
+  color: #39cf41;
 }
 .username_input_div {
   width: 100%;
@@ -634,11 +774,41 @@ export default {
   width: 100px;
   cursor: pointer;
 }
+.get_code_btn {
+  height: 44px;
+  line-height: 44px;
+  width: 100px;
+  text-align: center;
+  background: #39cf41;
+  color: #fff;
+  cursor: pointer;
+}
+.hava_submit_code_btn {
+  height: 44px;
+  line-height: 44px;
+  width: 100px;
+  text-align: center;
+  background: #9ecfa0;
+  color: #fff;
+  cursor: not-allowed;
+}
 .submit_btn {
   width: 284px;
   height: 44px;
   background: #cf1132;
   margin: 25px auto 0;
+  line-height: 44px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+.submit_btn_f {
+  width: 284px;
+  height: 44px;
+  background: #39cf41;
+  margin: 0 auto;
   line-height: 44px;
   text-align: center;
   font-size: 18px;
@@ -709,5 +879,38 @@ export default {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   color: #fff;
+}
+.forget_password_div {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: right;
+  margin: 20px 0 0;
+  padding: 0 30px 0 0;
+}
+.forget_password_div_f {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: right;
+  margin: 20px 0 0;
+  padding: 0 35px 0 0;
+}
+.forget_password_div span,
+.forget_password_div_f span {
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.forget_password_div span:hover,
+.forget_password_div_f span:hover {
+  color: #bbb;
+}
+.code_notice {
+  width: 284px;
+  color: #ddd;
+  font-size: 12px;
+  height: 25px;
+  line-height: 25px;
+  margin: 0 auto;
 }
 </style>

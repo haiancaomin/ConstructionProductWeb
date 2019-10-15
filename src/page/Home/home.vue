@@ -164,6 +164,14 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .home {
+  display: flex;
+  flex-direction: column;
+  position: relative; 
+  width:100%;
+  min-width:1260px;
+  max-width: 1920px;
+  margin: 0 auto;
+
   background-color: #f6f7fb;
 }
 .fade-enter-active,

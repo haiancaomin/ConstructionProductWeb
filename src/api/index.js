@@ -2,6 +2,14 @@ import http from './public'
 import {
   apis
 } from './api'
+//忘记密码提交
+export const submintNewPasswordFun = (params) => {
+  return http.fetchPost(apis.submintNewPasswordFun, params)
+}
+//获取短信验证码
+export const getPhoneCodeFun = (params) => {
+  return http.fetchPost(apis.getPhoneCodeFun, params)
+}
 //登录
 export const userLoginFun = (params) => {
   return http.fetchPost(apis.userLoginFun, params)
