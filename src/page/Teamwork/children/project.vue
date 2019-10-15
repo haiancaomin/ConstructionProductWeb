@@ -172,6 +172,10 @@ export default {
                   center: true
                 });
                 this._getProjectList();
+              } else if (res.data == 2) {
+                this.$message.error({
+                  message: "合同编号已存在！"
+                });
               } else {
                 this.$message.error({
                   message: "保存失败！"
@@ -188,6 +192,10 @@ export default {
                   center: true
                 });
                 this._getProjectList();
+              } else if (res.data == 2) {
+                this.$message.error({
+                  message: "合同编号已存在！"
+                });
               } else {
                 this.$message.error({
                   message: "保存失败！"

@@ -169,6 +169,10 @@ export default {
                   center: true
                 });
                 this._getMemberList();
+              } else if (res.data == 2) {
+                this.$message.error({
+                  message: "手机号已存在！"
+                });
               } else {
                 this.$message.error({
                   message: "保存失败！"
@@ -186,6 +190,10 @@ export default {
                   center: true
                 });
                 this._getMemberList();
+              } else if (res.data == 2) {
+                this.$message.error({
+                  message: "手机号已存在！"
+                });
               } else {
                 this.$message.error({
                   message: "保存失败！"
@@ -249,7 +257,7 @@ export default {
       this.currentPage = val;
       this._getMemberList();
     },
-    
+
     clearAddOrEdit() {
       this.addOrEdit = "";
     },
