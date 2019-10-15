@@ -243,12 +243,18 @@ export default {
       } else if (command == "teamWork") {
         this.$router.push({ path: `/admin/member` });
       } else if (command == "changePw") {
-        alert("修改密码");
+        this.$router.push({
+        path: "/login",
+        query: {
+          changePassword: true
+        }
+      });
       }
     },
     logOut() {
       removeStore("zjzp_userid");
       removeStore("zjzp_name");
+      removeStore("zjzp_phone");
       removeStore("zjzp_token");
       this.username = "";
       this.$router.push({ path: "/home" });

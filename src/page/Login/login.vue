@@ -1,7 +1,5 @@
 <template>
-  <div class="login v2">
-    <!-- <y-header>
-    </y-header>-->
+  <div class="login">
     <div class="wrapper">
       <div class="login_head">
         <div class="login_head_zone">
@@ -32,7 +30,7 @@
 
       <div class="login_outbody">
         <div class="login_body">
-          <div class="login_zone" v-if="loginFlag">
+          <div class="login_zone" v-if="loginFlag == 1">
             <div class="dialog_title">账号登录</div>
             <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
             <form>
@@ -58,11 +56,11 @@
               <div class="submit_btn" @click="login()">登&nbsp;录</div>
             </form>
             <div class="forget_password_div">
-              <span @click="loginFlag=false">忘记密码？</span>
+              <span @click="loginFlag=2">忘记密码？</span>
             </div>
           </div>
 
-          <div class="login_zone" v-if="!loginFlag">
+          <div class="login_zone" v-if="loginFlag == 2">
             <div class="dialog_title_f">忘记密码</div>
             <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
             <form>
@@ -70,7 +68,12 @@
                 <div class="username_input_icon_div">
                   <i class="iconfont_username">&#xe735;</i>
                 </div>
-                <input type="text" placeholder="请输入您的登录手机号" class="username_input" v-model="f_phone" />
+                <input
+                  type="text"
+                  placeholder="请输入您的登录手机号"
+                  class="username_input"
+                  v-model="f_phone"
+                />
               </div>
               <div class="user_password_div">
                 <div class="user_password_icon_div">
@@ -95,8 +98,49 @@
               <div class="submit_btn_f" @click="submintNewPassword()">确&nbsp;认</div>
             </form>
             <div class="forget_password_div_f">
-              <span @click="loginFlag=true">去登录</span>
+              <span @click="loginFlag=1">去登录</span>
             </div>
+          </div>
+
+          <div class="login_zone_3" v-if="loginFlag == 3">
+            <div class="dialog_title_f">修改密码</div>
+            <div class="errorMsg" v-show="errMsg != ''">{{errMsg}}</div>
+            <form>
+              <div class="username_input_div">
+                <div class="username_input_icon_div">
+                  <i class="iconfont_username">&#xe735;</i>
+                </div>
+                <input
+                  type="text"
+                  placeholder="请输入您的登录手机号"
+                  class="username_input lock_phone"
+                  v-model="f_phone"
+                  disabled
+                />
+              </div>
+              <div class="user_password_div">
+                <div class="user_password_icon_div">
+                  <i class="iconfont_password">&#xe6fc;</i>
+                </div>
+                <input
+                  type="password"
+                  placeholder="请输入新密码"
+                  class="user_password"
+                  v-model="f_password"
+                />
+              </div>
+              <div class="code_div">
+                <div class="code_icon_div">
+                  <i class="iconfont_code">&#xe63d;</i>
+                </div>
+                <input type="text" placeholder="手机验证码" class="code_input" v-model="f_code" />
+                <div class="get_code_btn" v-if="show" @click="getCode()">获取验证码</div>
+                <div class="hava_submit_code_btn" v-if="!show">{{count}} 秒后重发</div>
+              </div>
+              <div class="code_notice">温馨提示：每个手机号每天最多能接收5次验证码</div>
+              <div class="submit_btn_f" @click="submintNewPassword()">确&nbsp;认</div>
+            </form>
+            
           </div>
         </div>
       </div>
@@ -107,95 +151,26 @@
           <div class="foot_con">©2018-2019 All Rights Reserved 智聚装配式绿色建筑创新中心南通有限公司 版权所有</div>
         </div>
       </div>
-      <!-- <div class="dialog dialog-shadow" style="display: block; margin-top: -362px;">
-        <div class="title">
-          <h4>使用 智聚装配 账号 登录</h4>
-        </div>
-        <div v-if="loginPage" class="content">
-          <ul class="common-form">
-            <li class="username border-1p">
-              <div class="input">
-                <input type="text" v-model="ruleForm.userName" placeholder="账号">
-              </div>
-            </li>
-            <li>
-              <div class="input">
-                <input type="password" v-model="ruleForm.userPwd" @keyup.enter="login" placeholder="密码">
-              </div>
-            </li>
-            <li>
-              <div class="input">
-                <input type="text" v-model="ruleForm.captcha" placeholder="验证码"/>
-                &nbsp;&nbsp;&nbsp;
-                <img id="imageCode" :src="imageCode" @click="init_geetest()"/>
-              </div>
-            </li>
-            <li style="text-align: right" class="pr">
-              <el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>
-             
-              <a href="javascript:;" class="register" @click="toRegister">注册 GPmall 账号</a>
-              <a style="padding: 1px 0 0 10px" @click="open('找回密码','请联系作者邮箱找回密码或使用测试账号登录：test | test')">忘记密码 ?</a>
-            </li>
-          </ul>
-         
-          <div style="margin-top: 25px">
-            <y-button :text="logintxt"
-                      :classStyle="ruleForm.userPwd&& ruleForm.userName&& logintxt === '登录'?'main-btn':'disabled-btn'"
-                      @btnClick="login"
-                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
-          </div>
-         
-          <div>
-            <y-button text="返回" @btnClick="login_back"
-              style="marginTop: 10px;marginBottom: 15px;width: 100%;height: 48px;font-size: 18px;line-height: 48px">
-            </y-button>
-          </div>
-          <div class="border"></div>
-          <div class="footer">
-            <div class="other">其它账号登录：</div>
-            <a><img @click="open('待开发','此功能开发中...')" style="height: 15px; margin-top: 22px;" src="/static/images/other-login.png"></a>
-          </div>
-        </div>
-      </div>-->
     </div>
   </div>
 </template>
-<script src="../../../static/geetest/gt.js"></script>
 <script>
-// import YHeader from '/common/header'
-import YFooter from "/common/footer";
-import YButton from "/components/YButton";
 import {
-  userLogin,
-  initKaptcha,
   createCodeFun,
   userLoginFun,
   getPhoneCodeFun,
   submintNewPasswordFun
 } from "/api/index.js";
-import { addCart } from "/api/goods.js";
-import { setStore, getStore, removeStore } from "/utils/storage.js";
-require("../../../static/geetest/gt.js");
+import { setStore, getStore } from "/utils/storage";
 export default {
   data() {
     return {
-      cart: [],
-      loginPage: true,
-      registered: {
-        userName: "",
-        userPwd: "",
-        userPwd2: "",
-        errMsg: ""
-      },
-      autoLogin: false,
-      logintxt: "登录",
-      imageCode: "",
       userName: "",
       userPwd: "",
       captcha: "",
       errMsg: "",
       caodeImg: "",
-      loginFlag: true,
+      loginFlag: 1,
       f_phone: "",
       f_password: "",
       f_code: "",
@@ -204,14 +179,18 @@ export default {
       timer: null
     };
   },
-  // computed: {
-  //   count() {
-  //     return this.$store.state.login;
-  //   }
-  // },
   watch: {
     loginFlag: function(val) {
       this.errMsg = "";
+      if (val==1) {
+        this.f_phone = "";
+        this.f_password = "";
+        this.f_code = "";
+      } else if((val==2)){
+        this.userName = "";
+        this.userPwd = "";
+        this.captcha = "";
+      }
     }
   },
   methods: {
@@ -237,7 +216,7 @@ export default {
         paramSubmit.append("code", this.f_code);
         submintNewPasswordFun(paramSubmit).then(res => {
           if (res.data == 0) {
-            this.loginFlag = true;
+            this.loginFlag = 1;
             this.$message({
               message: "修改成功",
               type: "success",
@@ -276,19 +255,27 @@ export default {
         let paramCode = new URLSearchParams();
         paramCode.append("phone", this.f_phone);
         getPhoneCodeFun(paramCode).then(res => {
-          const TIME_COUNT = 60;
-          if (!this.timer) {
-            this.count = TIME_COUNT;
-            this.show = false;
-            this.timer = setInterval(() => {
-              if (this.count > 0 && this.count <= TIME_COUNT) {
-                this.count--;
-              } else {
-                this.show = true;
-                clearInterval(this.timer);
-                this.timer = null;
-              }
-            }, 1000);
+          if (res.data == 1) {
+            this.$message({
+              message: "该手机号今日收取验证码数量已达上限!",
+              type: "error",
+              center: true
+            });
+          } else if (res.data == 0) {
+            const TIME_COUNT = 60;
+            if (!this.timer) {
+              this.count = TIME_COUNT;
+              this.show = false;
+              this.timer = setInterval(() => {
+                if (this.count > 0 && this.count <= TIME_COUNT) {
+                  this.count--;
+                } else {
+                  this.show = true;
+                  clearInterval(this.timer);
+                  this.timer = null;
+                }
+              }, 1000);
+            }
           }
         });
       }
@@ -298,75 +285,13 @@ export default {
         this.caodeImg = res.data;
       });
     },
-    open(t, m) {
-      this.$notify.info({
-        title: t,
-        message: m
-      });
-    },
-    messageSuccess() {
-      this.$message({
-        message: "恭喜您，注册成功！赶紧登录体验吧",
-        type: "success"
-      });
-    },
-    message(m) {
-      this.$message.error({
-        message: m
-      });
-    },
-    getRemembered() {
-      var judge = getStore("remember");
-      if (judge === "true") {
-        this.autoLogin = true;
-        this.ruleForm.userName = getStore("rusername");
-        this.ruleForm.userPwd = getStore("rpassword");
-      }
-    },
-    rememberPass() {
-      if (this.autoLogin === true) {
-        setStore("remember", "true");
-        setStore("rusername", this.ruleForm.userName);
-        setStore("rpassword", this.ruleForm.userPwd);
-      } else {
-        setStore("remember", "false");
-        removeStore("rusername");
-        removeStore("rpassword");
-      }
-    },
-    toRegister() {
-      this.$router.push({
-        path: "/register"
-      });
-    },
-    // 登录返回按钮
-    login_back() {
-      this.$router.go(-1);
-    },
-    // 登陆时将本地的添加到用户购物车
-    login_addCart() {
-      let cartArr = [];
-      let locaCart = JSON.parse(getStore("buyCart"));
-      if (locaCart && locaCart.length) {
-        locaCart.forEach(item => {
-          cartArr.push({
-            userId: getStore("userId"),
-            productId: item.productId,
-            productNum: item.productNum
-          });
-        });
-      }
-      this.cart = cartArr;
-    },
     login() {
-      this.logintxt = "登录中...";
-      this.rememberPass();
       if (this.userName == "" || this.userPwd == "") {
         this.errMsg = "账号或密码不能为空!";
       } else if (this.userName.length > 20) {
         this.errMsg = "用户名不能超过20个字符!";
-      } else if (this.userPwd.length > 20) {
-        this.errMsg = "密码不能超过20个字符!";
+      } else if (this.userPwd.length > 12) {
+        this.errMsg = "密码不能超过12个字符!";
       } else if (this.captcha == "") {
         this.errMsg = "验证码不能为空!";
       } else if (this.captcha.length > 10) {
@@ -410,30 +335,25 @@ export default {
             });
             setStore("zjzp_userid", res.data.userid);
             setStore("zjzp_name", res.data.name);
+            setStore("zjzp_phone", res.data.phone);
             setStore("zjzp_token", res.data.token);
 
             this.$router.go(-1);
           }
         });
       }
-    },
-    init_geetest() {
-      initKaptcha().then(res => {
-        this.imageCode = "data:image/gif;base64," + res.result;
-      });
     }
   },
   mounted() {
-    this._createCodeFun();
-    // this.getRemembered();
-    // this.login_addCart();
-    // this.init_geetest();
-    // this.open('登录提示', '测试体验账号密码：test | test')
-  },
-  components: {
-    // YHeader,
-    YFooter,
-    YButton
+    let changePassword = this.$route.query.changePassword;
+    if(changePassword) {
+      this.loginFlag = 3;
+      this.f_phone = getStore("zjzp_phone");
+    } else if(getStore("zjzp_userid")!=undefined) {
+      this.$router.push({ path:'/home'})
+    } else {
+      this._createCodeFun();
+    }
   }
 };
 </script>
@@ -441,199 +361,21 @@ export default {
 * {
   box-sizing: content-box;
 }
-
 .login {
   overflow-x: hidden;
   overflow-y: hidden;
-  // position: relative;
-  .input {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    input {
-      font-size: 16px;
-      width: 100%;
-      height: 100%;
-      padding: 10px 15px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-  }
   .wrapper {
     background: url("http://192.168.1.12/jzbppt/login/login.jpg") no-repeat;
-    // background-size: 100%;
     background-size: cover;
-    // background-position:center;
     overflow: hidden;
     min-height: 750px;
     min-width: 1280px;
-
-    // min-height: 800px;
-    // min-width: 630px;
-  }
-}
-
-.v2 .dialog {
-  width: 450px;
-  border: 1px solid #dadada;
-  border-radius: 10px;
-  top: 50%;
-  left: 50%;
-  margin-left: -225px;
-  position: absolute;
-  .title {
-    background: linear-gradient(#fff, #f5f5f5);
-    height: auto;
-    overflow: visible;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    position: relative;
-    background-image: url(/static/images/logo_login.png);
-    background-size: 240px;
-    background-position: top center;
-    background-repeat: no-repeat;
-    height: 92px;
-    margin: 23px 0 50px;
-    padding: 75px 0 0;
-    box-shadow: none;
-    h4 {
-      padding: 0;
-      text-align: center;
-      color: #666;
-      border-bottom: 1px solid #dcdcdc;
-      -webkit-box-shadow: none;
-      -moz-box-shadow: none;
-      box-shadow: none;
-      font-weight: 700;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      border-bottom: 0;
-      -webkit-box-shadow: none;
-      -moz-box-shadow: none;
-      box-shadow: none;
-      line-height: 1em;
-      height: auto;
-      color: #333;
-      font-weight: 400;
-    }
-  }
-  .content {
-    padding: 0 40px 22px;
-    height: auto;
-    .common-form {
-      li {
-        clear: both;
-        margin-bottom: 15px;
-        position: relative;
-      }
-    }
-  }
-}
-
-.dialog-shadow,
-.v2 .bbs .dialog-shadow,
-.v2 .dialog-shadow {
-  -webkit-box-shadow: 0 9px 30px -6px rgba(0, 0, 0, 0.2),
-    0 18px 20px -10px rgba(0, 0, 0, 0.04), 0 18px 20px -10px rgba(0, 0, 0, 0.04),
-    0 10px 20px -10px rgba(0, 0, 0, 0.04);
-  -moz-box-shadow: 0 9px 30px -6px rgba(0, 0, 0, 0.2),
-    0 18px 20px -10px rgba(0, 0, 0, 0.04), 0 18px 20px -10px rgba(0, 0, 0, 0.04),
-    0 10px 20px -10px rgba(0, 0, 0, 0.04);
-  box-shadow: 0 9px 30px -6px rgba(0, 0, 0, 0.2),
-    0 18px 20px -10px rgba(0, 0, 0, 0.04), 0 18px 20px -10px rgba(0, 0, 0, 0.04),
-    0 10px 20px -10px rgba(0, 0, 0, 0.04);
-}
-
-@media screen and (min-width: 737px),
-  screen and (-webkit-max-device-pixel-ratio: 1.9) and (max-width: 736px) and (min-device-width: 737px) {
-  .wrapper {
-    background: url(/static/images/con-bg_04f25dbf8e.jpg) repeat-x;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
   }
-  .dialog {
-    background: url(/static/images/dialog-gray-bg.png) #fff bottom repeat-x;
-    border-radius: 12px;
-    display: none;
-    margin: -163px 0 0 -218px;
-    width: 436px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-  }
-  .dialog .title h4 {
-    border-bottom: #d1d1d1 solid 1px;
-    box-shadow: 0 2px 6px #d1d1d1;
-    color: #666;
-    font-size: 20px;
-    height: 61px;
-    line-height: 61px;
-    padding: 0 0 0 35px;
-  }
-  .common-form li {
-    clear: both;
-    margin-bottom: 15px;
-    position: relative;
-  }
-  .auto-login {
-    position: absolute;
-    top: 0px;
-    left: 2px;
-    color: #999;
-  }
-  .register {
-    padding: 1px 10px 0;
-    border-right: 1px solid #ccc;
-  }
-  .border {
-    margin-top: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-  .other {
-    margin: 20px 5px 0 0;
-    width: auto;
-    color: #bbb;
-    font-size: 12px;
-    cursor: default;
-    color: #999;
-  }
-  .footer {
-    display: flex;
-    flex-direction: row;
-  }
-  .agree {
-    margin-bottom: 30px;
-    color: #999;
-  }
-}
-
-.registered {
-  h4 {
-    padding: 0;
-    text-align: center;
-    color: #666;
-    border-bottom: 1px solid #dcdcdc;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    font-weight: 700;
-    font-size: 20px;
-    height: 60px;
-    line-height: 60px;
-  }
-}
-
-#wait {
-  text-align: left;
-  color: #999;
-  margin: 0;
 }
 .login_head {
   width: 100%;
@@ -691,6 +433,12 @@ export default {
   background: rgba(0, 0, 0, 0.6);
   margin: 110px 0 0 850px;
   padding-bottom: 30px;
+}
+.login_zone_3 {
+  width: 350px;
+  background: rgba(0, 0, 0, 0.6);
+  margin: 110px 0 0 850px;
+  padding-bottom: 40px;
 }
 .dialog_title {
   width: 100%;
@@ -912,5 +660,8 @@ export default {
   height: 25px;
   line-height: 25px;
   margin: 0 auto;
+}
+.lock_phone {
+  cursor: not-allowed;
 }
 </style>
