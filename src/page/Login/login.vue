@@ -336,6 +336,7 @@ export default {
             setStore("zjzp_userid", res.data.userid);
             setStore("zjzp_name", res.data.name);
             setStore("zjzp_phone", res.data.phone);
+            setStore("zjzp_role", res.data.role);
             setStore("zjzp_token", res.data.token);
 
             this.$router.go(-1);
