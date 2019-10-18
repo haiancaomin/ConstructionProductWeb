@@ -95,7 +95,7 @@
           <el-dropdown :show-timeout="0" :hide-timeout="500" @command="handleCommand" v-else>
             <div class="hava_user">欢迎回来，{{username}}</div>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+              <el-dropdown-item command="teamWork">项目协同</el-dropdown-item>
               <el-dropdown-item command="changePw">修改密码</el-dropdown-item>
               <el-dropdown-item command="logOut">注销</el-dropdown-item>
             </el-dropdown-menu>
@@ -122,7 +122,7 @@
                 </li>
                 <li>
                   <router-link to="/admin">
-                    <div @click="changGoods(3)" :class="{active:choosePage===3}">协同办公</div>
+                    <div @click="changGoods(3)" :class="{active:choosePage===3}">项目协同</div>
                   </router-link>
                 </li>
               </ul>
@@ -147,7 +147,7 @@
               >
                 <div class="shpping_cart_hava_user">{{username}}</div>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="teamWork">协同办公</el-dropdown-item>
+                  <el-dropdown-item command="teamWork">项目协同</el-dropdown-item>
                   <el-dropdown-item command="changePw">修改密码</el-dropdown-item>
                   <el-dropdown-item command="logOut">注销</el-dropdown-item>
                 </el-dropdown-menu>
@@ -170,7 +170,7 @@
                 </li>
                 <li>
                   <router-link to="/admin">
-                    <div @click="changGoods(3)" :class="{active:choosePage===3}">协同办公</div>
+                    <div @click="changGoods(3)" :class="{active:choosePage===3}">项目协同</div>
                   </router-link>
                 </li>
               </ul>
