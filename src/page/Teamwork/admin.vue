@@ -12,14 +12,17 @@
             </div>
             <div class="box-inner">
               <ul class="account-nav">
+                <div v-for="(item,i) in nav"
+                  :key="i">
                 <li
-                  v-for="(item,i) in nav"
-                  :key="i"
                   :class="{current:item.name===title}"
                   @click="tab(item)"
+                   v-if="(userRole==1&&item.path=='member')||(item.path=='project')||(userRole==1&&item.path=='step')"
                 >
+               
                   <a href="javascript:;">{{item.name}}</a>
                 </li>
+                </div>
               </ul>
             </div>
           </div>
@@ -33,6 +36,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { getStore } from "/utils/storage";
 export default {
   data() {
     return {
@@ -42,7 +46,8 @@ export default {
         { name: "项目管理", path: "project" },
         { name: "项目节点", path: "step" }
       ],
-      editAvatar: true
+      editAvatar: true,
+      userRole: 0,
     };
   },
   computed: {
@@ -60,6 +65,9 @@ export default {
         this.title = item.name;
       }
     });
+  },
+  mounted() {
+    this.userRole = getStore("zjzp_role");
   },
   watch: {
     $route(to) {

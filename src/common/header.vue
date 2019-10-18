@@ -121,7 +121,7 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/admin">
+                  <router-link to="/admin/project">
                     <div @click="changGoods(3)" :class="{active:choosePage===3}">项目协同</div>
                   </router-link>
                 </li>
@@ -169,7 +169,7 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/admin">
+                  <router-link to="/admin/project">
                     <div @click="changGoods(3)" :class="{active:choosePage===3}">项目协同</div>
                   </router-link>
                 </li>
@@ -241,7 +241,7 @@ export default {
       if (command == "logOut") {
         this.logOut();
       } else if (command == "teamWork") {
-        this.$router.push({ path: `/admin/member` });
+        this.$router.push({ path: `/admin/project` });
       } else if (command == "changePw") {
         this.$router.push({
         path: "/login",

@@ -2,7 +2,7 @@
   <div>
     <y-shelf title="项目管理">
       <div slot="right">
-        <el-button @click="newProject">新建项目</el-button>
+        <el-button @click="newProject" v-if="userRole==1||userRole==2">新建项目</el-button>
       </div>
       <div slot="content">
         <div
@@ -21,8 +21,8 @@
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button @click="toTeamwork(scope.row)" type="text" size="small">工作流</el-button>
-                <el-button @click="_updateProject(scope.row)" type="text" size="small">编辑</el-button>
-                <el-button @click="_deleteProject(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_updateProject(scope.row)" type="text" size="small" v-if="userRole==1||userRole==2">编辑</el-button>
+                <el-button @click="_deleteProject(scope.row)" type="text" size="small" v-if="userRole==1||userRole==2">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -129,7 +129,8 @@ export default {
       name: "",
       selectUsers: [],
       selectNodes: [],
-      addOrEdit: ""
+      addOrEdit: "",
+      userRole:0
     };
   },
   methods: {
@@ -299,6 +300,9 @@ export default {
   created() {
     // this.userId = getStore("userId");
     this._getProjectList();
+  },
+  mounted() {
+    this.userRole = getStore("zjzp_role");
   },
   components: {
     YShelf

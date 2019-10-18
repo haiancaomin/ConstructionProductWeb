@@ -10,7 +10,7 @@
             <button
               @click="addNodeItem($event)"
               :id="item.nid"
-              v-if="item.status==1"
+              v-if="item.status==1&&(userRole==1||userRole==2)"
               class="add-node-info"
             >添加节点信息</button>
             <div class="step-row" v-for="(item,index) in item.infolist" :key="index">
@@ -58,6 +58,7 @@
         style="margin-top: 12px;"
         @click="_next"
         :disabled="active==nodesList.length?true:false"
+        v-if="userRole==1||userRole==2"
       >下一步</el-button>
     </div>
     <el-dialog
@@ -95,6 +96,7 @@
 </template>
 <script>
 import { getStepInfo, saveNodeInfo, next, deleteAttachment } from "/api";
+import { getStore } from "/utils/storage";
 export default {
   props: ["data", "defaultActive"],
   data() {
@@ -112,12 +114,16 @@ export default {
       currentNid: "",
       addOrEdit: "",
       formLabelWidth: "120px",
-      active: 0
+      active: 0,
+      userRole:0,
     };
   },
   created() {
     this.projectid = this.$route.query.pid;
     this._getStepInfo();
+  },
+  mounted() {
+    this.userRole = getStore("zjzp_role");
   },
   methods: {
     _next() {

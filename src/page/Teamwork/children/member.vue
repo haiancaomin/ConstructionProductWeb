@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showFlag">
     <y-shelf title="人员管理">
       <div slot="right">
         <el-button @click="newMember">新增人员</el-button>
@@ -93,6 +93,7 @@ export default {
   data() {
     return {
       newMemberVisible: false,
+      showFlag:false,
       ruleForm: {
         name: "",
         phone: "",
@@ -273,6 +274,11 @@ export default {
     this._getMemberList();
     // this.userid = getStore("userid");
     // this._orderList();
+  },
+  mounted() {
+    if(getStore("zjzp_role")==1) {
+      this.showFlag = true;
+    };
   },
   components: {
     YShelf

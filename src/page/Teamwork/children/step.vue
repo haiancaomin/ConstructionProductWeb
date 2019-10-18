@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showFlag">
     <y-shelf title="项目节点">
       <div slot="right">
         <el-button @click="newStep">新建节点</el-button>
@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       newStepVisible: false,
+      showFlag:false,
       ruleForm: {
         nodename: ""
       },
@@ -198,6 +199,11 @@ export default {
     this._getStepList();
     // this.userid = getStore("userid");
     // this._orderList();
+  },
+  mounted() {
+    if(getStore("zjzp_role")==1) {
+      this.showFlag = true;
+    };
   },
   components: {
     YShelf
