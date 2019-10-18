@@ -256,6 +256,9 @@ export default {
       removeStore("zjzp_name");
       removeStore("zjzp_phone");
       removeStore("zjzp_token");
+      removeStore("zjzp_role");
+           
+
       this.username = "";
       this.$router.push({ path: "/home" });
     },
