@@ -21,8 +21,18 @@
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button @click="toTeamwork(scope.row)" type="text" size="small">工作流</el-button>
-                <el-button @click="_updateProject(scope.row)" type="text" size="small" v-if="userRole==1||userRole==2">编辑</el-button>
-                <el-button @click="_deleteProject(scope.row)" type="text" size="small" v-if="userRole==1||userRole==2">删除</el-button>
+                <el-button
+                  @click="_updateProject(scope.row)"
+                  type="text"
+                  size="small"
+                  v-if="userRole==1||userRole==2"
+                >编辑</el-button>
+                <el-button
+                  @click="_deleteProject(scope.row)"
+                  type="text"
+                  size="small"
+                  v-if="userRole==1||userRole==2"
+                >删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -130,7 +140,7 @@ export default {
       selectUsers: [],
       selectNodes: [],
       addOrEdit: "",
-      userRole:0
+      userRole: 0
     };
   },
   methods: {
@@ -143,6 +153,7 @@ export default {
       let params = new URLSearchParams();
       params.append("name", this.name);
       params.append("userid", this.userid);
+      params.append("role", this.userRole);
       params.append("selectIndex", this.currentPage);
       params.append("pageIndex", (this.currentPage - 1) * 10);
       getProjectList(params).then(res => {
