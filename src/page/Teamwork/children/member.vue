@@ -271,6 +271,7 @@ export default {
     }
   },
   created() {
+    this.userid = getStore("zjzp_userid");
     this._getMemberList();
     // this.userid = getStore("userid");
     // this._orderList();
@@ -279,7 +280,6 @@ export default {
     if (getStore("zjzp_role") == 1) {
       this.showFlag = true;
     }
-    this.userid = getStore("zjzp_userid");
   },
   components: {
     YShelf

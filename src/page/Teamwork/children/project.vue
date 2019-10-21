@@ -309,13 +309,11 @@ export default {
     }
   },
   created() {
-    // this.userId = getStore("userId");
-    this._getProjectList();
-  },
-  mounted() {
     this.userRole = getStore("zjzp_role");
     this.userid = getStore("zjzp_userid");
+    this._getProjectList();
   },
+  mounted() {},
   components: {
     YShelf
   }

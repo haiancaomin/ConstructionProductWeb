@@ -120,8 +120,8 @@ export default {
   },
   created() {
     this.pid = this.$route.query.pid;
-    this._getMsgList(this.pid);
     this.userid = getStore("zjzp_userid");
+    this._getMsgList(this.pid);
   }
 };
 </script>
