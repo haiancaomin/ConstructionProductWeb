@@ -47,6 +47,7 @@
 </template>
 <script>
 import { getMsgList, sendMsg } from "/api";
+import { getStore } from "/utils/storage";
 import myStep from "/components/myStep";
 import YShelf from "/components/shelf";
 export default {
