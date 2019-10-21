@@ -140,7 +140,6 @@
               <div class="code_notice">温馨提示：每个手机号每天最多能接收5次验证码</div>
               <div class="submit_btn_f" @click="submintNewPassword()">确&nbsp;认</div>
             </form>
-            
           </div>
         </div>
       </div>
@@ -182,11 +181,11 @@ export default {
   watch: {
     loginFlag: function(val) {
       this.errMsg = "";
-      if (val==1) {
+      if (val == 1) {
         this.f_phone = "";
         this.f_password = "";
         this.f_code = "";
-      } else if((val==2)){
+      } else if (val == 2) {
         this.userName = "";
         this.userPwd = "";
         this.captcha = "";
@@ -347,14 +346,22 @@ export default {
   },
   mounted() {
     let changePassword = this.$route.query.changePassword;
-    if(changePassword) {
+    if (changePassword) {
       this.loginFlag = 3;
       this.f_phone = getStore("zjzp_phone");
-    } else if(getStore("zjzp_userid")!=undefined) {
-      this.$router.push({ path:'/home'})
+    } else if (getStore("zjzp_userid") != undefined) {
+      this.$router.push({ path: "/home" });
     } else {
       this._createCodeFun();
     }
+    var _self = this;
+    document.onkeydown = function(e) {
+      var key = window.event.keyCode;
+
+      if (key == 13 || key == 100) {
+        _self.login();
+      }
+    };
   }
 };
 </script>
