@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       newProjectVisible: false,
-      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
+      userid: "",
       ruleForm: {
         projectname: "",
         contractno: "",
@@ -314,6 +314,7 @@ export default {
   },
   mounted() {
     this.userRole = getStore("zjzp_role");
+    this.userid = getStore("zjzp_userid");
   },
   components: {
     YShelf

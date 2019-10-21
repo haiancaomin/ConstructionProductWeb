@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       newStepVisible: false,
-      showFlag:false,
+      showFlag: false,
       ruleForm: {
         nodename: ""
       },
@@ -73,7 +73,7 @@ export default {
         ]
       },
       formLabelWidth: "120px",
-      userid: "B0A11FC2-59AC-443C-894B-5412145473D3",
+      userid: "",
       loading: false,
       currentPage: 1,
       pageSize: 10,
@@ -201,9 +201,10 @@ export default {
     // this._orderList();
   },
   mounted() {
-    if(getStore("zjzp_role")==1) {
+    if (getStore("zjzp_role") == 1) {
       this.showFlag = true;
-    };
+    }
+    this.userid = getStore("zjzp_userid");
   },
   components: {
     YShelf

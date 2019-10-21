@@ -62,7 +62,7 @@ export default {
       loading: false,
       msgloading: false,
       content: "",
-      userid: "B0A11FC2-59AC-443C-894B-5412145473D3"
+      userid: ""
     };
   },
   components: {
@@ -121,6 +121,7 @@ export default {
   created() {
     this.pid = this.$route.query.pid;
     this._getMsgList(this.pid);
+    this.userid = getStore("zjzp_userid");
   }
 };
 </script>
