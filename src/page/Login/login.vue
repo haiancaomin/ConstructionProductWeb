@@ -358,7 +358,7 @@ export default {
     document.onkeydown = function(e) {
       var key = window.event.keyCode;
 
-      if (key == 13 || key == 100) {
+      if (key == 13) {
         _self.login();
       }
     };
